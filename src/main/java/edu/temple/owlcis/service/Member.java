@@ -1,14 +1,21 @@
 /**
- * Member class 2/25/2016
+ * CIS4398 Projects
+ * Spring 2016
+ * 2/25/2016
  */
 package edu.temple.owlcis.service;
 
 /**
- * Member class is any user that is a Temple University student or alumni
- * @author Lam
+ * Member class is used for any user that is a Temple University student or
+ * alumni. This is a subtype of User class and have additional data fields: 
+ * major, studentOrAlumni, and gradDate. Based on this type's privileges, it 
+ * overrides some access methods by setting them to true: canWriteReview, 
+ * canWriteForumPost, canSaveSchedule.
+ *
+ * @version 1.0
  */
 public class Member extends User {
-    
+
     /**
      * The Member's degree major
      */
@@ -18,10 +25,10 @@ public class Member extends User {
      */
     protected String studentOrAlumni;
     /**
-     * The Member's graduation date 
+     * The Member's graduation date
      */
     protected String gradDate;
-    
+
     /**
      * Default Constructor for Member
      */
@@ -31,7 +38,7 @@ public class Member extends User {
         this.setStudentOrAlumni("student");
         this.setGradDate("May 2016");
     }
-    
+
     /**
      * Parameterized Constructor for Member object
      *
@@ -52,25 +59,25 @@ public class Member extends User {
         this.setStudentOrAlumni(sa);
         this.setGradDate(gd);
     }
-    
+
     @Override
     public boolean canWriteReview() {
         return true;
     }
-    
 
     @Override
     public boolean canWriteForumPost() {
         return true;
     }
-    
+
     @Override
     public boolean canSaveSchedule() {
         return true;
     }
 
     /**
-     * Gets
+     * Gets the major
+     *
      * @return the major
      */
     public String getMajor() {
@@ -78,6 +85,8 @@ public class Member extends User {
     }
 
     /**
+     * Sets the major
+     *
      * @param major the major to set
      */
     public void setMajor(String major) {
@@ -85,6 +94,8 @@ public class Member extends User {
     }
 
     /**
+     * Gets the Member's status: student or alumni
+     *
      * @return the studentOrAlumni
      */
     public String getStudentOrAlumni() {
@@ -92,6 +103,8 @@ public class Member extends User {
     }
 
     /**
+     * Sets the Member's status
+     *
      * @param studentOrAlumni the studentOrAlumni to set
      */
     public void setStudentOrAlumni(String studentOrAlumni) {
@@ -99,6 +112,8 @@ public class Member extends User {
     }
 
     /**
+     * Gets the gradDate
+     *
      * @return the gradDate
      */
     public String getGradDate() {
@@ -106,7 +121,9 @@ public class Member extends User {
     }
 
     /**
-     * @param gradDate the gradDate to set
+     * Sets the gradDate
+     *
+     * @param gradDate the graduation date to set
      */
     public void setGradDate(String gradDate) {
         this.gradDate = gradDate;

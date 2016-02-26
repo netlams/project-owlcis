@@ -1,16 +1,18 @@
 /**
- * User class 2/25/2016
+ * CIS4398 Projects
+ * Spring 2016
+ * 2/25/2016
  */
 package edu.temple.owlcis.service;
 
 /**
  * User serves as the base class for all User role subtypes (Member, Advisor,
- * and Moderator). The subtypes inherits all common properties and methods from
- * this class, but it cannot be instantiated by itself. Common properties
- * include fname, lname, id, and email. Common methods include access checkers
- * for subtype privileges.
+ * and Moderator). It cannot be instantiated by itself; only its subtypes can be
+ * instantiated. The subtypes inherits all required properties and overrides any
+ * appropriate methods. Common properties include fname, lname, id, and email.
+ * Common methods include access checkers for subtype privileges.
  *
- * @author Lam
+ * @version 1.0
  */
 public abstract class User {
 
@@ -59,8 +61,10 @@ public abstract class User {
     /**
      * Factory to make new user subtypes based on input
      *
-     * @param roleType the name of the User subtype to make
-     * @return new User subtype
+     * @param roleType the name of the User subtype to make. Acceptable values
+     * are Member, Advisor, and Moderator.
+     * @return new User subtype if roleType is acceptable
+     * @throws IllegalArgumentException if invalid roleType
      */
     public static User userFactory(String roleType) {
         if (roleType.equalsIgnoreCase("Member")) {
@@ -70,15 +74,14 @@ public abstract class User {
         } else if (roleType.equalsIgnoreCase("Moderator")) {
             return new Moderator();
         } else {
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
     }
 
     /**
      * Checks whether this object could read reviews
      *
-     * @return  true if object have ReadReviews access;
-     *          false otherwise.
+     * @return true if object have ReadReviews access; false otherwise.
      */
     public boolean canReadReviews() {
         return true;
@@ -87,8 +90,7 @@ public abstract class User {
     /**
      * Checks whether this object could write reviews
      *
-     * @return  true if object have WriteReview access;
-     *          false otherwise.
+     * @return true if object have WriteReview access; false otherwise.
      */
     public boolean canWriteReview() {
         return false;
@@ -97,8 +99,7 @@ public abstract class User {
     /**
      * Checks whether this object could write forum posts
      *
-     * @return  true if object have WriteForumPost access;
-     *          false otherwise.
+     * @return true if object have WriteForumPost access; false otherwise.
      */
     public boolean canWriteForumPost() {
         return false;
@@ -107,8 +108,7 @@ public abstract class User {
     /**
      * Checks whether this object could save schedules
      *
-     * @return  true if object have SaveSchedule access;
-     *          false otherwise.
+     * @return true if object have SaveSchedule access; false otherwise.
      */
     public boolean canSaveSchedule() {
         return false;
@@ -117,8 +117,7 @@ public abstract class User {
     /**
      * Checks whether this object could comment on reviews
      *
-     * @return  true if object have CommentReview access;
-     *          false otherwise.
+     * @return true if object have CommentReview access; false otherwise.
      */
     public boolean canCommentReview() {
         return false;
@@ -127,8 +126,7 @@ public abstract class User {
     /**
      * Checks whether this object could flag reviews
      *
-     * @return  true if object have Flag access;
-     *          false otherwise.
+     * @return true if object have Flag access; false otherwise.
      */
     public boolean canFlag() {
         return false;
@@ -137,8 +135,7 @@ public abstract class User {
     /**
      * Checks whether this object could unflag
      *
-     * @return  true if object have UnFlag access;
-     *          false otherwise.
+     * @return true if object have UnFlag access; false otherwise.
      */
     public boolean canUnFlag() {
         return false;
@@ -147,8 +144,7 @@ public abstract class User {
     /**
      * Checks whether this object could delete an user
      *
-     * @return  true if object have DeleteUser access;
-     *          false otherwise.
+     * @return true if object have DeleteUser access; false otherwise.
      */
     public boolean canDeleteUser() {
         return false;
@@ -157,8 +153,7 @@ public abstract class User {
     /**
      * Checks whether this object could change an user role
      *
-     * @return  true if object have ChangeUserRole access;
-     *          false otherwise.
+     * @return true if object have ChangeUserRole access; false otherwise.
      */
     public boolean canChangeUserRole() {
         return false;
@@ -174,7 +169,7 @@ public abstract class User {
     }
 
     /**
-     * Sets the first name {@link User#fname}
+     * Sets the first name
      *
      * @param fname the fname to set
      */
@@ -192,7 +187,7 @@ public abstract class User {
     }
 
     /**
-     * Sets the last name {@link User#lname}
+     * Sets the last name
      *
      * @param lname the lname to set
      */
@@ -210,7 +205,7 @@ public abstract class User {
     }
 
     /**
-     * Sets the id (identifier) {@link User#id}
+     * Sets the id (identifier)
      *
      * @param id the id to set
      */
@@ -228,11 +223,12 @@ public abstract class User {
     }
 
     /**
-     * Sets the email address {@link User#email}
+     * Sets the email address
      *
      * @param email the email to set
      */
     public void setEmail(String email) {
         this.email = email;
     }
+    
 }

@@ -1,8 +1,8 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+/**
+ * CIS4398 Projects 
+ * Spring 2016 
+ * 2/25/2016
+ */
 package edu.temple.owlcis.service;
 
 import static spark.Spark.*;
@@ -12,74 +12,58 @@ import java.util.Map;
 import spark.ModelAndView;
 
 /**
+ * The Main class contains the main method for OWLCIS, executing the backend
+ * logic of the app.
  *
- * @author Lam
+ * @version 1.0
  */
 public class Main implements SparkApplication {
 //    public static void main(String[] args) {
 //        SparkApplication app = new Main();
 //        app.init();
 //    }
-    
+
     @Override
     public void init() {
-        /* test */
-        get("/run/:role", (request, response) -> {
-            try {
-                User someUser = User.userFactory(request.params(":role"));
- 
-                if (someUser.canWriteReview() && someUser.canWriteForumPost() && someUser.canSaveSchedule())
-                    return "I'm a Member because I can write reviews, posts, and save schedule";
-                else if (someUser.canCommentReview() && someUser.canWriteForumPost())
-                    return "I'm an Advisor because I can write posts and comment on reviews";
-                else if (someUser.canDeleteUser() && someUser.canFlag() && someUser.canChangeUserRole())
-                    return "I'm a Moderator because I can do special stuff";
-                else
-                    return "??";
-                 
-            } catch (RuntimeException e) {
-                return "no such role";
-            }
-        });
-        
+
         get("/hello", (request, response) -> "Hello World");
-        
+
         // matches "GET /hello/foo" and "GET /hello/bar"
         // request.params(":name") is 'foo' or 'bar'
         get("/hello/:name", (request, response) -> {
             return "Hello: " + request.params(":name");
         });
-        
+
         // matches "GET /say/hello/to/world"
         // request.splat()[0] is 'hello' and request.splat()[1] 'world'
         get("/say/*/to/*", (request, response) -> {
             return "Number of splat parameters: " + request.splat().length;
         });
-        
+
         post("/hello", (request, response)
                 -> "Hello World: " + request.body()
         );
-        
+
         get("/private", (request, response) -> {
             response.status(401);
             return "Go Away!!!";
         });
-        
+
         get("/feedbacks/:id", (request, response) -> {
             response.type("text/xml");
             return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><feedback>" + request.params("id") + "</feedback>";
         });
-        
+
         get("/protected", (request, response) -> {
             halt(403, "I don't think so!!!");
             return null;
         });
-        
+
         get("/redirect", (request, response) -> {
             response.redirect("/api/feedbacks/101");
             return null;
         });
-        
+
         get("/", (request, response) -> "<h1>/ root directory</h1> <p>Try /hello, /hello/yourname, /feedbacks/someid, /redirect</p> ");
     }
 }

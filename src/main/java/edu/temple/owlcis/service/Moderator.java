@@ -1,13 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * CIS4398 Projects
+ * Spring 2016
+ * 2/25/2016
  */
 package edu.temple.owlcis.service;
 
 /**
+ * Moderator class is used for any user that moderate the content of OWLCIS app. 
+ * This is a subtype of User class. Based on this type's privileges, it 
+ * overrides some access methods by setting them to true: canFlag, canUnFlag, 
+ * canDeleteUser, and canChangeUserRole.
  *
- * @author Lam
+ * @version 1.0
  */
 public class Moderator extends User {
     
@@ -19,7 +23,7 @@ public class Moderator extends User {
     }
     
     /**
-     * Parameterized Constructor for User object
+     * Parameterized Constructor for Moderator object
      *
      * @param f the first name to give to this object
      * @param l the last name to give to this object
@@ -33,30 +37,22 @@ public class Moderator extends User {
         this.setEmail(e);
     }
     
-    /**
-     * @return canFlag access
-     */
+    @Override
     public boolean canFlag() {
         return true;
     }
     
-    /**
-     * @return canUnFlag access
-     */
+    @Override
     public boolean canUnFlag() {
         return true;
     }
     
-    /**
-     * @return canDeleteUser access
-     */
+    @Override
     public boolean canDeleteUser() {
         return true;
     }
     
-    /**
-     * @return canChangeUserRole access
-     */
+    @Override
     public boolean canChangeUserRole() {
         return true;
     }
