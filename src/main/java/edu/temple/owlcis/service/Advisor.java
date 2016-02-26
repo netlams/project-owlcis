@@ -17,7 +17,7 @@ public class Advisor extends User {
     /**
      * The Advisor's department Id
      */
-    private int deptId;
+    protected int deptId;
 
     /**
      * Default Constructor for Advisor
