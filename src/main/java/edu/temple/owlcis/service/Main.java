@@ -21,7 +21,14 @@ public class Main implements SparkApplication {
 //    }
     @Override
     public void init() {
-//        port(8080);
+        get("/run", (req, res) -> {
+            User newUser = new Member();
+            if (newUser.canWriteReview()) 
+                return "I can write";
+            else
+                return "I can't write";
+        });
+        
         get("/hello", (req, res) -> "Hello World");
         
         // matches "GET /hello/foo" and "GET /hello/bar"
