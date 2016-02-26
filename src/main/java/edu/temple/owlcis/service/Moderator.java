@@ -19,11 +19,12 @@ public class Moderator extends User {
     }
     
     /**
-     * Constructor for Moderator
-     * @param f
-     * @param l
-     * @param i
-     * @param e
+     * Parameterized Constructor for User object
+     *
+     * @param f the first name to give to this object
+     * @param l the last name to give to this object
+     * @param i the id to give to this object
+     * @param e the email to give to this object
      */
     public Moderator(String f, String l, int i, String e) {
         this.setFname(f);

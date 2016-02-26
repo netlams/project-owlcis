@@ -1,20 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * User class 2/25/2016
  */
 package edu.temple.owlcis.service;
 
 /**
+ * User serves as the base class for all User role subtypes (Member, Advisor,
+ * and Moderator). The subtypes inherits all common properties and methods from
+ * this class, but it cannot be instantiated by itself. Common properties
+ * include fname, lname, id, and email. Common methods include access checkers
+ * for subtype privileges.
  *
  * @author Lam
  */
-public class User {
-    private String fname;
-    private String lname;
-    private int id;
-    private String email;
-    
+public abstract class User {
+
+    /**
+     * The User's first name
+     */
+    protected String fname;
+    /**
+     * The User's last name
+     */
+    protected String lname;
+    /**
+     * The User's id (identifier)
+     */
+    protected int id;
+    /**
+     * The User's email address
+     */
+    protected String email;
+
     /**
      * Default constructor for User object
      */
@@ -24,12 +40,14 @@ public class User {
         this.id = 0;
         this.email = "jd@example.com";
     }
-    
+
     /**
-     * Constructor for User object
-     * @param u
-     * @param id
-     * @param e 
+     * Parameterized Constructor for User object
+     *
+     * @param f the first name to give to User object
+     * @param l the last name to give to User object
+     * @param i the id to give to User object
+     * @param e the email to give to User object
      */
     public User(String f, String l, int i, String e) {
         this.fname = f;
@@ -37,53 +55,118 @@ public class User {
         this.id = i;
         this.email = e;
     }
-    
+
     /**
-     * @return void
+     * Factory to make new user subtypes based on input
+     *
+     * @param roleType the name of the User subtype to make
+     * @return new User subtype
+     */
+    public static User userFactory(String roleType) {
+        if (roleType.equalsIgnoreCase("Member")) {
+            return new Member();
+        } else if (roleType.equalsIgnoreCase("Advisor")) {
+            return new Advisor();
+        } else if (roleType.equalsIgnoreCase("Moderator")) {
+            return new Moderator();
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    /**
+     * Checks whether this object could read reviews
+     *
+     * @return  true if object have ReadReviews access;
+     *          false otherwise.
      */
     public boolean canReadReviews() {
         return true;
     }
-    
+
     /**
-     * 
-     * @return canWriteReview access
+     * Checks whether this object could write reviews
+     *
+     * @return  true if object have WriteReview access;
+     *          false otherwise.
      */
     public boolean canWriteReview() {
         return false;
     }
-    
+
     /**
-     * 
-     * @return canFlag access
+     * Checks whether this object could write forum posts
+     *
+     * @return  true if object have WriteForumPost access;
+     *          false otherwise.
+     */
+    public boolean canWriteForumPost() {
+        return false;
+    }
+
+    /**
+     * Checks whether this object could save schedules
+     *
+     * @return  true if object have SaveSchedule access;
+     *          false otherwise.
+     */
+    public boolean canSaveSchedule() {
+        return false;
+    }
+
+    /**
+     * Checks whether this object could comment on reviews
+     *
+     * @return  true if object have CommentReview access;
+     *          false otherwise.
+     */
+    public boolean canCommentReview() {
+        return false;
+    }
+
+    /**
+     * Checks whether this object could flag reviews
+     *
+     * @return  true if object have Flag access;
+     *          false otherwise.
      */
     public boolean canFlag() {
         return false;
     }
-    
+
     /**
-     * 
-     * @return canUnFlag access
+     * Checks whether this object could unflag
+     *
+     * @return  true if object have UnFlag access;
+     *          false otherwise.
      */
     public boolean canUnFlag() {
         return false;
     }
-    
+
     /**
-     * @return canDeleteUser access
+     * Checks whether this object could delete an user
+     *
+     * @return  true if object have DeleteUser access;
+     *          false otherwise.
      */
     public boolean canDeleteUser() {
         return false;
     }
-    
+
     /**
-     * @return canChangeUserRole access
+     * Checks whether this object could change an user role
+     *
+     * @return  true if object have ChangeUserRole access;
+     *          false otherwise.
      */
     public boolean canChangeUserRole() {
         return false;
     }
-    
+
     /**
+     * Gets the first name
+     *
      * @return the fname
      */
     public String getFname() {
@@ -91,6 +174,8 @@ public class User {
     }
 
     /**
+     * Sets the first name {@link User#fname}
+     *
      * @param fname the fname to set
      */
     public void setFname(String fname) {
@@ -98,6 +183,8 @@ public class User {
     }
 
     /**
+     * Gets the last name
+     *
      * @return the lname
      */
     public String getLname() {
@@ -105,13 +192,17 @@ public class User {
     }
 
     /**
+     * Sets the last name {@link User#lname}
+     *
      * @param lname the lname to set
      */
     public void setLname(String lname) {
         this.lname = lname;
     }
-    
+
     /**
+     * Gets the id (identifier)
+     *
      * @return the id
      */
     public int getId() {
@@ -119,6 +210,8 @@ public class User {
     }
 
     /**
+     * Sets the id (identifier) {@link User#id}
+     *
      * @param id the id to set
      */
     public void setId(int id) {
@@ -126,6 +219,8 @@ public class User {
     }
 
     /**
+     * Gets the email address
+     *
      * @return the email
      */
     public String getEmail() {
@@ -133,10 +228,11 @@ public class User {
     }
 
     /**
+     * Sets the email address {@link User#email}
+     *
      * @param email the email to set
      */
     public void setEmail(String email) {
         this.email = email;
     }
-                
 }

@@ -22,11 +22,12 @@ public class Advisor extends User {
     }
     
     /**
-     * Constructor for Moderator
-     * @param f
-     * @param l
-     * @param i
-     * @param e
+     * Parameterized Constructor for User object
+     *
+     * @param f the first name to give to this object
+     * @param l the last name to give to this object
+     * @param i the id to give to this object
+     * @param e the email to give to this object
      * @param did
      */
     public Advisor(String f, String l, int i, String e, int did) {
@@ -35,6 +36,20 @@ public class Advisor extends User {
         this.setId(i);
         this.setEmail(e);
         this.setDeptId(did);
+    }
+    
+    /**
+     * @return canWriteForumPost access
+     */
+    public boolean canWriteForumPost() {
+        return true;
+    }
+    
+    /**
+     * @return canCommentReview access
+     */
+    public boolean canCommentReview() {
+        return true;
     }
 
     /**

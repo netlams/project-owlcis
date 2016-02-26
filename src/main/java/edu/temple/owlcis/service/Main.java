@@ -1,15 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package edu.temple.owlcis.service;
+
 import static spark.Spark.*;
 import spark.servlet.SparkApplication;
 import java.util.HashMap;
 import java.util.Map;
 import spark.ModelAndView;
-//import spark.template.freemarker.FreeMarkerEngine;
+
 /**
  *
  * @author Lam
@@ -19,17 +20,29 @@ public class Main implements SparkApplication {
 //        SparkApplication app = new Main();
 //        app.init();
 //    }
+    
     @Override
     public void init() {
-        get("/run", (req, res) -> {
-            User newUser = new Member();
-            if (newUser.canWriteReview()) 
-                return "I can write";
-            else
-                return "I can't write";
+        /* test */
+        get("/run/:role", (request, response) -> {
+            try {
+                User someUser = User.userFactory(request.params(":role"));
+ 
+                if (someUser.canWriteReview() && someUser.canWriteForumPost() && someUser.canSaveSchedule())
+                    return "I'm a Member because I can write reviews, posts, and save schedule";
+                else if (someUser.canCommentReview() && someUser.canWriteForumPost())
+                    return "I'm an Advisor because I can write posts and comment on reviews";
+                else if (someUser.canDeleteUser() && someUser.canFlag() && someUser.canChangeUserRole())
+                    return "I'm a Moderator because I can do special stuff";
+                else
+                    return "??";
+                 
+            } catch (RuntimeException e) {
+                return "no such role";
+            }
         });
         
-        get("/hello", (req, res) -> "Hello World");
+        get("/hello", (request, response) -> "Hello World");
         
         // matches "GET /hello/foo" and "GET /hello/bar"
         // request.params(":name") is 'foo' or 'bar'
@@ -46,7 +59,7 @@ public class Main implements SparkApplication {
         post("/hello", (request, response)
                 -> "Hello World: " + request.body()
         );
-
+        
         get("/private", (request, response) -> {
             response.status(401);
             return "Go Away!!!";
@@ -56,17 +69,17 @@ public class Main implements SparkApplication {
             response.type("text/xml");
             return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><feedback>" + request.params("id") + "</feedback>";
         });
-
+        
         get("/protected", (request, response) -> {
             halt(403, "I don't think so!!!");
             return null;
         });
-
+        
         get("/redirect", (request, response) -> {
             response.redirect("/api/feedbacks/101");
             return null;
         });
-
+        
         get("/", (request, response) -> "<h1>/ root directory</h1> <p>Try /hello, /hello/yourname, /feedbacks/someid, /redirect</p> ");
     }
 }

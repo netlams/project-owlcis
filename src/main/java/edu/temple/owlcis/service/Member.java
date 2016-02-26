@@ -1,18 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Member class 2/25/2016
  */
 package edu.temple.owlcis.service;
 
 /**
- *
+ * Member class is any user that is a Temple University student or alumni
  * @author Lam
  */
 public class Member extends User {
-    private String major;
-    private String studentOrAlumni;
-    private String gradDate;
+    
+    /**
+     * The Member's degree major
+     */
+    protected String major;
+    /**
+     * The Member's status: either is a student or alumni
+     */
+    protected String studentOrAlumni;
+    /**
+     * The Member's graduation date 
+     */
+    protected String gradDate;
     
     /**
      * Default Constructor for Member
@@ -25,14 +33,15 @@ public class Member extends User {
     }
     
     /**
-     * Constructor for Member
-     * @param f
-     * @param l
-     * @param i
-     * @param e
-     * @param m 
-     * @param sa
-     * @param gd
+     * Parameterized Constructor for Member object
+     *
+     * @param f the first name to give to this object
+     * @param l the last name to give to this object
+     * @param i the id to give to this object
+     * @param e the email to give to this object
+     * @param m the major to give to this object
+     * @param sa the status to give this object (Student or Alumni)
+     * @param gd the graduation date to give this object
      */
     public Member(String f, String l, int i, String e, String m, String sa, String gd) {
         this.setFname(f);
@@ -44,14 +53,24 @@ public class Member extends User {
         this.setGradDate(gd);
     }
     
-    /**
-     * @return canWriteReview access
-     */
+    @Override
     public boolean canWriteReview() {
+        return true;
+    }
+    
+
+    @Override
+    public boolean canWriteForumPost() {
+        return true;
+    }
+    
+    @Override
+    public boolean canSaveSchedule() {
         return true;
     }
 
     /**
+     * Gets
      * @return the major
      */
     public String getMajor() {
