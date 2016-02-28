@@ -9,7 +9,7 @@ package edu.temple.owlcis.service;
  *
  * @author dhruvin sheth
  */
-public class course {
+public class Course {
 
     //global variables to be used in posting reviews
     private String courseID; // CIS course
@@ -20,7 +20,7 @@ public class course {
     private double clarity; // store clarity;
     private String elective; //recommendation for elective course
 
-    protected course() {
+    protected Course() {
         courseID = "";
         courseName = "";
         elective = "";

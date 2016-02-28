@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.temple.owlcis.service;
+package owlcis;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 /**
  *
- * @author dhruvin sheth
+ * @author Jeff
  */
 public class database {
 
@@ -44,4 +44,5 @@ public class database {
         return null;
         /* forcefully close the open connection */
     }
+
 }
