@@ -13,36 +13,34 @@ import java.sql.SQLException;
 
 /**
  *
- * @author sheth
+ * @author dhruvin sheth
  */
 public class database {
-   
-    
 
     private static Connection connection = null;
 
     public static Connection getConn() throws SQLException {
+        /*
+         This method will intialize database connection for OWL CIS to backend.
+         */
         if (connection != null) {
             return connection;
         } else {
-            
 
-                String driver = "com.mysql.jdbc.Driver";
-                /* try for connection by passing location of mysql, user and
-                password to connect it. We will utlize getConnection method in drivermanager
-                class
-                */
-            
+            String driver = "com.mysql.jdbc.Driver";
+            /* try for connection by passing location of mysql, user and
+             password to connect it. We will utlize getConnection method in drivermanager
+             class
+             */
+
             /* catch all exceptions for connection */
-            
-                
-            
             return connection;
         }
 
     }
-    
-    public static Connection close() throws SQLException{
+
+    public static Connection close() throws SQLException {
+        //it will forcefully close any open connection in database.
         return null;
         /* forcefully close the open connection */
     }
