@@ -11,7 +11,7 @@ package edu.temple.owlcis.service;
  * overrides some access methods by setting them to true: canFlag, canUnFlag, 
  * canDeleteUser, and canChangeUserRole.
  *
- * @version 1.0
+ * @author Dau
  */
 public class Moderator extends User {
     

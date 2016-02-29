@@ -11,13 +11,13 @@ package edu.temple.owlcis.service;
  * on this type's privileges, it overrides some access methods by setting them 
  * to true: canWriteForumPost, and canCommentReview.
  *
- * @version 1.0
+ * @author Dau
  */
 public class Advisor extends User {
     /**
      * The Advisor's department Id
      */
-    protected int deptId;
+    private int deptId;
 
     /**
      * Default Constructor for Advisor

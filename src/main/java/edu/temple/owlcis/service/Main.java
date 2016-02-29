@@ -12,18 +12,16 @@ import java.util.Map;
 import spark.ModelAndView;
 
 /**
- * The Main class contains the main method for OWLCIS, executing the backend
+ * The Main class contains the init method for OWLCIS, executing the backend
  * logic of the app.
  *
- * @version 1.0
  */
 public class Main implements SparkApplication {
-//    public static void main(String[] args) {
-//        SparkApplication app = new Main();
-//        app.init();
-//    }
 
     @Override
+    /**
+     * Executes the backend logic of the app
+     */
     public void init() {
 
         get("/hello", (request, response) -> "Hello World");

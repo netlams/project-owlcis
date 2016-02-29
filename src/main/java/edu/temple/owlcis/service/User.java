@@ -12,26 +12,26 @@ package edu.temple.owlcis.service;
  * appropriate methods. Common properties include fname, lname, id, and email.
  * Common methods include access checkers for subtype privileges.
  *
- * @version 1.0
+ * @author Dau
  */
 public abstract class User {
 
     /**
      * The User's first name
      */
-    protected String fname;
+    private String fname;
     /**
      * The User's last name
      */
-    protected String lname;
+    private String lname;
     /**
      * The User's id (identifier)
      */
-    protected int id;
+    private int id;
     /**
      * The User's email address
      */
-    protected String email;
+    private String email;
 
     /**
      * Default constructor for User object
