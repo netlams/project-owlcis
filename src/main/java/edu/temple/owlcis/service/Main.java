@@ -18,11 +18,13 @@ import spark.ModelAndView;
  */
 public class Main implements SparkApplication {
 
-    @Override
+    
     /**
      * Executes the backend logic of the app
      */
+    @Override
     public void init() {
+        staticFileLocation("/public");
 
         get("/hello", (request, response) -> "Hello World");
 
@@ -62,6 +64,6 @@ public class Main implements SparkApplication {
             return null;
         });
 
-        get("/", (request, response) -> "<h1>/ root directory</h1> <p>Try /hello, /hello/yourname, /feedbacks/someid, /redirect</p> ");
+//        get("/", (request, response) -> "<h1>/ root directory</h1> <p>Try /hello, /hello/yourname, /feedbacks/someid, /redirect</p> ");
     }
 }
