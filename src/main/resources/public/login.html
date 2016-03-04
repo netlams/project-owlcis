@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <h1>Login</h1>
+  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  <a href="#" onclick="signOut();">Sign out</a>
+
+  <div id="gname"></div>
+  <div id="gemail"></div>
+  <input type="button" value="clicky" onclick="showRole()" />
+
+  <script>
+    function getCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ')
+          c = c.substring(1);
+        if (c.indexOf(name) == 0)
+          return c.substring(name.length, c.length);
+      }
+      return "";
+    }
+
+    function showRole() {
+      var role = getCookie("role");
+      alert("Your role is: " + document.cookie);
+    }
+
+    function redirectToAnotherPage() {
+      window.location = "courses.html";
+    }
+
+    function checkServer() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'api/g-session');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onload = function() {
+        console.log('Signed in as: ' + xhr.responseText);
+
+        document.write("You will be redirected to main page in 5 sec.");
+        setTimeout('redirectToAnotherPage()', 5000);
+      };
+      xhr.send(id_token);
+    }
+
+    function onSignIn(googleUser) {
+      var loggedStatus = 0;
+      var profile = googleUser.getBasicProfile();
+      var id_token = googleUser.getAuthResponse().id_token;
+
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail());
+      console.log('Token: ' + id_token);
+
+      if (loggedStatus == 0 && googleUser.isSignedIn()) {
+        loggedStatus = 1; // logged in
+        document.getElementById("gname").appendChild(document.createElement("p").appendChild(document.createTextNode(profile.getName())));
+
+        document.getElementById("gemail").appendChild(document.createElement("p").appendChild(document.createTextNode(profile.getEmail())));
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'g-session');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+          console.log(xhr.responseText);
+        };
+        xhr.send(id_token);
+
+        if (validateEmail(profile.getEmail())) {
+          alert("Good you're from temple.");
+        } else {
+          alert("Not temple.");
+        }
+      }
+    }
+
+    function signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function() {
+        console.log('User signed out.');
+      });
+    }
+
+    function validateEmail(email) {
+      var pattern = new RegExp(/\S\S*@temple.edu$/i); // check if email param is a valid temple email address
+      return pattern.test(email);
+    }
+  </script>
+
+
+</body>
+
+</html>
