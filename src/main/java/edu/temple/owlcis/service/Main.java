@@ -84,5 +84,12 @@ public class Main implements SparkApplication {
            return "Your role from cookie is: " + request.cookie("role")
                    + "\n" + "Your email from session is: " + request.session().attribute("email");
         });
+        
+        get(API_LOC + "/db", (request, response) -> {
+
+            
+                
+            return "Working?" + SignIn.test();
+        });
     }
 }
