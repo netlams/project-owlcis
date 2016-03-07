@@ -33,10 +33,10 @@ public class Main implements SparkApplication {
     public void init() {
         staticFileLocation("/public");
 
-        // root API
+        /* root API */
         get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> <p>Try /hello, /hello/yourname, /feedbacks/someid, /redirect</p> ");
 
-        // login
+        /* login */
         post("/login", (request, response) -> {
             HttpTransport transport = new NetHttpTransport();
             JsonFactory jsonFactory = new GsonFactory();
@@ -79,7 +79,8 @@ public class Main implements SparkApplication {
                 return "invalid ID";
             }
         });
-
+        
+        /* check user info */
         get(API_LOC + "/check-user", (request, response) -> {
            return "Your role from cookie is: " + request.cookie("role")
                    + "\n" + "Your email from session is: " + request.session().attribute("email");
