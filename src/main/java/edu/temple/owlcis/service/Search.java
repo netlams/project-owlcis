@@ -59,7 +59,7 @@ public class Search {
             results = stmt.executeQuery();
 
         } finally {
-            dbc.close();
+            dbc.closeConn();
         }
 
         /*close the open Database connection to prevent memory leak */
@@ -84,7 +84,7 @@ public class Search {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            connection.close();
+            connection.closeConn();
         }
     }
 }

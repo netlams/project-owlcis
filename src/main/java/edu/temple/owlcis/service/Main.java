@@ -64,7 +64,9 @@ public class Main implements SparkApplication {
                 String locale = (String) payload.get("locale");
                 String familyName = (String) payload.get("family_name");
                 String givenName = (String) payload.get("given_name");
-
+                
+                
+                
                 // Use or store profile information
                 request.session().attribute("email", email);
                 // CHECK DATABASE FOR USER's ROLENAME AND SET ROLE
@@ -86,11 +88,21 @@ public class Main implements SparkApplication {
                    + "\n" + "Your email from session is: " + request.session().attribute("email");
         });
         
+        /* testing purposes */
         get(API_LOC + "/db", (request, response) -> {
-
-            
-                
-            return "Working?" + SignIn.test();
+            Database dbc = new Database();   
+            String temp = "Working? " + SignIn.test(dbc);
+            dbc.closeConn();
+            return temp;
         });
+        
+        /* quick sql query test */
+        get(API_LOC + "/log", (request, response) -> {
+            Database dbc = new Database(); 
+            String temp =  "Working? " + SignIn.findUserRole(dbc, "jane@temple.edu", "Lame", "Doe");
+            dbc.closeConn();
+            return temp;
+        });
+        
     }
 }
