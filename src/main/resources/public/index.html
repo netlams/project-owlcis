@@ -10,14 +10,17 @@
         <h1>Welcome to my app</h1>
         <p><a href="login.html">Login</a></p>
         <p id="role"></p>
+        <p id="fname"></p>
         <a href="api/check-user"><button>Check who I am</button></a>
         
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script src="js/main.js"></script>
         <script>
             var roleName = getCookie("role");
+            var fname = getCookie("fname");
             if (roleName!=null) {
                 document.getElementById("role").innerHTML = roleName;
+                document.getElementById("fname").innerHTML = fname;
             }
         </script>
     </body>

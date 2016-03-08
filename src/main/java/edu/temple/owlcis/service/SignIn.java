@@ -18,9 +18,6 @@ import java.sql.ResultSet;
  */
 public class SignIn {
 
-    private static PreparedStatement stmt = null;
-    private static ResultSet rs = null;
-
     /**
      * This method takes user email, fname, lname from the user and validates
      * the
@@ -28,10 +25,11 @@ public class SignIn {
      * validation
      * was successful
      */
-    public static String findUserRole(Database dbc, String email, String fname, String lname) throws SQLException {
-        Connection conn = dbc.getConn();
+    public static String findUserRole(Connection conn, String email, String fname, String lname) throws SQLException {
         StringBuilder ret = new StringBuilder("");
-
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+    
         if (conn != null) {
             try {
                 String sql = "SELECT role FROM test "
@@ -44,14 +42,15 @@ public class SignIn {
                 stmt.setString(1, email);
                 stmt.setString(2, fname);
                 stmt.setString(3, lname);
-
+                
+                // execute query
                 rs = stmt.executeQuery();
                 System.out.println("findUserRole Query executed");
-                // Now do something with the ResultSet ....
-                while (rs.next()) {
-                    ret.append(rs.getString("role"));
-                }
-                conn.close();
+                
+                // get first role
+                rs.first();
+                ret.append(rs.getString("role"));
+                
                 return ret.toString();
             } catch (SQLException ex) {
                 // handle any errors
@@ -63,7 +62,6 @@ public class SignIn {
                 // resources in a finally{} block
                 // in reverse-order of their creation
                 // if they are no-longer needed
-
                 if (rs != null) {
                     try {
                         rs.close();
@@ -83,13 +81,15 @@ public class SignIn {
                 }
             }
         }
-
+        
+        // failure
         return null;
     }
 
-    public static String test(Database dbc) throws SQLException {
-        Connection conn = dbc.getConn();
+    public static String test(Connection conn) throws SQLException {
         StringBuilder ret = new StringBuilder("");
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
         if (conn != null) {
             try {
@@ -101,7 +101,7 @@ public class SignIn {
                     ret.append(rs.getString(1));
                     ret.append(rs.getString(2));
                 }
-                conn.close();
+//                conn.close();
                 return ret.toString();
             } catch (SQLException ex) {
                 // handle any errors
@@ -113,7 +113,6 @@ public class SignIn {
                 // resources in a finally{} block
                 // in reverse-order of their creation
                 // if they are no-longer needed
-
                 if (rs != null) {
                     try {
                         rs.close();
@@ -131,9 +130,16 @@ public class SignIn {
 
                     stmt = null;
                 }
-
             }
         }
-        return dbc.getError();
+        // failture
+        return null;
+    }
+    
+    public static boolean isValidTempleEmailAddress(String email) {
+           String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(temple.edu)$";
+           java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+           java.util.regex.Matcher m = p.matcher(email);
+           return m.matches();
     }
 }

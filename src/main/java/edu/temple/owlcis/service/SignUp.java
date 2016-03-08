@@ -5,6 +5,11 @@
  */
 package edu.temple.owlcis.service;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 /**
  * When a User clicks on SignUp tab, the web page redirects itself to
  * registration page

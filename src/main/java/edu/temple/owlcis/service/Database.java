@@ -92,6 +92,7 @@ public class Database {
         try {
             //it will forcefully close any open connection in Database.
             this.connection.close();
+            System.out.println("Connection closed");
         } catch (Exception ex) {
             System.out.println("Error: Connection not closed: " + ex.getMessage());
         }
