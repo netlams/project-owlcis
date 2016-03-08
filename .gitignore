@@ -1,0 +1,4 @@
+# ignore the build folder from the repo
+target/**
+# ignore weird files
+*.*~
