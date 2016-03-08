@@ -1,27 +1,27 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
-        <title>Login Demo</title>
-        <link rel="stylesheet" href="css/style.css" />
-    </head>
-    <body>
-        <h1>Welcome to my app</h1>
-        <p><a href="login.html">Login</a></p>
-        <p id="role"></p>
-        <p id="fname"></p>
-        <a href="api/check-user"><button>Check who I am</button></a>
-        
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <script src="js/main.js"></script>
-        <script>
-            var roleName = getCookie("role");
-            var fname = getCookie("fname");
-            if (roleName!=null) {
-                document.getElementById("role").innerHTML = roleName;
-                document.getElementById("fname").innerHTML = fname;
-            }
-        </script>
-    </body>
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <title>OWL CIS</title>
+  <meta charset="UTF-8">
+  <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
+  <script src="app/plugin/angular/angular.min.js"></script>
+  <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
+  <script src="app/js/app.js"></script>
+  <script src="app/js/FirstController.js"></script>
+  <script src="app/js/SecondController.js"></script>
+  <script src="app/js/ThirdController.js"></script>
+  <script src="app/js/FourthController.js"></script>
+  <script src="app/js/DBService.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="shortcut icon" href="assets/img/logo/owl.png">
+</head>
+
+<body ng-app="authApp">
+  <div ui-view></div>
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="js/main.js"></script>
+</body>
+
 </html>
