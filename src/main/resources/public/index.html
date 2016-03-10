@@ -1,27 +1,101 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-  <title>OWL CIS</title>
-  <meta charset="UTF-8">
-  <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
-  <script src="app/plugin/angular/angular.min.js"></script>
-  <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
-  <script src="app/js/app.js"></script>
-  <script src="app/js/FirstController.js"></script>
-  <script src="app/js/SecondController.js"></script>
-  <script src="app/js/ThirdController.js"></script>
-  <script src="app/js/FourthController.js"></script>
-  <script src="app/js/DBService.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="shortcut icon" href="assets/img/logo/owl.png">
-</head>
+<html ng-app="authApp">
+    <head lang="en">
+        <title>OWL CIS</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Temple's OWLCIS - the app you want">
+        <meta name="author" content="...">
+        <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
 
-<body ng-app="authApp">
-  <div ui-view></div>
+        <script src="app/plugin/angular/angular.min.js"></script>
+        <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="app/js/app.js"></script>
+        <script src="app/js/FirstController.js"></script>
+        <script src="app/js/SecondController.js"></script>
+        <script src="app/js/ThirdController.js"></script>
+        <script src="app/js/FourthController.js"></script>
+        <script src="app/js/LoginController.js"></script>
+        <script src="app/js/DBService.js"></script>
 
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script src="js/main.js"></script>
-</body>
+        <!--<link rel="shortcut icon" href="assets/img/logo/owl.png">-->
+        <!-- CSS -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/main.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
+
+        <!-- IE 9 Fallback-->
+        <!--[if IE 9]>
+                <link href="assets/css/ie.css" rel="stylesheet">
+        <![endif]-->
+
+        <!-- GOOGLE FONTS -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
+
+    </head>
+
+    <body>
+        <!-- WRAPPER -->
+        <div class="wrapper">
+
+            <!-- NAVBAR -->
+            <nav class="navbar navbar-default navbar-dark " role="navigation">
+                <div class="container">				
+
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
+                            <span class="sr-only">Toggle Navigation</span>
+                            <i class="fa fa-bars"></i>
+                        </button>					
+                        <a href="#first" class="navbar-brand navbar-logo navbar-logo-bigger">
+                            <img src="assets/img/logo/tu.PNG" alt="University Logo">
+                        </a>
+                    </div>
+                    <!-- MAIN NAVIGATION -->
+                    <div id="main-nav" class="navbar-collapse collapse navbar-mega-menu">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown active">
+                                <a href="#login" class="dropdown-toggle" data-toggle="dropdown">Login</a>
+                            </li>
+                            <li ng-controller="loginController">
+                                <div id="google-signin-btn"></div>
+                                <span ng-bind="name"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END MAIN NAVIGATION -->
+                </div>
+            </nav>
+            <!-- END NAVBAR -->
+
+            <!-- App View / States -->
+            <div ui-view></div>
+
+
+            <!-- FOOTER -->
+            <footer style="margin-bottom: 30px; padding-top: 10px;">			
+                <!-- COPYRIGHT -->
+                <div class="text-center copyright navbar-fixed-bottom">
+                    &copy;2016 ... All Rights Reserved.
+                </div>
+                <!-- END COPYRIGHT -->
+            </footer>
+            <!-- END FOOTER -->
+        </div>
+
+        <!-- JAVASCRIPTS -->
+        <script src="assets/js/jquery-2.1.1.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/plugins/slick/slick.min.js"></script>
+        <script src="assets/js/plugins/stellar/jquery.stellar.min.js"></script>
+        <script src="assets/js/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
+        <script src="assets/js/plugins/autohidingnavbar/jquery.bootstrap-autohidingnavbar.min.js"></script>
+        <script src="assets/js/repute-scripts.js"></script>
+        <script src="https://apis.google.com/js/platform.js?onload=renderGButton" async defer></script>
+        <script src="js/main.js"></script>
+
+    </body>
 
 </html>
