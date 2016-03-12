@@ -17,5 +17,11 @@ import java.sql.ResultSet;
  * @author Mounya
  */
 public class SignUp {
-
+    
+    
+    public static String addNewUser() {
+        
+        
+        return null;
+    }
 }

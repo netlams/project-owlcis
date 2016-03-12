@@ -21,6 +21,7 @@ import java.util.Arrays;
  * The Main class contains the init method for OWLCIS, executing the backend
  * logic of the app.
  *
+ * @author Dau
  */
 public class Main implements SparkApplication {
 
@@ -31,14 +32,15 @@ public class Main implements SparkApplication {
      */
     @Override
     public void init() {
+        /* serve all public files from this location */
         staticFileLocation("/public");
 
         /* root API */
         get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");
 
-        /* login */
+        /* Login Route */
         post("/login", (request, response) -> {
-            String ret = null;
+            String ret = "";
             HttpTransport transport = new NetHttpTransport();
             JsonFactory jsonFactory = new GsonFactory();
 
@@ -48,7 +50,7 @@ public class Main implements SparkApplication {
                     .build();
             String idTokenString = request.body();
             // verify if valid google id token
-            GoogleIdToken idToken = verifier.verify(idTokenString); 
+            GoogleIdToken idToken = verifier.verify(idTokenString);
 
             if (idToken != null) { // valid
                 Payload payload = idToken.getPayload();
@@ -59,44 +61,47 @@ public class Main implements SparkApplication {
 
                 // Get profile information from payload
                 String email = payload.getEmail();
-                boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-                String name = (String) payload.get("name");
-                String pictureUrl = (String) payload.get("picture");
-                String locale = (String) payload.get("locale");
                 String familyName = (String) payload.get("family_name");
                 String givenName = (String) payload.get("given_name");
 
+                User user = new User((String) payload.get("family_name"), 
+                        (String) payload.get("given_name"), 
+                        payload.getEmail());// TODO
+                
                 Database dbc = new Database();
 
+                /* Check if email is from Temple University */
                 if (SignIn.isValidTempleEmailAddress(email) == true) {
-                    // temple email
+
                     String userRole = SignIn.findUserRole(dbc.getConn(), email, givenName, familyName);
                     if (userRole != null) {
                         // found user
                         response.status(200);
-                        request.session().attribute("email", email);
-                        request.session().attribute("fname", givenName);
-                        request.session().attribute("role", userRole);
+                        request.session(true);
+                        request.session().attribute("EMAIL", email);
+                        request.session().attribute("FNAME", givenName);
+                        request.session().attribute("ROLE", userRole);
                         // frontend can only access cookies, so we setting cookies here
-                        response.cookie("email", email, 3600);
-                        response.cookie("fname", givenName, 3600);
-                        response.cookie("role", userRole, 3600);
-                        ret = "User logged in: " + email 
+                        response.cookie("EMAIL", email, 3600);
+                        response.cookie("FNAME", givenName, 3600);
+                        response.cookie("ROLE", userRole, 3600);
+                        ret = "User logged in: " + email
                                 + ". \n\"HTTP 200 OK\"";
                         System.out.println(ret);
-                    }
-                    else {
+                    } else {
                         // no such user
-                        // TODO
+                        // add new user
+                        SignUp.addNewUser();
+                        // notify client to ask for additional info
+                        response.status(201);
                         System.out.println();
-                        ret = "User signed up: " + email 
+                        ret = "User signed up: " + email
                                 + ". \n\"HTTP 201 - CREATED\"";
                     }
-                }
-                else {
+                } else {
                     // not temple email
-                    response.status(404);
-                    ret = "Invalid. Not Temple." 
+                    response.status(403);
+                    ret = "Invalid credentials. Non-Temple."
                             + "\n\"HTTP 403 FORBIDDEN\"";
                 }
 
@@ -108,10 +113,36 @@ public class Main implements SparkApplication {
             }
         });
 
+        /* Signout Route */
+        get("/signout", (request, response) -> {
+            String ret = "";
+
+            /* check if user is logged in or not */
+            if (!request.session().isNew() && request.cookie("email") != null) {
+                /* remove these sessions */
+                request.session().removeAttribute("EMAIL");
+                request.session().removeAttribute("FNAME");
+                request.session().removeAttribute("ROLE");
+                /* remove these cookies */
+                response.removeCookie("EMAIL");
+                response.removeCookie("FNAME");
+                response.removeCookie("ROLE");
+                /* redirect back to homepage */
+                response.redirect("/");
+                ret = "User is signed out.";
+            } else {
+                response.status(400);
+                ret = "\"HTTP 400 BAD REQUEST\"";
+            }
+
+            return ret;
+        });
+
         /* check user info */
         get(API_LOC + "/check-user", (request, response) -> {
-            return "Your role from cookie is: " + request.cookie("role")
-                    + "\n" + "Your email from session is: " + request.session().attribute("email");
+            return "Your role from cookie is: " + request.cookie("ROLE")
+                    + "\n" + "Your email from session is: " 
+                    + request.session().attribute("EMAIL");
         });
 
     }

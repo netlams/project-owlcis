@@ -15,19 +15,25 @@ function onFailure(error) {
 }
 
 function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    var id_token = googleUser.getAuthResponse().id_token;
+    /* only call this function one time! (first time when nonexistent cookies) */
+    if (!getCookie("ROLE") && !getCookie("EMAIL") && !getCookie("FNAME")) {
+        loadLoadingAnim();
 
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail());
-    console.log('Token: ' + id_token);
 
-    if (googleUser.isSignedIn()) {
+        var profile = googleUser.getBasicProfile();
+        var id_token = googleUser.getAuthResponse().id_token;
+
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail());
+        console.log('Token: ' + id_token);
+
+//        if (googleUser.isSignedIn()) {
         if (validateEmail(profile.getEmail())) {
-            alert("Good you're from temple.");
+//                alert("Good you're from temple.");
             // Communicate with backend to set session data
+
             logBackend(id_token);
 
             // countdown to redirect
@@ -41,8 +47,11 @@ function onSignIn(googleUser) {
 //          }
 //      }, 1000);
         } else {
-            alert("Not temple.");
+            alert("Sorry, OWLCIS only allows Temple students, alumnis, and faculty members."
+                    + " \nYour Gmail: " + profile.getEmail() + " has not been accepted.");
+            signOut();
         }
+//        }
     }
 }
 
@@ -50,9 +59,7 @@ function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
         console.log('User signed out.');
-        document.getElementById("message").innerHTML = 'You have logged out';
-        document.getElementById("gname").innerHTML = '';
-        document.getElementById("gemail").innerHTML = '';
+        redirectTo("signout");
     });
 }
 
@@ -71,12 +78,12 @@ function getCookie(cname) {
         if (c.indexOf(name) == 0)
             return c.substring(name.length, c.length);
     }
-    return "";
+    return null;
 }
 
 function showRole() {
-    var role = getCookie("role");
-    alert("Your role is: " + getCookie("role"));
+    var role = getCookie("ROLE");
+    alert("Your role is: " + getCookie("ROLE"));
 }
 
 function redirectTo(page) {
@@ -85,11 +92,33 @@ function redirectTo(page) {
 
 // Communicate with backend to set session data
 function logBackend(id) {
+    console.log("Communicating with backend")
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'login');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-        console.log(xhr.responseText);
+//    xhr.onload = function () {
+//        console.log(xhr.responseText);
+//        redirectTo("/");
+//    };
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 404) {
+            console.log(xhr.responseText);
+            alert("OWLCIS is unavailable at the moment. Sorry for the inconvenience.")
+        }
+        else if (xhr.readyState == 4 && xhr.status == 403) {
+            console.log(xhr.responseText);
+            alert("OWLCIS encounterd an error. Sorry for the inconvenience.")
+        }
+        else {
+            console.log(xhr.responseText);
+            redirectTo("/");
+        }
     };
     xhr.send(id);
+}
+
+function loadLoadingAnim() {
+    document.getElementById("app").style.opacity = "0.1";
+    document.body.innerHTML += "<div class='cssload-loader'>OWLCIS</div>";
+    return true;
 }

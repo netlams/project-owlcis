@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 /**
  * A User can Log into his/her account.
  *
- * @author Mounya
+ * @author Mounya, Dau
  */
 public class SignIn {
 
@@ -26,32 +26,29 @@ public class SignIn {
      * was successful
      */
     public static String findUserRole(Connection conn, String email, String fname, String lname) throws SQLException {
-        StringBuilder ret = new StringBuilder("");
         PreparedStatement stmt = null;
         ResultSet rs = null;
-    
+
         if (conn != null) {
             try {
-                String sql = "SELECT role FROM test "
+                String sql = "SELECT user_type FROM user "
                         + "WHERE email = ? "
-                        + "AND fname = ? "
-                        + "AND lname = ?";
+                        + "AND f_name = ? "
+                        + "AND l_name = ?";
                 stmt = conn.prepareStatement(sql);
 
                 // set the params one-by-one
                 stmt.setString(1, email);
                 stmt.setString(2, fname);
                 stmt.setString(3, lname);
-                
+
                 // execute query
                 rs = stmt.executeQuery();
-                System.out.println("findUserRole Query executed");
-                
-                // get first role
+                System.out.println("findUserRole Query executed.");
+
+                // get first row found
                 rs.first();
-                ret.append(rs.getString("role"));
-                
-                return ret.toString();
+                return getLongRoleName(rs.getString(1).toLowerCase());
             } catch (SQLException ex) {
                 // handle any errors
                 System.out.println("SQLException: " + ex.getMessage());
@@ -81,7 +78,7 @@ public class SignIn {
                 }
             }
         }
-        
+
         // failure
         return null;
     }
@@ -135,11 +132,29 @@ public class SignIn {
         // failture
         return null;
     }
-    
+
     public static boolean isValidTempleEmailAddress(String email) {
-           String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(temple.edu)$";
-           java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
-           java.util.regex.Matcher m = p.matcher(email);
-           return m.matches();
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(temple.edu)$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
+    }
+
+    public static String getLongRoleName(String type) {
+        String roleName;
+        switch (type) {
+            case "me":
+                roleName = "member";
+                break;
+            case "mo":
+                roleName = "moderator";
+                break;
+            case "ad":
+                roleName = "advisor";
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid user type: " + type);
+        }
+        return roleName;
     }
 }

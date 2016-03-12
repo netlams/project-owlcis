@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 /**
  *
- * @author Jeff, Dhruvin
+ * @author Jeff, Dhruvin, Dau
  */
 public class Database {
 
