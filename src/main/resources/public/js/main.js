@@ -132,7 +132,7 @@ function logBackend(id) {
 
 function loadLoadingAnim() {
     document.getElementById("app").style.opacity = "0.1";
-    document.body.innerHTML += "<div id='cssload-loader'>OWLCIS</div>";
+    document.body.innerHTML += "<div id='cssload-loader'>OWLCIS is Loading</div>";
     return true;
 }
 
