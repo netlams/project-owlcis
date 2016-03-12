@@ -15,6 +15,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
@@ -55,62 +56,71 @@ public class Main implements SparkApplication {
             if (idToken != null) { // valid
                 Payload payload = idToken.getPayload();
 
-                // Print user identifier
-                String userId = payload.getSubject();
-                System.out.println("Valid Google token.");
+//                // Print user identifier
+//                String userId = payload.getSubject();
+//                System.out.println("Valid Google token.");
+//
+//                // Get profile information from payload
+//                String email = payload.getEmail();
+//                String familyName = (String) payload.get("family_name");
+//                String givenName = (String) payload.get("given_name");
 
-                // Get profile information from payload
-                String email = payload.getEmail();
-                String familyName = (String) payload.get("family_name");
-                String givenName = (String) payload.get("given_name");
-
-                User user = new User((String) payload.get("family_name"), 
-                        (String) payload.get("given_name"), 
-                        payload.getEmail());// TODO
+                User user = new User((String) payload.get("given_name"), 
+                        (String) payload.get("family_name"), 
+                        payload.getEmail());
+                System.out.println(user.toString());//
                 
                 Database dbc = new Database();
 
                 /* Check if email is from Temple University */
-                if (SignIn.isValidTempleEmailAddress(email) == true) {
-
-                    String userRole = SignIn.findUserRole(dbc.getConn(), email, givenName, familyName);
+                if (SignIn.isValidTempleEmailAddress(user.getEmail()) == true) {
+                    try {
+                    String userRole = SignIn.findUserRole(dbc.getConn(), user);
                     if (userRole != null) {
                         // found user
                         response.status(200);
                         request.session(true);
-                        request.session().attribute("EMAIL", email);
-                        request.session().attribute("FNAME", givenName);
-                        request.session().attribute("ROLE", userRole);
+                        request.session().attribute("USER", user);
+//                        request.session().attribute("EMAIL", email);
+//                        request.session().attribute("FNAME", givenName);
+//                        request.session().attribute("ROLE", userRole);
                         // frontend can only access cookies, so we setting cookies here
-                        response.cookie("EMAIL", email, 3600);
-                        response.cookie("FNAME", givenName, 3600);
-                        response.cookie("ROLE", userRole, 3600);
-                        ret = "User logged in: " + email
+                        response.cookie("EMAIL", user.getEmail(), 3600);
+                        response.cookie("FNAME", user.getFname(), 3600);
+                        response.cookie("ROLE", user.getLname(), 3600);
+                        ret = "User logged in: " + user.getEmail()
                                 + ". \n\"HTTP 200 OK\"";
                         System.out.println(ret);
                     } else {
                         // no such user
                         // add new user
-                        SignUp.addNewUser();
+//                        SignUp.addNewUser();
                         // notify client to ask for additional info
                         response.status(201);
                         System.out.println();
-                        ret = "User signed up: " + email
+                        ret = "User signed up: " + user.getEmail()
                                 + ". \n\"HTTP 201 - CREATED\"";
+                    }
+                    } catch (SQLException ex) {
+                        response.status(500);
+                        ret = "OWLCIS failed: " + ex.getMessage()
+                            + "\n\"HTTP 500 SERVER ERROR\"";
                     }
                 } else {
                     // not temple email
                     response.status(403);
                     ret = "Invalid credentials. Non-Temple."
-                            + "\n\"HTTP 403 FORBIDDEN\"";
+                            + "\n\"HTTP 400 BAD REQUEST\"";
                 }
 
                 dbc.closeConn();
                 return ret;
             } else {
-                System.out.println("Invalid ID token.");
-                return "invalid ID";
+                response.status(403);
+                ret = "Invalid ID sent. Non-Temple."
+                        + "\n\"HTTP 400 BAD REQUEST\"";
             }
+            return ret;
         });
 
         /* Signout Route */
@@ -120,9 +130,10 @@ public class Main implements SparkApplication {
             /* check if user is logged in or not */
             if (!request.session().isNew() && request.cookie("email") != null) {
                 /* remove these sessions */
-                request.session().removeAttribute("EMAIL");
-                request.session().removeAttribute("FNAME");
-                request.session().removeAttribute("ROLE");
+//                request.session().removeAttribute("EMAIL");
+//                request.session().removeAttribute("FNAME");
+//                request.session().removeAttribute("ROLE");
+                request.session().removeAttribute("USER");
                 /* remove these cookies */
                 response.removeCookie("EMAIL");
                 response.removeCookie("FNAME");

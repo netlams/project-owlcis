@@ -1,3 +1,5 @@
+var backendError = false;
+
 function renderGButton() {
     gapi.signin2.render('google-signin-btn', {
         'scope': 'profile email',
@@ -17,7 +19,6 @@ function onFailure(error) {
 function onSignIn(googleUser) {
     /* only call this function one time! (first time when nonexistent cookies) */
     if (!getCookie("ROLE") && !getCookie("EMAIL") && !getCookie("FNAME")) {
-        loadLoadingAnim();
 
 
         var profile = googleUser.getBasicProfile();
@@ -92,33 +93,52 @@ function redirectTo(page) {
 
 // Communicate with backend to set session data
 function logBackend(id) {
+    loadLoadingAnim();
+
     console.log("Communicating with backend")
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'login');
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-//    xhr.onload = function () {
-//        console.log(xhr.responseText);
-//        redirectTo("/");
-//    };
+
     xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 404) {
-            console.log(xhr.responseText);
-            alert("OWLCIS is unavailable at the moment. Sorry for the inconvenience.")
-        }
-        else if (xhr.readyState == 4 && xhr.status == 403) {
-            console.log(xhr.responseText);
-            alert("OWLCIS encounterd an error. Sorry for the inconvenience.")
-        }
-        else {
-            console.log(xhr.responseText);
+        console.log(xhr.responseText);
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // user logged in and session and cookie set
             redirectTo("/");
         }
+        else if (xhr.readyState == 4 && xhr.status == 201) {
+            // no matching found, so added new user and session and cookie set
+            alert("New user");
+        }
+        else if (xhr.readyState == 4 && xhr.status == 403) {
+            // Bad response
+            if (!backendError) {
+                alert("OWLCIS encounterd an error with your login credentials. Please make sure to use Temple email.");
+                stopLoadingAnim();
+            }
+            backendError = true;
+        }
+        else {
+            // Bad response
+            if (!backendError) {
+                alert("OWLCIS is unavailable at the moment. Please try again later.");
+                stopLoadingAnim();
+            }
+            backendError = true;
+        }
     };
+    xhr.open('POST', 'login');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send(id);
 }
 
 function loadLoadingAnim() {
     document.getElementById("app").style.opacity = "0.1";
-    document.body.innerHTML += "<div class='cssload-loader'>OWLCIS</div>";
+    document.body.innerHTML += "<div id='cssload-loader'>OWLCIS</div>";
+    return true;
+}
+
+function stopLoadingAnim() {
+    document.getElementById("app").style.opacity = "1.0";
+    var elem = document.getElementById("cssload-loader");
+    elem.parentNode.removeChild(elem);
     return true;
 }

@@ -7,7 +7,7 @@
 
 /* Loading animation */
 
-.cssload-loader {
+#cssload-loader {
 	width: 500px;
 	height: 100px;
 	line-height: 100px;
@@ -23,11 +23,11 @@
 	font-family: helvetica, arial, sans-serif;
 	text-transform: uppercase;
 	font-weight: 900;
-	font-size:36px;
+	font-size:24px;
 	color: rgb(158,27,52);
 	letter-spacing: 0.2em;
 }
-.cssload-loader::before, .cssload-loader::after {
+#cssload-loader::before, .cssload-loader::after {
 	content: "";
 	display: block;
 	width: 30px;
@@ -40,10 +40,10 @@
 		-webkit-animation: cssload-load 0.415s infinite alternate ease-in-out;
 		-moz-animation: cssload-load 0.415s infinite alternate ease-in-out;
 }
-.cssload-loader::before {
+#cssload-loader::before {
 	top: 0;
 }
-.cssload-loader::after {
+#cssload-loader::after {
 	bottom: 0;
 }
 

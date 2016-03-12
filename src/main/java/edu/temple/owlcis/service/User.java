@@ -15,7 +15,13 @@ package edu.temple.owlcis.service;
  * @author Dau
  */
 public class User {
-
+//    public enum RoleType {
+//        MEMBER, MODERATOR, ADVISOR
+//    }
+    public static final String MEMBER = "member";
+    public static final String ADVISOR = "advisor";
+    public static final String MODERATOR = "moderator";
+    
     /**
      * The User's first name
      */
@@ -269,6 +275,11 @@ public class User {
      */
     public void setRole(String role) {
         this.role = role;
+    }
+    
+    @Override
+    public String toString() {
+        return this.fname + " " + this.email;
     }
     
 }

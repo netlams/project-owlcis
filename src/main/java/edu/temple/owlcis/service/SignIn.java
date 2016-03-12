@@ -25,7 +25,11 @@ public class SignIn {
      * validation
      * was successful
      */
-    public static String findUserRole(Connection conn, String email, String fname, String lname) throws SQLException {
+//    public static String findUserRole(Connection conn, String email, String fname, String lname) throws SQLException {
+    public static String findUserRole(Connection conn, User user) throws SQLException {
+        String email = user.getEmail();
+        String fname = user.getFname();
+        String lname = user.getLname();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -47,13 +51,18 @@ public class SignIn {
                 System.out.println("findUserRole Query executed.");
 
                 // get first row found
+//                if (rs.first())
+//                    return getLongRoleName(rs.getString(1).toLowerCase());
+//                else
+//                    return null;
                 rs.first();
-                return getLongRoleName(rs.getString(1).toLowerCase());
+                    return getLongRoleName(rs.getString(1).toLowerCase());
             } catch (SQLException ex) {
                 // handle any errors
                 System.out.println("SQLException: " + ex.getMessage());
                 System.out.println("SQLState: " + ex.getSQLState());
                 System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
             } finally {
                 // it is a good idea to release
                 // resources in a finally{} block
