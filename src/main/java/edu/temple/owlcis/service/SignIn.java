@@ -1,28 +1,107 @@
 /**
- * CIS4398 Projects 
- * Spring 2016 
+ * CIS4398 Projects
+ * Spring 2016
  * 2/25/2016
  */
 package edu.temple.owlcis.service;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 /**
- * A User can Log into his/her account.
+ * This class manages the login requests.
  *
- * @author Mounya
+ * @author Mounya, Dau
  */
 public class SignIn {
 
-    //Global Variables
-    private String email;
-    private String password;
-
     /**
-     * This method takes username and password from the user and validates the
-     * information by checking the User table columns Returns true if validation
-     * was successful
+     * Find user role based on user information 
+     * 
+     * @param conn
+     * @param user
+     * @return user role
+     * @throws SQLException 
      */
-    protected boolean logIn() {
-        return true;
+    public static String findUserRole(Connection conn, User user) throws SQLException {
+        String email = user.getEmail();
+        String fname = user.getFname();
+        String lname = user.getLname();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        if (conn != null) {
+            try {
+                String sql = "SELECT user_type FROM user "
+                        + "WHERE email = ? "
+                        + "AND f_name = ? "
+                        + "AND l_name = ?";
+                stmt = conn.prepareStatement(sql);
+
+                // set the params one-by-one
+                stmt.setString(1, email);
+                stmt.setString(2, fname);
+                stmt.setString(3, lname);
+
+                // execute query
+                rs = stmt.executeQuery();
+                System.out.println("findUserRole Query executed.");
+
+                // get first row found
+                if (rs.first()) {
+                    return User.getLongRoleName(rs.getString(1).toLowerCase());
+                } else {
+                    return null;
+                }
+            } catch (SQLException ex) {
+                // handle any errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                // it is a good idea to release
+                // resources in a finally{} block
+                // in reverse-order of their creation
+                // if they are no-longer needed
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException sqlEx) {
+                    } // ignore
+
+                    rs = null;
+                }
+
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                    } // ignore
+
+                    stmt = null;
+                }
+            }
+        }
+
+        // failure
+        return null;
     }
 
+    
+    /**
+     * Check if email is from Temple
+     * 
+     * @param email
+     * @return true if Temple email; otherwise false
+     */
+    public static boolean isValidTempleEmailAddress(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(temple.edu)$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
+    }
 }

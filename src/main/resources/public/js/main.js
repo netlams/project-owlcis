@@ -1,85 +1,156 @@
+/**
+ * Global variables
+ */
+var backendError = false;
+var auth2;
+
+/* Initializes the Sign-In client */
+var initClient = function () {
+    gapi.load('auth2', function () {
+        /**
+         * Retrieve the singleton for the GoogleAuth library and set up the
+         * client.
+         */
+        auth2 = gapi.auth2.init({
+            client_id: '221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com'
+        });
+    });
+};
+
+/* Start Google Auth */
+//initClient();
+
+/* Create Google signin button */
+function renderGButton() {
+    gapi.signin2.render('google-signin-btn', {
+        'scope': 'profile email',
+        'width': 180,
+        'height': 32,
+        'longtitle': true,
+        'theme': 'dark',
+        'onsuccess': onSignIn,
+        'onfailure': onFailure
+    });
+}
+
+/* Failure at Google signin */
+function onFailure(error) {
+    console.log(error);
+}
+
+/* Success at Google signin */
 function onSignIn(googleUser) {
-  var loggedStatus = 0;
-  var profile = googleUser.getBasicProfile();
-  var id_token = googleUser.getAuthResponse().id_token;
+    
+        var profile = googleUser.getBasicProfile();
+        var id_token = googleUser.getAuthResponse().id_token;
 
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail());
-  console.log('Token: ' + id_token);
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Email: ' + profile.getEmail());
+    /* only call this function one time! (first time when nonexistent cookies) */
+    if (!getCookie("ROLE") && !getCookie("EMAIL") && !getCookie("FNAME")) {
+        if (validateEmail(profile.getEmail())) {
+            // Communicate with backend to set session data
 
-  if (loggedStatus == 0 && googleUser.isSignedIn()) {
-    loggedStatus = 1; // logged in
-    document.getElementById("message").innerHTML = 'Logged In, welcome';
-    document.getElementById("gname").appendChild(document.createElement("p").appendChild(document.createTextNode(profile.getName())));
-    document.getElementById("gemail").appendChild(document.createElement("p").appendChild(document.createTextNode(profile.getEmail())));
+            logBackend(id_token);
 
-    if (validateEmail(profile.getEmail())) {
-      alert("Good you're from temple.");
-      // Communicate with backend to set session data
-      logBackend(id_token);
-      
-      // countdown to redirect
-      var seconds = 5;
-      var repeat =  setInterval(function(){
-          document.getElementById("message").innerHTML = 'Redirecting you to homepage in ... ' + seconds;
-          seconds -= 1;
-          if (seconds == 0) { 
-              clearInterval(repeat);
-              redirectTo("index.html")
-          }
-      }, 1000);
-    } else {
-      alert("Not temple.");
+        } else {
+            alert("Sorry, OWLCIS only allows Temple students, alumnis, and faculty members."
+                    + " \nYour Gmail: " + profile.getEmail() + " has not been accepted.");
+            signOut();
+        }
     }
-  }
 }
 
+/* Sign out of OWLCIS */
 function signOut() {
-  var auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function() {
-    console.log('User signed out.');
-    document.getElementById("message").innerHTML = 'You have logged out';
-    document.getElementById("gname").innerHTML = '';
-    document.getElementById("gemail").innerHTML = '';
-  });
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+        console.log('User signed out.');
+        redirectTo("signout");
+    });
 }
 
+/* Check if email is from Temple */
 function validateEmail(email) {
-  var pattern = new RegExp(/\S\S*@temple.edu$/i); // check if email param is a valid temple email address
-  return pattern.test(email);
+    var pattern = new RegExp(/\S\S*@temple.edu$/i); // check if email param is a valid temple email address
+    return pattern.test(email);
 }
 
+/* Gets the value from Cookie */
 function getCookie(cname) {
-  var name = cname + "=";
-  var ca = document.cookie.split(';');
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ')
-      c = c.substring(1);
-    if (c.indexOf(name) == 0)
-      return c.substring(name.length, c.length);
-  }
-  return "";
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ')
+            c = c.substring(1);
+        if (c.indexOf(name) == 0)
+            return c.substring(name.length, c.length);
+    }
+    return null;
 }
 
-function showRole() {
-  var role = getCookie("role");
-  alert("Your role is: " + getCookie("role"));
-}
-
+/* Redirect to a URL */
 function redirectTo(page) {
-  window.location = page;
+    window.location = page;
 }
 
 // Communicate with backend to set session data
 function logBackend(id) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'login');
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onload = function() {
-    console.log(xhr.responseText);
-  };
-  xhr.send(id);
+    loadLoadingAnim();
+
+    console.log("Communicating with backend")
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        console.log(xhr.responseText);
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // user logged in and session and cookie set
+            redirectTo("/");
+        }
+        else if (xhr.readyState == 4 && xhr.status == 202) {
+            // no matching found, so added new user and session and cookie set
+            alert("New User! Redirecting you to complete signup.");
+            redirectTo("/#signup");
+            document.location.reload(true);
+        }
+        else if (xhr.readyState == 4 && xhr.status == 403) {
+            // Bad response
+            if (!backendError) {
+                alert("OWLCIS encounterd an error with your login credentials. Please make sure to use Temple email.");
+                stopLoadingAnim();
+            }
+            backendError = true;
+        }
+        else if (xhr.readyState == 4 && (xhr.status == 404 || xhr.status == 500)) {
+            // Bad response
+            if (!backendError) {
+                alert("OWLCIS is unavailable at the moment. Please try again later.");
+                stopLoadingAnim();
+            }
+            backendError = true;
+        }
+        else {
+            ;
+        }
+    };
+    xhr.open('POST', 'login');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(id);
+}
+
+/* Start loading animation */
+function loadLoadingAnim() {
+    document.getElementById("app").style.opacity = "0.1";
+    document.body.innerHTML += "<div id='cssload-loader'>OWLCIS is Loading</div>";
+    return true;
+}
+
+/* Stop loading animation */
+function stopLoadingAnim() {
+    document.getElementById("app").style.opacity = "1.0";
+    var elem = document.getElementById("cssload-loader");
+    elem.parentNode.removeChild(elem);
+    return true;
 }

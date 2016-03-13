@@ -14,7 +14,19 @@ package edu.temple.owlcis.service;
  *
  * @author Dau
  */
-public abstract class User {
+public class User {
+    /**
+     * Constants
+     */
+    public static final String MEMBER = "member";
+    /**
+     * Constants
+     */
+    public static final String ADVISOR = "advisor";
+    /**
+     * Constants
+     */
+    public static final String MODERATOR = "moderator";
 
     /**
      * The User's first name
@@ -32,15 +44,38 @@ public abstract class User {
      * The User's email address
      */
     private String email;
+    /**
+     * The User's email address
+     */
+    private String role;
 
     /**
      * Default constructor for User object
      */
     public User() {
+        this.id = 0;
         this.fname = "Jane";
         this.lname = "Doe";
-        this.id = 0;
         this.email = "jd@example.com";
+        this.role = "member";
+    }
+
+    /**
+     * Parameterized Constructor for User object
+     *
+     * @param i the id to give to User object
+     * @param e the email to give to User object
+     * @param f the first name to give to User object
+     * @param l the last name to give to User object
+     * @param r the role to give to User object
+     */
+    public User(int i, String e, String f, String l, String r) {
+        this();
+        this.fname = f;
+        this.lname = l;
+        this.id = i;
+        this.email = e;
+        this.role = r;
     }
 
     /**
@@ -48,13 +83,12 @@ public abstract class User {
      *
      * @param f the first name to give to User object
      * @param l the last name to give to User object
-     * @param i the id to give to User object
      * @param e the email to give to User object
      */
-    public User(String f, String l, int i, String e) {
+    public User(String f, String l, String e) {
+        this();
         this.fname = f;
         this.lname = l;
-        this.id = i;
         this.email = e;
     }
 
@@ -230,5 +264,78 @@ public abstract class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    /**
+     * Gets the role
+     *
+     * @return the role
+     */
+    public String getRole() {
+        return role;
+    }
+
+    /**
+     * Sets the role
+     *
+     * @param role the role to set
+     */
+    public void setRole(String role) {
+        this.role = role;
+    }
     
+    /**
+     * Gets string representation of object
+     * 
+     * @return string representation
+     */
+    @Override
+    public String toString() {
+        return this.fname + " " + this.email;
+    }
+    
+    /**
+     * Converts short role name to long name
+     * 
+     * @param type the short role name
+     * @return long role name
+     */
+    public static String getLongRoleName(String type) {
+        String roleName;
+        switch (type) {
+            case "me":
+                roleName = User.MEMBER;
+                break;
+            case "mo":
+                roleName = User.MODERATOR;
+                break;
+            case "ad":
+                roleName = User.ADVISOR;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid user type: " + type);
+        }
+        return roleName;
+    }
+    
+    /**
+     * Converts long role name to short name
+     * @param roleName the long name
+     * @return the short name
+     */
+    public static String getShortRoleName(String roleName) {
+        switch (roleName) {
+            case User.MEMBER:
+                roleName = "me";
+                break;
+            case User.MODERATOR:
+                roleName = "mo";
+                break;
+            case User.ADVISOR:
+                roleName = "ad";
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid user type: " + roleName);
+        }
+        return roleName;
+    }
 }

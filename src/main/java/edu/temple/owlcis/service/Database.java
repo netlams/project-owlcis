@@ -1,7 +1,7 @@
 /**
- * CIS4398 
- * Projects Spring 
- * 2016 2/25/2016
+ * CIS4398 Projects
+ * Spring 2016
+ * 3/06/2016
  */
 package edu.temple.owlcis.service;
 
@@ -13,36 +13,89 @@ import java.sql.SQLException;
 
 /**
  *
- * @author Jeff, Dhruvin
+ * @author Jeff, Dhruvin, Dau
  */
 public class Database {
 
-    private static Connection connection = null;
+    private Connection connection = null;
+    private static final String driver = "com.mysql.jdbc.Driver";
+    private static final String dbUrl = "jdbc:mysql://localhost:3306/owlcis";
+    private static final String username = "user";
+    private static final String pwrd = "temple2016";
+    private StringBuilder err = new StringBuilder("");
 
-    public static Connection getConn() throws SQLException {
+    public Database() {
+        try {
+            Class.forName(driver).newInstance();
+            this.connection = DriverManager.getConnection(dbUrl, username, pwrd);
+            System.out.println("Database connection established");
+        } catch (SQLException ex) {
+            // handle any errors
+            err.append("Error encountered!\n");
+            err.append("SQLException: ");
+            err.append(ex.getMessage());
+            err.append("\n");
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        } catch (ClassNotFoundException ex) {
+            err.append("Error encountered!\n");
+            err.append("Driver class not found: ");
+            err.append(ex.getMessage());
+            err.append("\n");
+            System.out.println("Driver class not found: " + ex.getMessage());
+        } catch (Exception ex) {
+            err.append("Error encountered!\n");
+            err.append("Connection not created: ");
+            err.append(ex.getMessage());
+            err.append("\n");
+            System.out.println("Connection not created: " + ex.getMessage());
+        }
+    }
+
+    public String getError() {
+        return err.toString();
+    }
+
+    public Connection getConn() throws SQLException {
         /*
          This method will intialize Database connection for OWL CIS to backend.
          */
-        if (connection != null) {
-            return connection;
+        if (this.connection != null || !this.connection.isClosed()) {
+            return this.connection;
         } else {
-
-            String driver = "com.mysql.jdbc.Driver";
-            /* try for connection by passing location of mysql, user and
-             password to connect it. We will utlize getConnection method in drivermanager
-             class
-             */
-
-            /* catch all exceptions for connection */
-            return connection;
+            try {
+                this.connection = DriverManager.getConnection(dbUrl, username, pwrd);
+                System.out.println("Database connection established");
+                return this.connection;
+            } catch (SQLException ex) {
+                // handle any errors
+                err.append("Error encountered!\n");
+                err.append("SQLException: ");
+                err.append(ex.getMessage());
+                err.append("\n");
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+            } catch (Exception ex) {
+                err.append("Error encountered!\n");
+                err.append("Connection not created: ");
+                err.append(ex.getMessage());
+                err.append("\n");
+                System.out.println("Connection not created: " + ex.getMessage());
+            }
+            return null;
         }
-
     }
 
-    public static Connection close() throws SQLException {
-        //it will forcefully close any open connection in Database.
-        return null;
-        /* forcefully close the open connection */
+    public void closeConn() throws SQLException {
+        try {
+            //it will forcefully close any open connection in Database.
+            this.connection.close();
+            System.out.println("Connection closed");
+        } catch (Exception ex) {
+            System.out.println("Error: Connection not closed: " + ex.getMessage());
+        }
     }
 
 }
