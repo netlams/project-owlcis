@@ -16,7 +16,7 @@
             return null;
         }
     });
-
+    
     app.controller('loginController', ['$scope', '$state', 'CookieService', function ($scope, $state, CookieService) {
             $scope.fname = CookieService.getCookie('FNAME');
             $scope.role = CookieService.getCookie('ROLE');

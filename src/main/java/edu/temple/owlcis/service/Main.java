@@ -1,5 +1,7 @@
 /**
- * CIS4398 Projects Spring 2016 2/25/2016
+ * CIS4398 Projects 
+ * Spring 2016 
+ * 2/25/2016
  */
 package edu.temple.owlcis.service;
 
@@ -25,7 +27,10 @@ import java.util.Arrays;
  * @author Dau
  */
 public class Main implements SparkApplication {
-
+    
+    /**
+     * A constant string to containing the backend system URL
+     */
     public static final String API_LOC = "/api";
 
     /**
@@ -56,17 +61,7 @@ public class Main implements SparkApplication {
             if (idToken != null) { // valid
                 Payload payload = idToken.getPayload();
 
-//                // Print user identifier
-//                String userId = payload.getSubject();
-//                System.out.println("Valid Google token.");
-//
-//                // Get profile information from payload
-//                String email = payload.getEmail();
-//                String familyName = (String) payload.get("family_name");
-//                String givenName = (String) payload.get("given_name");
-                User user = new User((String) payload.get("given_name"),
-                        (String) payload.get("family_name"),
-                        payload.getEmail());
+                User user = new User((String) payload.get("given_name"), (String) payload.get("family_name"), payload.getEmail());
 
                 Database dbc = new Database();
 
@@ -79,9 +74,6 @@ public class Main implements SparkApplication {
                             response.status(200);
                             request.session(true);
                             request.session().attribute("USER", user);
-//                        request.session().attribute("EMAIL", email);
-//                        request.session().attribute("FNAME", givenName);
-//                        request.session().attribute("ROLE", userRole);
                             // frontend can only access cookies, so we setting cookies here
                             response.cookie("EMAIL", user.getEmail(), 3600);
                             response.cookie("FNAME", user.getFname(), 3600);
@@ -91,34 +83,34 @@ public class Main implements SparkApplication {
                             System.out.println(ret);
                         } else {
                             // no such user
-                            // add new user
-//                            SignUp.addNewUser(dbc.getConn(), user);
                             // notify client to ask for additional info
                             response.status(202);
                             request.session().attribute("USER", user);
                             // frontend can only access cookies, so we setting cookies here
-                            response.cookie("EMAIL", user.getEmail(), 1800);
-//                            response.cookie("FNAME", user.getFname(), 3600);
-//                            response.cookie("ROLE", user.getLname(), 3600);
+                            // set cookie to timeout in 900 seconds
+                            response.cookie("EMAIL", user.getEmail(), 900);
                             ret = "User accepted: " + user.getEmail()
                                     + ". \n\"HTTP 202 - ACCEPTED\"";
                             System.out.println(ret);
                         }
                     } catch (SQLException ex) {
+                        // Database errors
                         response.status(500);
                         ret = "OWLCIS failed: " + ex.getMessage()
                                 + "\n\"HTTP 500 SERVER ERROR\"";
                     }
                 } else {
-                    // not temple email
+                    // invalid email
                     response.status(403);
                     ret = "Invalid credentials. Non-Temple."
                             + "\n\"HTTP 400 BAD REQUEST\"";
                 }
-
+                
+                // Close connection
                 dbc.closeConn();
                 return ret;
             } else {
+                // invalid Google Token sent
                 response.status(403);
                 ret = "Invalid ID sent. Non-Temple."
                         + "\n\"HTTP 400 BAD REQUEST\"";
@@ -126,6 +118,9 @@ public class Main implements SparkApplication {
             return ret;
         });
         
+        /**
+         * Signup Route 
+         */
         post("/signup", (request, response) -> {
             String ret = "hi";
 //            ret = request.queryParams("roleType");
@@ -135,16 +130,15 @@ public class Main implements SparkApplication {
             return ret;
         });
         
-        /* Signout Route */
+        /** 
+         * Signout Route 
+         */
         get("/signout", (request, response) -> {
             String ret = "";
 
             /* check if user is logged in or not */
             if (!request.session().isNew() && request.cookie("EMAIL") != null) {
-                /* remove these sessions */
-//                request.session().removeAttribute("EMAIL");
-//                request.session().removeAttribute("FNAME");
-//                request.session().removeAttribute("ROLE");
+                /* remove sessions */
                 request.session().removeAttribute("USER");
                 /* remove these cookies */
                 response.removeCookie("EMAIL");
@@ -160,13 +154,6 @@ public class Main implements SparkApplication {
             }
 
             return ret;
-        });
-
-        /* check user info */
-        get(API_LOC + "/check-user", (request, response) -> {
-            return "Your role from cookie is: " + request.cookie("ROLE")
-                    + "\n" + "Your email from session is: "
-                    + request.session().attribute("EMAIL");
         });
 
     }

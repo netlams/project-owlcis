@@ -12,20 +12,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
- * A User can Log into his/her account.
+ * This class manages the login requests.
  *
  * @author Mounya, Dau
  */
 public class SignIn {
 
     /**
-     * This method takes user email, fname, lname from the user and validates
-     * the
-     * information by checking the User table columns Returns user role name if
-     * validation
-     * was successful
+     * Find user role based on user information 
+     * 
+     * @param conn
+     * @param user
+     * @return user role
+     * @throws SQLException 
      */
-//    public static String findUserRole(Connection conn, String email, String fname, String lname) throws SQLException {
     public static String findUserRole(Connection conn, User user) throws SQLException {
         String email = user.getEmail();
         String fname = user.getFname();
@@ -56,8 +56,6 @@ public class SignIn {
                 } else {
                     return null;
                 }
-//                rs.first();
-//                    return getLongRoleName(rs.getString(1).toLowerCase());
             } catch (SQLException ex) {
                 // handle any errors
                 System.out.println("SQLException: " + ex.getMessage());
@@ -93,56 +91,13 @@ public class SignIn {
         return null;
     }
 
-    public static String test(Connection conn) throws SQLException {
-        StringBuilder ret = new StringBuilder("");
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        if (conn != null) {
-            try {
-                stmt = conn.prepareStatement("SELECT * FROM test");
-                rs = stmt.executeQuery();
-                System.out.println("Test Query executed");
-                // Now do something with the ResultSet ....
-                while (rs.next()) {
-                    ret.append(rs.getString(1));
-                    ret.append(rs.getString(2));
-                }
-//                conn.close();
-                return ret.toString();
-            } catch (SQLException ex) {
-                // handle any errors
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-            } finally {
-                // it is a good idea to release
-                // resources in a finally{} block
-                // in reverse-order of their creation
-                // if they are no-longer needed
-                if (rs != null) {
-                    try {
-                        rs.close();
-                    } catch (SQLException sqlEx) {
-                    } // ignore
-
-                    rs = null;
-                }
-
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (SQLException sqlEx) {
-                    } // ignore
-
-                    stmt = null;
-                }
-            }
-        }
-        // failture
-        return null;
-    }
-
+    
+    /**
+     * Check if email is from Temple
+     * 
+     * @param email
+     * @return true if Temple email; otherwise false
+     */
     public static boolean isValidTempleEmailAddress(String email) {
         String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(temple.edu)$";
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);

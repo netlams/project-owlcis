@@ -1,9 +1,10 @@
+/**
+ * Global variables
+ */
 var backendError = false;
 var auth2;
 
-/**
- * Initializes the Sign-In client.
- */
+/* Initializes the Sign-In client */
 var initClient = function () {
     gapi.load('auth2', function () {
         /**
@@ -13,13 +14,13 @@ var initClient = function () {
         auth2 = gapi.auth2.init({
             client_id: '221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com'
         });
-
     });
 };
 
-initClient();
+/* Start Google Auth */
+//initClient();
 
-
+/* Create Google signin button */
 function renderGButton() {
     gapi.signin2.render('google-signin-btn', {
         'scope': 'profile email',
@@ -32,13 +33,14 @@ function renderGButton() {
     });
 }
 
+/* Failure at Google signin */
 function onFailure(error) {
     console.log(error);
 }
 
+/* Success at Google signin */
 function onSignIn(googleUser) {
     
-        googleUser = auth2.currentUser.get();
         var profile = googleUser.getBasicProfile();
         var id_token = googleUser.getAuthResponse().id_token;
 
@@ -60,6 +62,7 @@ function onSignIn(googleUser) {
     }
 }
 
+/* Sign out of OWLCIS */
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
@@ -68,11 +71,13 @@ function signOut() {
     });
 }
 
+/* Check if email is from Temple */
 function validateEmail(email) {
     var pattern = new RegExp(/\S\S*@temple.edu$/i); // check if email param is a valid temple email address
     return pattern.test(email);
 }
 
+/* Gets the value from Cookie */
 function getCookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
@@ -86,6 +91,7 @@ function getCookie(cname) {
     return null;
 }
 
+/* Redirect to a URL */
 function redirectTo(page) {
     window.location = page;
 }
@@ -106,7 +112,6 @@ function logBackend(id) {
         else if (xhr.readyState == 4 && xhr.status == 202) {
             // no matching found, so added new user and session and cookie set
             alert("New User! Redirecting you to complete signup.");
-//            redirectTo("/");
             redirectTo("/#signup");
             document.location.reload(true);
         }
@@ -135,12 +140,14 @@ function logBackend(id) {
     xhr.send(id);
 }
 
+/* Start loading animation */
 function loadLoadingAnim() {
     document.getElementById("app").style.opacity = "0.1";
     document.body.innerHTML += "<div id='cssload-loader'>OWLCIS is Loading</div>";
     return true;
 }
 
+/* Stop loading animation */
 function stopLoadingAnim() {
     document.getElementById("app").style.opacity = "1.0";
     var elem = document.getElementById("cssload-loader");

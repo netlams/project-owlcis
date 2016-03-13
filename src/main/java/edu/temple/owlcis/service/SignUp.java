@@ -12,13 +12,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
- * When a User clicks on SignUp tab, the web page redirects itself to
- * registration page
+ * This class manages the signup requests.
  *
  * @author Mounya, Dau
  */
 public class SignUp {
 
+    /**
+     * Add new user to database
+     * 
+     * @param conn
+     * @param user
+     * @return status result
+     * @throws SQLException 
+     */
     public static String addNewUser(Connection conn, User user) throws SQLException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -39,7 +46,6 @@ public class SignUp {
                 // execute query
                 stmt.executeUpdate();
                 System.out.println("addNewUser Query executed.");
-//                INSERT INTO member VALUES ( (SELECT user_id FROM user WHERE email='ba@temple.edu'), 1, '2016-05-06', 'CIS' );
                 switch (user.getRole()) {
                     case User.MEMBER:
                         sql = "INSERT INTO member (mem_id) VALUES ("

@@ -15,12 +15,17 @@ package edu.temple.owlcis.service;
  * @author Dau
  */
 public class User {
-//    public enum RoleType {
-//        MEMBER, MODERATOR, ADVISOR
-//    }
-
+    /**
+     * Constants
+     */
     public static final String MEMBER = "member";
+    /**
+     * Constants
+     */
     public static final String ADVISOR = "advisor";
+    /**
+     * Constants
+     */
     public static final String MODERATOR = "moderator";
 
     /**
@@ -65,6 +70,7 @@ public class User {
      * @param r the role to give to User object
      */
     public User(int i, String e, String f, String l, String r) {
+        this();
         this.fname = f;
         this.lname = l;
         this.id = i;
@@ -276,12 +282,23 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-
+    
+    /**
+     * Gets string representation of object
+     * 
+     * @return string representation
+     */
     @Override
     public String toString() {
         return this.fname + " " + this.email;
     }
-
+    
+    /**
+     * Converts short role name to long name
+     * 
+     * @param type the short role name
+     * @return long role name
+     */
     public static String getLongRoleName(String type) {
         String roleName;
         switch (type) {
@@ -299,7 +316,12 @@ public class User {
         }
         return roleName;
     }
-
+    
+    /**
+     * Converts long role name to short name
+     * @param roleName the long name
+     * @return the short name
+     */
     public static String getShortRoleName(String roleName) {
         switch (roleName) {
             case User.MEMBER:
