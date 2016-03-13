@@ -20,6 +20,7 @@ public class Moderator extends User {
      */
     public Moderator() {
         super();
+        super.setRole(User.MODERATOR);
     }
     
     /**

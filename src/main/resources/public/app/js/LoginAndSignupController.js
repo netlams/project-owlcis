@@ -16,7 +16,7 @@
             return null;
         }
     });
-    
+
     app.controller('loginController', ['$scope', '$state', 'CookieService', function ($scope, $state, CookieService) {
             $scope.fname = CookieService.getCookie('FNAME');
             $scope.role = CookieService.getCookie('ROLE');
@@ -29,6 +29,28 @@
             }
 
             $scope.loginStatus = $scope.checkLogin();
+        }]);
+
+    app.controller('signupController', ['$scope', '$state', '$http', '$window', function ($scope, $state, $http, $window) {
+            $scope.formData = {};
+            // process the form
+            $scope.processForm = function () {
+                $http.post('/signup', $scope.formData)
+                        .then(function (response) {
+                            console.log(response.status);
+                            console.log(response.data);
+                            if (response.status == 203) {
+                                alert("Successfully Added");
+                                $window.location.href = '/';
+                            }
+                            else {
+                                alert("error :((");
+                                $window.location.href = '/';
+                            }
+                        }, function (response) {
+                            ;
+                        });
+            };
         }]);
 
 }());

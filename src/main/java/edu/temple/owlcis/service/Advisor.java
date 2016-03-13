@@ -24,6 +24,7 @@ public class Advisor extends User {
      */
     public Advisor() {
         super();
+        super.setRole(User.ADVISOR);
         this.setDeptId(0);
     }
 
@@ -68,6 +69,16 @@ public class Advisor extends User {
      */
     public void setDeptId(int deptId) {
         this.deptId = deptId;
+    }
+    
+    /**
+     * Gets string representation of object
+     * 
+     * @return string representation
+     */
+    @Override
+    public String toString() {
+        return super.toString() + " deptId: " + this.getDeptId();
     }
 
 }
