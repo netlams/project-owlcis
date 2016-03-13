@@ -1,4 +1,24 @@
 var backendError = false;
+var auth2;
+
+/**
+ * Initializes the Sign-In client.
+ */
+var initClient = function () {
+    gapi.load('auth2', function () {
+        /**
+         * Retrieve the singleton for the GoogleAuth library and set up the
+         * client.
+         */
+        auth2 = gapi.auth2.init({
+            client_id: '221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com'
+        });
+
+    });
+};
+
+initClient();
+
 
 function renderGButton() {
     gapi.signin2.render('google-signin-btn', {
@@ -17,42 +37,26 @@ function onFailure(error) {
 }
 
 function onSignIn(googleUser) {
-    /* only call this function one time! (first time when nonexistent cookies) */
-    if (!getCookie("ROLE") && !getCookie("EMAIL") && !getCookie("FNAME")) {
-
-
+    
+        googleUser = auth2.currentUser.get();
         var profile = googleUser.getBasicProfile();
         var id_token = googleUser.getAuthResponse().id_token;
 
         console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
         console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail());
-        console.log('Token: ' + id_token);
-
-//        if (googleUser.isSignedIn()) {
+    /* only call this function one time! (first time when nonexistent cookies) */
+    if (!getCookie("ROLE") && !getCookie("EMAIL") && !getCookie("FNAME")) {
         if (validateEmail(profile.getEmail())) {
-//                alert("Good you're from temple.");
             // Communicate with backend to set session data
 
             logBackend(id_token);
 
-            // countdown to redirect
-//      var seconds = 5;
-//      var repeat =  setInterval(function(){
-//          document.getElementById("message").innerHTML = 'Redirecting you to homepage in ... ' + seconds;
-//          seconds -= 1;
-//          if (seconds == 0) { 
-//              clearInterval(repeat);
-////              redirectTo("index.html")
-//          }
-//      }, 1000);
         } else {
             alert("Sorry, OWLCIS only allows Temple students, alumnis, and faculty members."
                     + " \nYour Gmail: " + profile.getEmail() + " has not been accepted.");
             signOut();
         }
-//        }
     }
 }
 
@@ -82,11 +86,6 @@ function getCookie(cname) {
     return null;
 }
 
-function showRole() {
-    var role = getCookie("ROLE");
-    alert("Your role is: " + getCookie("ROLE"));
-}
-
 function redirectTo(page) {
     window.location = page;
 }
@@ -104,9 +103,12 @@ function logBackend(id) {
             // user logged in and session and cookie set
             redirectTo("/");
         }
-        else if (xhr.readyState == 4 && xhr.status == 201) {
+        else if (xhr.readyState == 4 && xhr.status == 202) {
             // no matching found, so added new user and session and cookie set
-            alert("New user");
+            alert("New User! Redirecting you to complete signup.");
+//            redirectTo("/");
+            redirectTo("/#signup");
+            document.location.reload(true);
         }
         else if (xhr.readyState == 4 && xhr.status == 403) {
             // Bad response
@@ -116,13 +118,16 @@ function logBackend(id) {
             }
             backendError = true;
         }
-        else {
+        else if (xhr.readyState == 4 && (xhr.status == 404 || xhr.status == 500)) {
             // Bad response
             if (!backendError) {
                 alert("OWLCIS is unavailable at the moment. Please try again later.");
                 stopLoadingAnim();
             }
             backendError = true;
+        }
+        else {
+            ;
         }
     };
     xhr.open('POST', 'login');

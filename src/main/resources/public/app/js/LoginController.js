@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('authApp');
-    
+
     /* Gets the cookie */
     app.service('CookieService', function () {
         this.getCookie = function getCookie(cname) {
@@ -21,15 +21,14 @@
             $scope.fname = CookieService.getCookie('FNAME');
             $scope.role = CookieService.getCookie('ROLE');
             $scope.loginStatus = false;
-            $scope.checkLogin = function() {
-                if ($scope.fname != null && $scope.role != null) 
+            $scope.checkLogin = function () {
+                if ($scope.fname != null && $scope.role != null)
                     return true;
-                else  
+                else
                     return false
             }
-      
-            $scope.loginStatus = $scope.checkLogin();
-    }]);
 
+            $scope.loginStatus = $scope.checkLogin();
+        }]);
 
 }());

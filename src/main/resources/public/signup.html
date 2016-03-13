@@ -1,0 +1,58 @@
+<div class="text-center">
+
+    <h1 class="text-center">Sign up for OWLCIS</h1>
+
+    <form class="form-horizontal" action="/signup" method="POST">
+
+        <div class="form-group">
+            <div class="col-sm-2 col-sm-offset-5">
+                <select name="roleType" id="roleType" data-ng-model="roleType" class="form-control" required>
+                    <option value="">---Please select---</option>
+                    <option value="member">Member</option>
+                    <option value="moderator">Moderator</option>
+                    <option value="advisor">Advisor</option>
+                </select>
+            </div>
+        </div>
+
+        <div data-ng-show="roleType == 'member'">
+            <div class="form-group">
+                <label for="studentOrAlumni" class="col-sm-2 control-label col-sm-offset-3">Status:</label>
+                <div class="col-sm-2">
+                    <input type="radio" name="studentOrAlumni" id="optionsRadios1" value="1" checked> Student
+                    <input type="radio" name="studentOrAlumni" id="optionsRadios2" value="0"> Alumni
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="major" class="col-sm-2 control-label col-sm-offset-3">Major</label>
+                <div class="col-sm-3">
+                    <input name="major" type="text" class="form-control" placeholder="CIS / IST" ng-required="roleType == 'member'" maxlength="3">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="gradDate" class="col-sm-2 control-label col-sm-offset-3">Graduation Date</label>
+                <div class="col-sm-3">
+                    <input name="gradDate" type="date" class="form-control" >
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group" data-ng-show="roleType == 'advisor'">
+            <label for="deptId" class="col-sm-2 control-label col-sm-offset-4">Department Id</label>
+            <div class="col-sm-1">
+                <input name="deptId" type="number" class="form-control" placeholder="1" ng-required="roleType == 'advisor'">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 col-sm-offset-5">
+                <input type="submit" class="btn btn-default" value="Sign me up!">
+            </div>
+        </div>
+
+    </form>
+
+</div>

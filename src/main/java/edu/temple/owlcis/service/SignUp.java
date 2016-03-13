@@ -1,6 +1,6 @@
 /**
- * CIS4398 Projects 
- * Spring 2016 
+ * CIS4398 Projects
+ * Spring 2016
  * 2/25/2016
  */
 package edu.temple.owlcis.service;
@@ -10,50 +10,63 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 /**
  * When a User clicks on SignUp tab, the web page redirects itself to
  * registration page
  *
- * @author Mounya
+ * @author Mounya, Dau
  */
 public class SignUp {
-    
-    
+
     public static String addNewUser(Connection conn, User user) throws SQLException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         if (conn != null) {
             try {
-                String sql = "INSERT INTO user (user_type, f_name, l_name) "
-                                + "VALUES (?, ?, ?)";
-                
+                String sql = "INSERT INTO user (user_id, user_type, f_name, l_name, email) "
+                        + "VALUES (1, ?, ?, ?, ?)";
+
                 stmt = conn.prepareStatement(sql);
 
                 // set the params one-by-one
-                stmt.setString(1, user.getRole());
+                stmt.setString(1, User.getShortRoleName(user.getRole()));
                 stmt.setString(2, user.getFname());
                 stmt.setString(3, user.getLname());
+                stmt.setString(4, user.getEmail());
 
                 // execute query
-                rs = stmt.executeQuery();
+                stmt.executeUpdate();
                 System.out.println("addNewUser Query executed.");
-                
+//                INSERT INTO member VALUES ( (SELECT user_id FROM user WHERE email='ba@temple.edu'), 1, '2016-05-06', 'CIS' );
                 switch (user.getRole()) {
-                    case User.MEMBER: 
-                        sql = "INSERT INTO member (user_type, f_name, l_name) "
-                                + "VALUES (?, ?, ?)";
+                    case User.MEMBER:
+                        sql = "INSERT INTO member (mem_id) VALUES ("
+                                + "(SELECT user_id FROM user WHERE email = ? ))";
+                        break;
+                    case User.MODERATOR:
+                        sql = "INSERT INTO moderator (mod_id) VALUES ("
+                                + "(SELECT user_id FROM user WHERE email = ? ))";
+                        break;
+                    case User.ADVISOR:
+                        sql = "INSERT INTO advisor (adv_id) VALUES ("
+                                + "(SELECT user_id FROM user WHERE email = ? ))";
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid user type: " + user.getRole());
                 }
-                
-                
 
-                // get first row found
-//                if (rs.first())
-//                    return getLongRoleName(rs.getString(1).toLowerCase());
-//                else
-//                    return null;
-//                rs.first();
-                    return null;
+                stmt = conn.prepareStatement(sql);
+
+                // set the params one-by-one
+                stmt.setString(1, user.getEmail());
+
+                // execute query
+                stmt.executeUpdate();
+                System.out.println("addNewUser type Query executed.");
+
+                return "Good";
             } catch (SQLException ex) {
                 // handle any errors
                 System.out.println("SQLException: " + ex.getMessage());

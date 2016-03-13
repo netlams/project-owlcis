@@ -64,47 +64,50 @@ public class Main implements SparkApplication {
 //                String email = payload.getEmail();
 //                String familyName = (String) payload.get("family_name");
 //                String givenName = (String) payload.get("given_name");
-
-                User user = new User((String) payload.get("given_name"), 
-                        (String) payload.get("family_name"), 
+                User user = new User((String) payload.get("given_name"),
+                        (String) payload.get("family_name"),
                         payload.getEmail());
-                System.out.println(user.toString());//
-                
+
                 Database dbc = new Database();
 
                 /* Check if email is from Temple University */
                 if (SignIn.isValidTempleEmailAddress(user.getEmail()) == true) {
                     try {
-                    String userRole = SignIn.findUserRole(dbc.getConn(), user);
-                    if (userRole != null) {
-                        // found user
-                        response.status(200);
-                        request.session(true);
-                        request.session().attribute("USER", user);
+                        String userRole = SignIn.findUserRole(dbc.getConn(), user);
+                        if (userRole != null) {
+                            // found user
+                            response.status(200);
+                            request.session(true);
+                            request.session().attribute("USER", user);
 //                        request.session().attribute("EMAIL", email);
 //                        request.session().attribute("FNAME", givenName);
 //                        request.session().attribute("ROLE", userRole);
-                        // frontend can only access cookies, so we setting cookies here
-                        response.cookie("EMAIL", user.getEmail(), 3600);
-                        response.cookie("FNAME", user.getFname(), 3600);
-                        response.cookie("ROLE", user.getLname(), 3600);
-                        ret = "User logged in: " + user.getEmail()
-                                + ". \n\"HTTP 200 OK\"";
-                        System.out.println(ret);
-                    } else {
-                        // no such user
-                        // add new user
-//                        SignUp.addNewUser();
-                        // notify client to ask for additional info
-                        response.status(201);
-                        System.out.println();
-                        ret = "User signed up: " + user.getEmail()
-                                + ". \n\"HTTP 201 - CREATED\"";
-                    }
+                            // frontend can only access cookies, so we setting cookies here
+                            response.cookie("EMAIL", user.getEmail(), 3600);
+                            response.cookie("FNAME", user.getFname(), 3600);
+                            response.cookie("ROLE", user.getLname(), 3600);
+                            ret = "User logged in: " + user.getEmail()
+                                    + ". \n\"HTTP 200 OK\"";
+                            System.out.println(ret);
+                        } else {
+                            // no such user
+                            // add new user
+//                            SignUp.addNewUser(dbc.getConn(), user);
+                            // notify client to ask for additional info
+                            response.status(202);
+                            request.session().attribute("USER", user);
+                            // frontend can only access cookies, so we setting cookies here
+                            response.cookie("EMAIL", user.getEmail(), 1800);
+//                            response.cookie("FNAME", user.getFname(), 3600);
+//                            response.cookie("ROLE", user.getLname(), 3600);
+                            ret = "User accepted: " + user.getEmail()
+                                    + ". \n\"HTTP 202 - ACCEPTED\"";
+                            System.out.println(ret);
+                        }
                     } catch (SQLException ex) {
                         response.status(500);
                         ret = "OWLCIS failed: " + ex.getMessage()
-                            + "\n\"HTTP 500 SERVER ERROR\"";
+                                + "\n\"HTTP 500 SERVER ERROR\"";
                     }
                 } else {
                     // not temple email
@@ -122,13 +125,22 @@ public class Main implements SparkApplication {
             }
             return ret;
         });
-
+        
+        post("/signup", (request, response) -> {
+            String ret = "hi";
+//            ret = request.queryParams("roleType");
+//            ret += " " + request.queryParams("major");
+            ret = request.body();
+            response.redirect("/");
+            return ret;
+        });
+        
         /* Signout Route */
         get("/signout", (request, response) -> {
             String ret = "";
 
             /* check if user is logged in or not */
-            if (!request.session().isNew() && request.cookie("email") != null) {
+            if (!request.session().isNew() && request.cookie("EMAIL") != null) {
                 /* remove these sessions */
 //                request.session().removeAttribute("EMAIL");
 //                request.session().removeAttribute("FNAME");
@@ -143,6 +155,7 @@ public class Main implements SparkApplication {
                 ret = "User is signed out.";
             } else {
                 response.status(400);
+                response.redirect("/");
                 ret = "\"HTTP 400 BAD REQUEST\"";
             }
 
@@ -152,7 +165,7 @@ public class Main implements SparkApplication {
         /* check user info */
         get(API_LOC + "/check-user", (request, response) -> {
             return "Your role from cookie is: " + request.cookie("ROLE")
-                    + "\n" + "Your email from session is: " 
+                    + "\n" + "Your email from session is: "
                     + request.session().attribute("EMAIL");
         });
 

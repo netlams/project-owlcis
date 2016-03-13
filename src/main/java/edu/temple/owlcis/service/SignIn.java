@@ -51,12 +51,13 @@ public class SignIn {
                 System.out.println("findUserRole Query executed.");
 
                 // get first row found
-//                if (rs.first())
+                if (rs.first()) {
+                    return User.getLongRoleName(rs.getString(1).toLowerCase());
+                } else {
+                    return null;
+                }
+//                rs.first();
 //                    return getLongRoleName(rs.getString(1).toLowerCase());
-//                else
-//                    return null;
-                rs.first();
-                    return getLongRoleName(rs.getString(1).toLowerCase());
             } catch (SQLException ex) {
                 // handle any errors
                 System.out.println("SQLException: " + ex.getMessage());
@@ -147,23 +148,5 @@ public class SignIn {
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
         java.util.regex.Matcher m = p.matcher(email);
         return m.matches();
-    }
-
-    public static String getLongRoleName(String type) {
-        String roleName;
-        switch (type) {
-            case "me":
-                roleName = "member";
-                break;
-            case "mo":
-                roleName = "moderator";
-                break;
-            case "ad":
-                roleName = "advisor";
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid user type: " + type);
-        }
-        return roleName;
     }
 }
