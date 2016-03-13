@@ -4,6 +4,8 @@
  * 2/25/2016
  */
 package edu.temple.owlcis.service;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * Member class is used for any user that is a Temple University student or
@@ -28,15 +30,16 @@ public class Member extends User {
      * The Member's graduation date
      */
     protected String gradDate;
-
+//    protected Date gradDate;
     /**
      * Default Constructor for Member
      */
     public Member() {
         super();
+        super.setRole(User.MEMBER);
         this.setMajor("Computer Science");
         this.setStudentOrAlumni("student");
-        this.setGradDate("May 2016");
+        this.setGradDate("2016-05-12");
     }
 
     /**
@@ -129,4 +132,33 @@ public class Member extends User {
         this.gradDate = gradDate;
     }
     
+//    /**
+//     * Gets the gradDate
+//     *
+//     * @return the gradDate
+//     */
+//    public Date getGradDate() {
+//        return gradDate;
+//    }
+//
+//    /**
+//     * Sets the gradDate
+//     *
+//     * @param gradDate the graduation date to set
+//     */
+//    public void setGradDate(Date gradDate) {
+//        this.gradDate = gradDate;
+//    }
+    
+    /**
+     * Gets string representation of object
+     * 
+     * @return string representation
+     */
+    @Override
+    public String toString() {
+        return super.toString() + " studentOrAlumni: " 
+                + this.getStudentOrAlumni() + " Major: " + this.getMajor() 
+                + " GradDate: " + this.getGradDate();
+    }
 }

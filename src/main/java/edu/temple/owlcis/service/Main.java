@@ -1,6 +1,6 @@
 /**
- * CIS4398 Projects 
- * Spring 2016 
+ * CIS4398 Projects
+ * Spring 2016
  * 2/25/2016
  */
 package edu.temple.owlcis.service;
@@ -17,6 +17,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.Arrays;
 
@@ -27,7 +28,7 @@ import java.util.Arrays;
  * @author Dau
  */
 public class Main implements SparkApplication {
-    
+
     /**
      * A constant string to containing the backend system URL
      */
@@ -105,33 +106,83 @@ public class Main implements SparkApplication {
                     ret = "Invalid credentials. Non-Temple."
                             + "\n\"HTTP 400 BAD REQUEST\"";
                 }
-                
+
                 // Close connection
                 dbc.closeConn();
                 return ret;
             } else {
                 // invalid Google Token sent
-                response.status(403);
+                response.status(400);
                 ret = "Invalid ID sent. Non-Temple."
                         + "\n\"HTTP 400 BAD REQUEST\"";
             }
             return ret;
         });
-        
+
         /**
-         * Signup Route 
+         * Signup Route
          */
         post("/signup", (request, response) -> {
-            String ret = "hi";
-//            ret = request.queryParams("roleType");
-//            ret += " " + request.queryParams("major");
-            ret = request.body();
-            response.redirect("/");
+            String ret = "";
+            System.out.println("Starting signup. " + request.body());
+
+            try {
+                if (request.session().attributes() != null) {
+                    // Parser 
+                    Gson gson = new Gson();
+                    // get user data from session
+                    User user = request.session().attribute("USER");
+                    System.out.println("Existing User: " + user.toString());
+
+                    // temporary holder to determine which user type
+                    User newUser = gson.fromJson(request.body(), User.class);
+                    System.out.println("NO PROBLEM USER");
+                    newUser = gson.fromJson(request.body(), User.userFactory(newUser.getRole()).getClass());
+                    System.out.println("New User's class " + newUser.getClass());
+
+                    // Set new user's info from session data
+                    newUser.setEmail(user.getEmail());
+                    newUser.setFname(user.getFname());
+                    newUser.setLname(user.getLname());
+                    System.out.println("New User's: " + newUser.toString());
+
+                    // Ready to add to database
+                    Database dbc = new Database();
+                    if (dbc.getError().length() == 0) {
+                        ret = SignUp.addNewUser(dbc.getConn(), newUser);
+                        request.session().attribute("USER", user);
+                        response.cookie("EMAIL", user.getEmail(), 3600);
+                        response.cookie("FNAME", user.getFname(), 3600);
+                        response.cookie("ROLE", user.getLname(), 3600);
+                        response.status(203);
+                        ret = newUser.toString();
+                    } else {
+                        ret = dbc.getError();
+                        throw new SQLException();
+                    }
+                    // Close connection
+                    dbc.closeConn();
+                    ret += "\nUser accepted: " + user.getEmail()
+                            + ". \n\"HTTP 202 - ACCEPTED\"";
+                    System.out.println(ret);
+                }
+            } catch (NullPointerException ex) {
+                response.status(400);
+                System.out.println(ex.getMessage());
+                ret = "Invalid usage."
+                        + "\n\"HTTP 400 BAD REQUEST\"";
+            } catch (Exception ex) {
+                response.status(500);
+                System.out.println(ex.getMessage());
+                ret = "OWLCIS failed: " + ex.getMessage()
+                        + "\n\"HTTP 500 SERVER ERROR\"";
+            }
+
             return ret;
         });
-        
-        /** 
-         * Signout Route 
+
+        /**
+         * Signout Route
          */
         get("/signout", (request, response) -> {
             String ret = "";

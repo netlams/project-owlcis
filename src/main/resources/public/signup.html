@@ -1,12 +1,12 @@
-<div class="text-center">
+<div class="text-center" data-ng-controller="signupController">
 
     <h1 class="text-center">Sign up for OWLCIS</h1>
 
-    <form class="form-horizontal" action="/signup" method="POST">
+    <form class="form-horizontal" data-ng-submit="processForm()">
 
         <div class="form-group">
             <div class="col-sm-2 col-sm-offset-5">
-                <select name="roleType" id="roleType" data-ng-model="roleType" class="form-control" required>
+                <select name="role" id="role" data-ng-model="formData.role" class="form-control" required>
                     <option value="">---Please select---</option>
                     <option value="member">Member</option>
                     <option value="moderator">Moderator</option>
@@ -15,35 +15,35 @@
             </div>
         </div>
 
-        <div data-ng-show="roleType == 'member'">
+        <div data-ng-show="formData.role == 'member'">
             <div class="form-group">
                 <label for="studentOrAlumni" class="col-sm-2 control-label col-sm-offset-3">Status:</label>
                 <div class="col-sm-2">
-                    <input type="radio" name="studentOrAlumni" id="optionsRadios1" value="1" checked> Student
-                    <input type="radio" name="studentOrAlumni" id="optionsRadios2" value="0"> Alumni
+                    <input name="studentOrAlumni" data-ng-model="formData.studentOrAlumni" type="radio" value="student" data-ng-checked="true"> Student
+                    <input name="studentOrAlumni" data-ng-model="formData.studentOrAlumni" type="radio" value="alumni"> Alumni
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="major" class="col-sm-2 control-label col-sm-offset-3">Major</label>
                 <div class="col-sm-3">
-                    <input name="major" type="text" class="form-control" placeholder="CIS / IST" ng-required="roleType == 'member'" maxlength="3">
+                    <input name="major" data-ng-model="formData.major" type="text" class="form-control" placeholder="CIS / IST" data-ng-required="formData.role == 'member'" maxlength="3">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="gradDate" class="col-sm-2 control-label col-sm-offset-3">Graduation Date</label>
                 <div class="col-sm-3">
-                    <input name="gradDate" type="date" class="form-control" >
+                    <input name="gradDate" data-ng-model="formData.gradDate" type="date" class="form-control" >
                 </div>
             </div>
 
         </div>
 
-        <div class="form-group" data-ng-show="roleType == 'advisor'">
+        <div class="form-group" data-ng-show="formData.role == 'advisor'">
             <label for="deptId" class="col-sm-2 control-label col-sm-offset-4">Department Id</label>
             <div class="col-sm-1">
-                <input name="deptId" type="number" class="form-control" placeholder="1" ng-required="roleType == 'advisor'">
+                <input name="deptId" data-ng-model="formData.deptId" type="number" class="form-control" placeholder="1" data-ng-required="formData.role == 'advisor'">
             </div>
         </div>
 

@@ -57,7 +57,7 @@ public class User {
         this.fname = "Jane";
         this.lname = "Doe";
         this.email = "jd@example.com";
-        this.role = "member";
+        this.role = User.MEMBER;
     }
 
     /**
@@ -290,7 +290,9 @@ public class User {
      */
     @Override
     public String toString() {
-        return this.fname + " " + this.email;
+        return "First Name: " + this.getFname() + " Last Name: " 
+                + this.getLname() + " Email: " + this.getEmail() 
+                + " Role: " + this.getRole();
     }
     
     /**
