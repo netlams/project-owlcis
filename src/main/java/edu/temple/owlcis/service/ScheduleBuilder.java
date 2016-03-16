@@ -1,4 +1,5 @@
 package edu.temple.owlcis.service;
+import java.util.Date;
 
 /**
  *
@@ -16,6 +17,7 @@ public class ScheduleBuilder {
     //Global variables
     private String username; //the username of the student who created the schedule (e.g., tue11223@temple.edu)
     private String creationDateTime; //the time and date at which the schedule was created
+    private Schedule mySchedule;
     
     /**
      * the constructor for the ScheduleBuilder object
@@ -23,6 +25,8 @@ public class ScheduleBuilder {
      */
     public ScheduleBuilder(String un) {
         username = un;
+        //creationDateTime = now
+        mySchedule = new Schedule();
     }
     
     /**
@@ -33,7 +37,10 @@ public class ScheduleBuilder {
      * @return true if the course was successfully added to the schedule;
      * false if it was not added
      */
-    private boolean addCourse(String courseID) {
+    private boolean addCourse(String courseID, String title, String major, String semester) {
+        //first verify that the schedule does not already have this course
+        //should also check if this user has taken this course already
+        mySchedule.courses.add(new Course(courseID, title, major, semester));
         return true;
     }
     
@@ -45,7 +52,9 @@ public class ScheduleBuilder {
      * @return true if the course was successfully deleted from the schedule;
      * false if it was not deleted
      */
-    private boolean deleteCourse(String courseID) {
+    private boolean deleteCourse(String courseID, String semester) {
+        //first verify that the schedule has this course
+        //traverse through courses, find one that contains this courseID on this semester and delete it
         return true;
     }
     

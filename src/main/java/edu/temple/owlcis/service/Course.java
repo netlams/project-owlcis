@@ -21,11 +21,11 @@ public class Course {
     /**
      * the constructor for the Course object
      */
-    protected Course() {
-        courseID = "";
-        courseTitle = "";
-        cisMajor = "";
-        semester = "";
+    protected Course(String cid, String ctitle, String cmajor, String csemester) {
+        courseID = cid;
+        courseTitle = ctitle;
+        cisMajor = cmajor;
+        semester = csemester;
     }
     
     /**
