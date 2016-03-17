@@ -54,6 +54,10 @@
                     <!-- MAIN NAVIGATION -->
                     <div id="main-nav" class="navbar-collapse collapse navbar-mega-menu">
                         <ul class="nav navbar-nav navbar-right" ng-controller="loginController">
+                            <li data-ng-repeat="link in navbar">
+                                <a href="{{link.url}}">{{link.name}}</a>
+                            </li>
+                            
                             <li id="appLoginMsg">
                                 <p class="navbar-text" ng-hide="loginStatus">Sign in using your Temple University Email</p>
                                 <p class="navbar-text" ng-show="loginStatus">Welcome, {{fname}}.</p>

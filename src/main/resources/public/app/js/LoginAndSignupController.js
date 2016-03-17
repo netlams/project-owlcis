@@ -32,14 +32,32 @@
     /* Login Controller */
     app.controller('loginController', ['$scope', '$state', 'CookieService',
         function ($scope, $state, CookieService) {
+            $scope.memberNav = [{url: '#home', name: 'Home'},
+                {url: '#profile', name: 'Profile'},
+                {url: '#course', name: 'Course'},
+                {url: '#schedule', name: 'Schedule'},
+                {url: '#forum', name: 'Forum'}];
+            $scope.modAdvNav = [{url: '#home', name: 'Home'},
+                {url: '#course', name: 'Course'},
+                {url: '#forum', name: 'Forum'}];
             $scope.fname = CookieService.getCookie('FNAME');
             $scope.role = CookieService.getCookie('ROLE');
+            $scope.email = CookieService.getCookie('EMAIL');
+            $scope.navbar = [];
+
             $scope.loginStatus = false;
             $scope.checkLogin = function () {
-                if ($scope.fname != null && $scope.role != null)
+                if ($scope.fname != null
+                        && $scope.role != null
+                        && $scope.email != null) {
+                    if ($scope.role === 'member')
+                        $scope.navbar = $scope.memberNav;
+                    else 
+                        $scope.navbar = $scope.modAdvNav;
                     return true;
-                else
+                } else {
                     return false;
+                }
             };
 
             $scope.loginStatus = $scope.checkLogin();
@@ -62,21 +80,21 @@
 
             // process the form
             $scope.processForm = function () {
-                    $http.post('/signup', $scope.formData)
-                            .then(function (response) {
-                                console.log("Signup status: " + response.status);
-                                console.log(response.data);
-                                if (response.status == 203) {
-                                    alert("Successfully Added");
-                                    $window.location.href = '/';
-                                }
-                            }, function (response) {
-                                $scope.formData.err = "Cannot sign up at the moment.\n\
+                $http.post('/signup', $scope.formData)
+                        .then(function (response) {
+                            console.log("Signup status: " + response.status);
+                            console.log(response.data);
+                            if (response.status == 203) {
+                                alert("Successfully Added");
+                                $window.location.href = '/';
+                            }
+                        }, function (response) {
+                            $scope.formData.err = "Cannot sign up at the moment.\n\
                                             Make sure you're loggged into Google and try again";
-                                console.log("Error in processing form. "
-                                            + response.data);
-                            });
-            }
+                            console.log("Error in processing form. "
+                                    + response.data);
+                        });
+            };
         }]);
 
 }());

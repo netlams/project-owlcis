@@ -76,7 +76,7 @@ public class Main implements SparkApplication {
                             // frontend can only access cookies, so we setting cookies here
                             response.cookie("EMAIL", user.getEmail(), 3600);
                             response.cookie("FNAME", user.getFname(), 3600);
-                            response.cookie("ROLE", user.getLname(), 3600);
+                            response.cookie("ROLE", userRole, 3600);
                             ret = "User logged in: " + user.getEmail()
                                     + ". \n\"HTTP 200 OK\"";
                             System.out.println(ret);
@@ -151,7 +151,7 @@ public class Main implements SparkApplication {
                         request.session().attribute("USER", newUser);
                         response.cookie("EMAIL", user.getEmail(), 3600);
                         response.cookie("FNAME", user.getFname(), 3600);
-                        response.cookie("ROLE", user.getLname(), 3600);
+                        response.cookie("ROLE", user.getRole(), 3600);
                         response.status(203);
 //                        System.out.println(newUser.toString());
                     } else {
