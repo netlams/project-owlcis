@@ -7,8 +7,7 @@ package edu.temple.owlcis.service;
 
 /**
  * User serves as the base class for all User role subtypes (Member, Advisor,
- * and Moderator). It cannot be instantiated by itself; only its subtypes can be
- * instantiated. The subtypes inherits all required properties and overrides any
+ * and Moderator). The subtypes inherits all required properties and overrides any
  * appropriate methods. Common properties include fname, lname, id, and email.
  * Common methods include access checkers for subtype privileges.
  *

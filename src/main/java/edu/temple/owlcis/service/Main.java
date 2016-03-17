@@ -206,6 +206,15 @@ public class Main implements SparkApplication {
 
             return ret;
         });
+        
+        /**
+         * Departments JSON Route
+         */
+        get(API_LOC + "/depts", (request, response) -> {
+            response.status(200);
+            response.type("application/json");
+            return new Gson().toJson(Department.getAllDepartments());
+        });
 
     }
 }
