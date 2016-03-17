@@ -7,9 +7,7 @@ package edu.temple.owlcis.service;
 
 import static spark.Spark.*;
 import spark.servlet.SparkApplication;
-import java.util.HashMap;
-import java.util.Map;
-import spark.ModelAndView;
+import java.util.List;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -150,12 +148,12 @@ public class Main implements SparkApplication {
                     Database dbc = new Database();
                     if (dbc.getError().length() == 0) {
                         ret = SignUp.addNewUser(dbc.getConn(), newUser);
-                        request.session().attribute("USER", user);
+                        request.session().attribute("USER", newUser);
                         response.cookie("EMAIL", user.getEmail(), 3600);
                         response.cookie("FNAME", user.getFname(), 3600);
                         response.cookie("ROLE", user.getLname(), 3600);
                         response.status(203);
-                        ret = newUser.toString();
+//                        System.out.println(newUser.toString());
                     } else {
                         ret = dbc.getError();
                         throw new SQLException();
@@ -168,6 +166,10 @@ public class Main implements SparkApplication {
                 }
             } catch (NullPointerException ex) {
                 response.status(400);
+                /* remove these cookies */
+                response.removeCookie("EMAIL");
+                response.removeCookie("FNAME");
+                response.removeCookie("ROLE");
                 System.out.println(ex.getMessage());
                 ret = "Invalid usage."
                         + "\n\"HTTP 400 BAD REQUEST\"";
@@ -206,14 +208,24 @@ public class Main implements SparkApplication {
 
             return ret;
         });
-        
+
         /**
-         * Departments JSON Route
+         * Departments GET Route
          */
         get(API_LOC + "/depts", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
-            return new Gson().toJson(Department.getAllDepartments());
+            try {
+                List list = Department.getAllDepartments();
+                response.type("application/json");
+                if (list.isEmpty()) 
+                    response.status(404);
+                else 
+                    response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
         });
 
     }

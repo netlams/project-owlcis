@@ -22,21 +22,20 @@ public class Department {
     private String shortname;
     private String name;
     private String chair;
-    
+
     public Department() {
         this.id = 0;
         this.shortname = "";
         this.name = "";
         this.chair = "";
     }
-    
+
     public Department(int id, String s, String n, String c) {
         this.id = id;
         this.shortname = s;
         this.name = n;
         this.chair = c;
     }
-    
 
     public static List getAllDepartments() throws SQLException {
         Database dbc = new Database();
@@ -51,13 +50,13 @@ public class Department {
                 // execute query
                 rs = stmt.executeQuery(sql);
                 System.out.println("getAllDept Query executed.");
-                
+
                 // add to list
                 while (rs.next()) {
-                    list.add(new Department(rs.getInt(1), 
-                                            rs.getString(2), 
-                                            rs.getString(3), 
-                                            rs.getString(4)));
+                    list.add(new Department(rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -87,7 +86,9 @@ public class Department {
 
                     stmt = null;
                 }
+
             }
+            dbc.closeConn();
             return list;
         }
         return null;

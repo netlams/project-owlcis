@@ -57,19 +57,16 @@ public class SignUp {
                             stmt.setString(1, newM.getEmail());
                             stmt.setInt(2, (newM.getStudentOrAlumni().toLowerCase() == "student" ? 1 : 0));
                             stmt.setString(3, newM.getMajor());
-//                        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");
                             java.util.Date date1 = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(newM.getGradDate());
-//                        java.util.Date parsedDate = dateFormat.parse(newM.getGradDate());
                             java.sql.Date newDate = new java.sql.Date(date1.getTime());
-//                        java.sql.Date newDate = ;
                             stmt.setDate(4, newDate);
                         } catch (Exception ex) {
                             System.out.println("ERROR in adding to MEMBER TABLE");
                         }
                         break;
                     case User.MODERATOR:
-                        sql = "INSERT INTO moderator (mod_id) VALUES ("
-                                + "(SELECT user_id FROM user WHERE email = ? ))";
+                        sql = "INSERT INTO moderator VALUES ("
+                                + "(SELECT user_id FROM user WHERE email = ? ), now())";
                         stmt = conn.prepareStatement(sql);
                         // set the params one-by-one
                         stmt.setString(1, user.getEmail());
