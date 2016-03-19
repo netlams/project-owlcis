@@ -19,7 +19,7 @@ public class Database {
 
     private Connection connection = null;
     private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String dbUrl = "jdbc:mysql://localhost:3306/owlcis";
+    private static final String dbUrl = "jdbc:mysql://localhost:3307/owlcis";
     private static final String username = "user";
     private static final String pwrd = "temple2016";
     private StringBuilder err = new StringBuilder("");
@@ -94,7 +94,7 @@ public class Database {
             this.connection.close();
             System.out.println("Connection closed");
         } catch (Exception ex) {
-            System.out.println("Error: Connection not closed: " + ex.getMessage());
+            System.out.println("Error: Connection not open: " + ex.getMessage() + ". Are you tunneled in yet?");
         }
     }
 

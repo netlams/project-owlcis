@@ -302,6 +302,7 @@ public class User {
      */
     public static String getLongRoleName(String type) {
         String roleName;
+        type = type.toLowerCase();
         switch (type) {
             case "me":
                 roleName = User.MEMBER;
@@ -324,6 +325,7 @@ public class User {
      * @return the short name
      */
     public static String getShortRoleName(String roleName) {
+        roleName = roleName.toLowerCase();
         switch (roleName) {
             case User.MEMBER:
                 roleName = "me";

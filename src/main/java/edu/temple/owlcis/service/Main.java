@@ -42,7 +42,7 @@ public class Main implements SparkApplication {
 
         /* root API */
         get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");
-
+       
         /* Login Route */
         post("/login", (request, response) -> {
             String ret = "";
