@@ -79,7 +79,7 @@
 
                             <li id="appLoginMsg">
                                 <p class="navbar-text" ng-hide="loginStatus">Sign in using your Temple University Email</p>
-                                <p class="navbar-text" ng-show="loginStatus">Welcome, {{fname}}.</p>
+                                <p class="navbar-text" ng-show="loginStatus">Welcome, {{fname}} [{{role}}]</p>
                                 <button type="button" class="btn btn-default" ng-show="loginStatus" onClick="signOut()">Sign out?</button>
                             </li>
                             <li>
