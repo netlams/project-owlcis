@@ -24,7 +24,7 @@
         <link href="assets/css/main.css" rel="stylesheet" type="text/css">
         <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
         <link href="assets/css/ie.css" rel="stylesheet" type="text/css">
-    <link href="assets/css/footernav.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/footernav.css" rel="stylesheet" type="text/css">
 
         <!-- IE 9 Fallback-->
         <!--[if IE 9]>
@@ -34,48 +34,49 @@
         <!-- GOOGLE FONTS -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
-    
-    <style type="text/css">
-        .navbar-brand {
-            padding: 0px; /* firefox bug fix */
-        }
+        <style type="text/css">
+          .navbar-brand {
+              padding: 0px; /* firefox bug fix */
+          }
 
-        .navbar-brand > img {
-            height: 100%;
-            padding: 8px; /* firefox bug fix */
-            width: auto;
-        }
+          .navbar-brand > img {
+              height: 100%;
+              padding: 8px; /* firefox bug fix */
+              width: auto;
+          }
 
-        .form-inline .form-group select {
-            width: 200px;
-        }
-    </style>
+          .form-inline .form-group select {
+              width: 200px;
+          }
+        </style>
     </head>
 
     <body>
-        <!-- WRAPPER
-        <div id="app" class="wrapper">
-         -->
+        <!-- WRAPPER -->
+        <div id="app">
 
             <!-- NAVBAR -->
             <nav class="navbar navbar-default navbar-dark " role="navigation">
-                <div class="container">				
+                <div class="container">
 
                     <div class="navbar-header">
-                          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
                             <span class="sr-only">Toggle Navigation</span>
                             <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                        </button>					
-                        <a class="navbar-brand" href="#">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a href="#first" class="navbar-brand">
                             <img src="assets/img/logo/tu.PNG" alt="University Logo">
                         </a>
                     </div>
-                    
                     <!-- MAIN NAVIGATION -->
-                    <div id="nav-bar" class="navbar-collapse collapse">
+                    <div id="main-nav" class="navbar-collapse collapse navbar-mega-menu">
                         <ul class="nav navbar-nav navbar-right" ng-controller="loginController">
+                            <li data-ng-repeat="link in navbar">
+                                <a href="{{link.url}}">{{link.name}}</a>
+                            </li>
+
                             <li id="appLoginMsg">
                                 <p class="navbar-text" ng-hide="loginStatus">Sign in using your Temple University Email</p>
                                 <p class="navbar-text" ng-show="loginStatus">Welcome, {{fname}}.</p>
@@ -92,19 +93,16 @@
             <!-- END NAVBAR -->
 
             <!-- PAGE CONTENT -->
-            
                 <div class="container">
-                    
+
                     <!-- App View / States -->
-                    <div ui-view>
-                    </div>
+                    <div ui-view></div>
 
                 </div>
-           
-            <!-- END PAGE CONTENT -->	
-      
+            <!-- END PAGE CONTENT -->
+
             <!-- FOOTER -->
-            <footer style="margin-bottom: 30px; padding-top: 10px;">			
+            <footer style="margin-bottom: 30px; padding-top: 10px;">
                 <!-- COPYRIGHT -->
                 <div class="text-center copyright navbar-fixed-bottom">
                     &copy;2016 Team Rachel, Dau, Dhruvin, Mounya, Jeff.  All Rights Reserved.
@@ -112,7 +110,7 @@
                 <!-- END COPYRIGHT -->
             </footer>
             <!-- END FOOTER -->
-        
+        </div>
 
         <!-- JAVASCRIPTS -->
         <script src="assets/js/jquery-2.1.1.min.js"></script>
@@ -126,10 +124,6 @@
         <script src="https://apis.google.com/js/api:client.js"></script>
         <script src="js/main.js"></script>
 
-        <!--Bootstrap Scripts and JQuery-->
-<script src="assets/js/jquery-2.1.1.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-</body>
-   
+    </body>
 
 </html>

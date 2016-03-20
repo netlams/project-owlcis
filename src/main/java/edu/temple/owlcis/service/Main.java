@@ -7,9 +7,7 @@ package edu.temple.owlcis.service;
 
 import static spark.Spark.*;
 import spark.servlet.SparkApplication;
-import java.util.HashMap;
-import java.util.Map;
-import spark.ModelAndView;
+import java.util.List;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -43,8 +41,7 @@ public class Main implements SparkApplication {
         staticFileLocation("/public");
 
         /* root API */
-        get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");
-                
+        get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");       
 
         /* Post Review Route */
         post(API_LOC + "/coursereviews", (request, response) -> {
@@ -64,9 +61,6 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        
-        
         
         /* Login Route */
         post("/login", (request, response) -> {
@@ -101,7 +95,7 @@ public class Main implements SparkApplication {
                             // frontend can only access cookies, so we setting cookies here
                             response.cookie("EMAIL", user.getEmail(), 3600);
                             response.cookie("FNAME", user.getFname(), 3600);
-                            response.cookie("ROLE", user.getLname(), 3600);
+                            response.cookie("ROLE", userRole, 3600);
                             ret = "User logged in: " + user.getEmail()
                                     + ". \n\"HTTP 200 OK\"";
                             System.out.println(ret);
@@ -173,24 +167,28 @@ public class Main implements SparkApplication {
                     Database dbc = new Database();
                     if (dbc.getError().length() == 0) {
                         ret = SignUp.addNewUser(dbc.getConn(), newUser);
-                        request.session().attribute("USER", user);
+                        request.session().attribute("USER", newUser);
                         response.cookie("EMAIL", user.getEmail(), 3600);
                         response.cookie("FNAME", user.getFname(), 3600);
-                        response.cookie("ROLE", user.getLname(), 3600);
+                        response.cookie("ROLE", user.getRole(), 3600);
                         response.status(203);
-                        ret = newUser.toString();
+//                        System.out.println(newUser.toString());
                     } else {
                         ret = dbc.getError();
                         throw new SQLException();
                     }
                     // Close connection
                     dbc.closeConn();
-                    ret += "\nUser accepted: " + user.getEmail()
-                            + ". \n\"HTTP 202 - ACCEPTED\"";
+                    ret += "\nUser created: " + user.getEmail()
+                            + ". \n\"HTTP 201 - CREATED\"";
                     System.out.println(ret);
                 }
             } catch (NullPointerException ex) {
                 response.status(400);
+                /* remove these cookies */
+                response.removeCookie("EMAIL");
+                response.removeCookie("FNAME");
+                response.removeCookie("ROLE");
                 System.out.println(ex.getMessage());
                 ret = "Invalid usage."
                         + "\n\"HTTP 400 BAD REQUEST\"";
@@ -230,6 +228,25 @@ public class Main implements SparkApplication {
             }
 
             return ret;
+        });
+
+        /**
+         * Departments GET Route
+         */
+        get(API_LOC + "/depts", (request, response) -> {
+            try {
+                List list = Department.getAllDepartments();
+                response.type("application/json");
+                if (list.isEmpty()) 
+                    response.status(404);
+                else 
+                    response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
         });
 
     }
