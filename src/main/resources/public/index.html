@@ -17,12 +17,14 @@
         <script src="app/js/LoginAndSignupController.js"></script>
         <script src="app/js/DBService.js"></script>
 
-        <!--<link rel="shortcut icon" href="assets/img/logo/owl.png">-->
+        <link rel="shortcut icon" href="assets/img/logo/owl.png">
         <!-- CSS -->
         <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="assets/css/main.css" rel="stylesheet" type="text/css">
         <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/ie.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/footernav.css" rel="stylesheet" type="text/css">
 
         <!-- IE 9 Fallback-->
         <!--[if IE 9]>
@@ -32,6 +34,21 @@
         <!-- GOOGLE FONTS -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+          .navbar-brand {
+              padding: 0px; /* firefox bug fix */
+          }
+
+          .navbar-brand > img {
+              height: 100%;
+              padding: 8px; /* firefox bug fix */
+              width: auto;
+          }
+
+          .form-inline .form-group select {
+              width: 200px;
+          }
+        </style>
     </head>
 
     <body>
@@ -40,13 +57,16 @@
 
             <!-- NAVBAR -->
             <nav class="navbar navbar-default navbar-dark " role="navigation">
-                <div class="container">				
+                <div class="container">
 
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
                             <span class="sr-only">Toggle Navigation</span>
-                            <i class="fa fa-bars"></i>
-                        </button>					
+                            <!-- <i class="fa fa-bars"></i> -->
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
                         <a href="#first" class="navbar-brand navbar-logo navbar-logo-bigger">
                             <img src="assets/img/logo/tu.PNG" alt="University Logo">
                         </a>
@@ -57,7 +77,7 @@
                             <li data-ng-repeat="link in navbar">
                                 <a href="{{link.url}}">{{link.name}}</a>
                             </li>
-                            
+
                             <li id="appLoginMsg">
                                 <p class="navbar-text" ng-hide="loginStatus">Sign in using your Temple University Email</p>
                                 <p class="navbar-text" ng-show="loginStatus">Welcome, {{fname}}.</p>
@@ -74,18 +94,18 @@
             <!-- END NAVBAR -->
 
             <!-- PAGE CONTENT -->
-            <div class="page-content">
+            <!-- <div class="page-content"> -->
                 <div class="container">
-                    
+
                     <!-- App View / States -->
                     <div ui-view></div>
 
                 </div>
-            </div>
-            <!-- END PAGE CONTENT -->	
+            <!-- </div> -->
+            <!-- END PAGE CONTENT -->
 
             <!-- FOOTER -->
-            <footer style="margin-bottom: 30px; padding-top: 10px;">			
+            <footer style="margin-bottom: 30px; padding-top: 10px;">
                 <!-- COPYRIGHT -->
                 <div class="text-center copyright navbar-fixed-bottom">
                     &copy;2016 Team Rachel, Dau, Dhruvin, Mounya, Jeff.  All Rights Reserved.

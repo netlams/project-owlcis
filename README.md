@@ -5,4 +5,4 @@
 4.) browser test
 
 <h1>How to run database connections</h1>
-Tunnel in using some command-line interface: terminal, SSH Secure Shell, or PuTTy. <code>ssh -L 3306:localhost:3306 NAME@owlcis.me</code>
+Tunnel in using some command-line interface: terminal, SSH Secure Shell, or PuTTy. <code>ssh -L 3307:localhost:3306 NAME@owlcis.me</code>
