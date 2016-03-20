@@ -14,8 +14,10 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  font-size: 13px;
-  color: #7b7b7b;
+  font-size: 14px;
+  color: white;
+  font-weight: bolder;
+   background-color: #9E1B34;
   line-height: 1.6;
 }
 body.layout-boxed {
@@ -73,6 +75,10 @@ hr {
 
 .widget-title {
   font-size: 18px;
+  color: #57CBF2;
+  font-weight: bolder;
+  font-feature-settings: normal;
+  
 }
 
 .section-heading {
@@ -274,7 +280,6 @@ hr {
 
 /* footer */
 footer {
-  background-color: #49494b;
   font-weight: 300;
   color: #eaeaea;
 }
@@ -4861,6 +4866,8 @@ div.mc-image {
 div[class*="col-"] > .form-group {
   margin-left: 0;
   margin-right: 0;
+ 
+  
 }
 
 /* add contextual color for badges */
