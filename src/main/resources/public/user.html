@@ -1,205 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
 
-    <head>
-        <title>Home | Page 02</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Responsive Multipurpose Bootstrap Theme">
-        <meta name="author" content="The Develovers">
-        <!-- CSS -->
-        <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/main.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
-
-        <!-- IE 9 Fallback-->
-        <!--[if IE 9]>
-                <link href="assets/css/ie.css" rel="stylesheet">
-        <![endif]-->
-        <!-- GOOGLE FONTS -->
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
-        <!-- FAVICONS -->
-       
-       <link rel="shortcut icon" href="assets/img/logo/owl.png">
-    </head>
-
-    <body>
-        <!-- WRAPPER -->
-        <div class="wrapper">
-            <!-- NAVBAR -->
-            <nav class="navbar navbar-default navbar-dark " role="navigation">
-                <div class="container">				
-
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
-                            <span class="sr-only">Toggle Navigation</span>
-                            <i class="fa fa-bars"></i>
-                        </button>					
-                        <a href="home.html" class="navbar-brand navbar-logo navbar-logo-bigger">
-                            <img src="assets/img/logo/tu.png" alt="University Logo">
-                        </a>
-                    </div>
-                    <!-- MAIN NAVIGATION -->
-                    <div id="main-nav" class="navbar-collapse collapse navbar-mega-menu">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home</a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile</a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Schedule</a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Forum</a>
-                            </li>
-                            <li class="dropdown">
-                                <a><i><b> Welcome, Username </b></i> </a>
-                            </li>
-                            
-                        </ul>
-                    </div>
-                    <!-- END MAIN NAVIGATION -->
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img src="assets/img/logo/tu.PNG" alt="University Logo">
+            </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Schedule</a></li>
+                <li><a href="#">Forum</a></li>
+                
+                
+            </ul>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row">
+                <img src="assets/img/logo/serc.jpg" alt="image" width="100" height="80">
+                <strong style="font-size: 30px;">Profile</strong>
+            </div>
+            <div class="row">
+                <h3 class="widget-title">Looking for reviews?</h3>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="course-list">Courses:</label>
+                
+                <select id="course-list" class="form-control">
+                    <option value="">Select Course</option>
+                    <option value="cis 1068">CIS 1068</option>
+                    <option value="cis 2107">CIS 2107</option>
+                </select>
+            </div>
+            <p> </p>
+                    
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="col-md-9">
+                <p class="widget-title">Address</p>
+            <section style="margin-bottom: 0px;">
+                <p style="font-weight: bolder">Temple University Computer & Information Sciences</br>
+                 1925 N. 12th Street </br>
+                    Philadelphia, PA 19122</br>
+                    Phone: 215- 204-8450 | Fax: 215- 204-5082 </br>
+                Email: cis@temple.edu</p>
+            </section>
+            </div>
+            <div class="col-md-2">
+                <img src="assets/img/logo/serc.jpg" alt="image" width="125" height="200">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="overflow-y: scroll; color: black; font-size: 16px;">
+                    <h6>Courses With Highest feedback:</h6>
                 </div>
-            </nav>
-            <!-- END NAVBAR -->
-
-            <!-- PAGE CONTENT -->
-            <div class="page-content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4">						
-                            <!-- Contact Info -->
-                            <div class="widget">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <img src="" alt="Profile Image" height="100" width="120">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h2>Profile <i class="fa fa-plus"></i></h2>
-                                    </div>
-
-                                </div>
-                                <br>
-
-                                <div class="form-horizontal">									
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Search for Course</label>
-                                        <div class="col-md-10">
-                                            <select class="form-control">
-                                                <option value="cis 1068">cis 1068</option>
-                                                <option value="cis 2107">cis 2107</option>
-                                                
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <input type="submit" class="btn btn-primary" value="Search">
-                                    <input type="submit" class="btn btn-primary pull-right" value="Post">
-                                </div>
-                            </div>
-                            <!-- End Contact Info -->
-                            <div class="list-group-item" style="height: 300px; max-height: 300px; overflow-y: auto;">
-                                <h3 class="widget-title">Courses with highest feedback:</h3>
-                            </div>
-
-                        </div>
-                        <div class="col-md-8">
-                            <div class="col-md-8">
-                                <h2 class="widget-title">Temple University Computer & Information Sciences</h2>
-                                <section style="margin-bottom: 0px;">
-                                    <p>1925 N. 12th Street</p>
-                                        <p>Philadelphia, PA 19122</p>
-                                        <p> Phone: 215- 204-8450 | Fax: 215- 204-5082 | </p>
-                                        <p>Email: cis@temple.edu </p>
-                                    
-                                </section>
-                            </div>
-                            <div class="col-md-4">
-                                <img src="assets/img/logo/serc.jpg" alt="Image" height="150" width="150">
-                            </div>					
-                            <div class="row">
-                                <div class="col-md-12">
-                                    &nbsp;
-                                </div>
-                                <div class="col-md-12">
-                                    &nbsp;
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    &nbsp;
-                                </div>
-                                <div class="col-md-12">
-                                    &nbsp;
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="list-group-item" style="max-height: 300px; overflow-y: auto;">
-                                    <h3 class="widget-title">Most recent feedbacks:</h3>
-                                    <div class="row">
-                                        <div class="col-md-3"><b>Course</b></div>
-                                        <div class="col-md-9"><b>Comment</b></div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-md-3">CIS 2344</div>
-                                        <div class="col-md-9">
-                                            <textarea class="form-control" placeholder="xxxxxx xxxxxxxxg xxxxxxxe" rows="4"></textarea>
-                                        </div>
-                                        <div class="col-md-9 col-md-offset-3">Advisor approval &nbsp; &nbsp; &nbsp;<i class="fa fa-thumbs-o-up fa-2x">10</i> &nbsp; &nbsp; &nbsp;<i class="fa fa-thumbs-o-down fa-2x">2</i></div>
-                                        <div class="col-md-9 col-md-offset-3">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</div>
-                                    </div>
-                                    
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-md-3">CIS 5789</div>
-                                        <div class="col-md-9">
-                                            <textarea class="form-control" placeholder="xxxxxx xxxxxxxxg xxxxxxxe" rows="4"></textarea>
-                                        </div>
-                                        <div class="col-md-9 col-md-offset-3">Advisor approval &nbsp; &nbsp; &nbsp;<i class="fa fa-thumbs-o-up fa-2x">10</i> &nbsp; &nbsp; &nbsp;<i class="fa fa-thumbs-o-down fa-2x">2</i></div>
-                                        <div class="col-md-9 col-md-offset-3">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</div>
-                                    </div>
-                                    <hr>
-                             
-                                    <div class="row">
-                                        <div class="col-md-3">CIS 5789</div>
-                                        <div class="col-md-9">
-                                            <textarea class="form-control" placeholder="xxxxxx xxxxxxxxg xxxxxxxe" rows="4"></textarea>
-                                        </div>
-                                        <div class="col-md-9 col-md-offset-3">Advisor approval &nbsp; &nbsp; &nbsp;<i class="fa fa-thumbs-o-up fa-2x">10</i> &nbsp; &nbsp; &nbsp;<i class="fa fa-thumbs-o-down fa-2x">2</i></div>
-                                        <div class="col-md-9 col-md-offset-3">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="panel-body">
+                    <p>course one</p>
+                    <p>course one</p>
+                    <p>course one</p>
                 </div>
             </div>
-            <!-- END PAGE CONTENT -->		
 
-            <!-- FOOTER -->
-            <footer style="margin-bottom: 30px; padding-top: 10px;">			
-                <!-- COPYRIGHT -->
-                <div class="text-center copyright navbar-fixed-bottom">
-                    &copy;2016 The Develovers. All Rights Reserved.
-                </div>
-                <!-- END COPYRIGHT -->
-            </footer>
-            <!-- END FOOTER -->
         </div>
-        <!-- END WRAPPER -->
-        <!-- JAVASCRIPTS -->
-        <script src="assets/js/jquery-2.1.1.min.js"></script>
-        <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/plugins/slick/slick.min.js"></script>
-        <script src="assets/js/plugins/stellar/jquery.stellar.min.js"></script>
-        <script src="assets/js/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
-        <script src="assets/js/plugins/autohidingnavbar/jquery.bootstrap-autohidingnavbar.min.js"></script>
-        <script src="assets/js/repute-scripts.js"></script>	
-    </body>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">Most Recent Feedback:</div>
+                <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
+                    <form role="form" class="form-horizontal">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="comments" class="control-label col-md-2">CS2344</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" id="comments" rows="4"></textarea>
+                            <span id="helpBlock6" class="help-block">Advisor approval:
+                            <i class="fa fa-thumbs-o-up fa-2x">10</i>
+                            <i class="fa fa-thumbs-o-down fa-2x">2</i>
+                        </span>
+                                    <span id="helpBlock"
+                                          class="help-block">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comments1" class="control-label col-md-2">CS2344</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" id="comments1" rows="4"></textarea>
+                            <span id="helpBlock5" class="help-block">Advisor approval:
+                            <i class="fa fa-thumbs-o-up fa-2x">10</i>
+                            <i class="fa fa-thumbs-o-down fa-2x">2</i>
+                        </span>
+                                    <span id="helpBlock1"
+                                          class="help-block">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comments2" class="control-label col-md-2">CS2344</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" id="comments2" rows="4"></textarea>
+                        <span id="helpBlock4" class="help-block">Advisor approval:
+                            <i class="fa fa-thumbs-o-up fa-2x">10</i>
+                            <i class="fa fa-thumbs-o-down fa-2x">2</i>
+                        </span>
+                                    <span id="helpBlock2"
+                                          class="help-block">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</span>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+<!--Bootstrap Scripts and JQuery-->
+<script src="assets/js/jquery-2.1.1.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
 </html>

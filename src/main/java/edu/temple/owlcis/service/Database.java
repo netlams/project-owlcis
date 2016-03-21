@@ -94,7 +94,7 @@ public class Database {
             this.connection.close();
             System.out.println("Connection closed");
         } catch (Exception ex) {
-            System.out.println("Error: Connection not closed: " + ex.getMessage());
+            System.out.println("Error: Connection not open: " + ex.getMessage() + ". Are you tunneled in yet?");
         }
     }
 
