@@ -31,7 +31,7 @@
                                     <input name="major" data-ng-model="formData.major" type="text" class="form-control" placeholder="CIS / IST" data-ng-required="formData.role == 'member'" data-ng-maxlength="3">
                                 </div>-->
                 <div class="col-sm-2">
-                    <select name="major" id="formData.major" data-ng-model="formData.major" class="form-control" data-ng-required="formData.role == 'advisor'">
+                    <select name="major" id="formData.major" data-ng-model="formData.major" class="form-control" data-ng-required="formData.role == 'member'">
                         <option value="">-Select a Major-</option>
                         <option data-ng-repeat="option in formData.availDeptOptions" value="{{option.shortname}}">{{option.name}}</option>
                     </select>
