@@ -31,7 +31,7 @@
     display: block;
     width: 30px;
     height: 30px;
-    background: #9E1B34;
+    background: rgb(107,107,107);
     position: absolute;
     animation: cssload-load 0.415s infinite alternate ease-in-out;
     -o-animation: cssload-load 0.415s infinite alternate ease-in-out;
@@ -126,6 +126,7 @@
         width: 30px;
     }
 }
+
 input.star { display: none; }
 
 label.star {
@@ -156,10 +157,37 @@ label.star:before {
   font-family: FontAwesome;
 }
 
-/* image padding for home page */
-images{
-    padding-bottom: 10px;
-    padding-left: 5px;
-    border-radius: 4px;
-    
+//JUST COSMETIC STUFF FROM HERE ON. THESE AREN'T THE DROIDS YOU ARE LOOKING FOR: MOVE ALONG. 
+
+//just styling for the number
+.choice{
+  position: fixed;
+  top: 0;
+  left:0;
+  right:0;
+  text-align: center;
+  padding: 20px;
+  display:block;
+}
+
+//reset, center n shiz (don't mind this stuff)
+*, ::after, ::before{
+  height: 100%;
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
+  text-align: center;  
+  vertical-align: middle;
+}
+body{
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", 
+  Helvetica, Arial, "Lucida Grande", sans-serif;
+  &::before{
+    height: 100%;
+    content:'';
+    width:0;
+    background:red;
+    vertical-align: middle;
+    display:inline-block;
+  }
 }
