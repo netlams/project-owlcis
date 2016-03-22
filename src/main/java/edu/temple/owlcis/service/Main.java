@@ -227,6 +227,25 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
+        
+        /**
+         * ViewCourseReviews GET Route
+         */
+        get(API_LOC + "/viewreviews", (request, response) -> {
+            try {
+                List list = ViewReviews.getAllReviews();
+                response.type("application/json");
+                if (list.isEmpty()) 
+                    response.status(404);
+                else 
+                    response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
 
     }
 }

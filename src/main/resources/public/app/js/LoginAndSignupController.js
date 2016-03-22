@@ -73,6 +73,7 @@
                         $scope.formData = {
                             deptId: null,
                             major: null,
+                            
                             availDeptOptions: data,
                             err: null,
                         };
