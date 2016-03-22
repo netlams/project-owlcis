@@ -1,39 +1,4 @@
-/*------------------------------------------------------------------
-[Table of contents]
 
-#index.html - HOME PAGE
-1. General
-2. Footer
-3. Header
-3.1. Avatar
-4. Content
-4.1. Pagination
-4.2. Sidebar
-4.3. Post
-
-#02_topic.html - TOPIC
-5. Breadcrumb
-6. Topic
-7. Quote post
-
-
-#03_new_topic.html - NEW TOPIC
-
-#04_new_account.html - NEW ACCOUNT
-
-8. Extra small devices (less 767px)
-8.1. index.html
-8.2. 02_topic.html
-8.3. 03_new_topic.html
-9. Small devices (768 - 991px)
-10. Medium devices (992-1200px)
-11. Large devices (more 1200px)
-
--------------------------------------------------------------------*/
-
-
-/*-----------------------------------------------------------------*/
-/*--- General ---*/
 
 body {
     font-family: 'Open Sans Light', sans-serif;
@@ -50,16 +15,6 @@ a:hover {
 
 /*-----------------------------------------------------------------*/
 /*--- Footer ---*/
-
-footer {
-    height: 69px;
-    line-height: 69px;
-    color: #363838;
-}
-
-footer .logo {
-    line-height: normal;
-}
 
 
 ul.socialicons li {
