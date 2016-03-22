@@ -29,6 +29,19 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
         }).state('signup', {
             url: '/signup',
             templateUrl: 'signup.html'
-        });
+        }).state('forum', {
+            url: '/forum',
+            templateUrl: 'forumhome.html',
+            controller:'forumhome'
+        }).state('post', {
+            url: '/post',
+            templateUrl: 'forumpost.html',
+            controller:'forumpost'
+        }).state('search', {
+            url: '/search',
+            templateUrl: 'forumsearch.html',
+            controller:'forumsearch'
+    });
 
-});
+});;
+
