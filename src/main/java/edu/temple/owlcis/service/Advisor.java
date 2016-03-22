@@ -31,16 +31,15 @@ public class Advisor extends User {
     /**
      * Parameterized Constructor for Advisor object
      *
+     * @param e the email to give to this object
      * @param f the first name to give to this object
      * @param l the last name to give to this object
-     * @param i the id to give to this object
-     * @param e the email to give to this object
      * @param did the deptId to give to this object
      */
-    public Advisor(String f, String l, int i, String e, int did) {
+    public Advisor(String e, String f, String l, int did) {
+        this();
         this.setFname(f);
         this.setLname(l);
-        this.setId(i);
         this.setEmail(e);
         this.setDeptId(did);
     }
@@ -78,7 +77,7 @@ public class Advisor extends User {
      */
     @Override
     public String toString() {
-        return super.toString() + " deptId: " + this.getDeptId();
+        return super.toString() + " DeptId: " + this.getDeptId();
     }
 
 }
