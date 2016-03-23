@@ -41,6 +41,10 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/search',
             templateUrl: 'forumsearch.html',
             controller:'forumsearch'
+    }).state('review', {
+            url: '/review',
+            templateUrl: 'review.html',
+            controller:'review'
     });
 
 });;
