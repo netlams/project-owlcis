@@ -1,8 +1,9 @@
 <div class="text-center"   ng-controller="PromiseCtrl">
+
     <form class="form-horizontal" action="/signup" method="POST">
-    <h1 class="text-center">Course Review</h1>
+        <h1 class="text-center">Course Review</h1> 
         <div class="col-md-12">
-            <div class="list-group-item" style="max-height: 425px; overflow-y: auto;">
+            <div class="list-group-item" >
                 <hr>
                 <div class="row" ng-repeat="x in example2">
                     <div class="col-md-3"> Posted by: <br>{{x.f_name}} &nbsp; {{x.l_name}}<br> Time Stamp: {{x.time_stamp}}</div>
@@ -13,9 +14,10 @@
                         <i class="fa fa-thumbs-o-up fa-2x">10</i> &nbsp; &nbsp; &nbsp;
                         <i class="fa fa-thumbs-o-down fa-2x">2</i></div>
                     <div class="col-md-9 col-md-offset-3">User Type: {{x.user_type}}</div>
-                    </div>
+                </div>
                 <hr>
             </div>
         </div>
+
     </form>
 </div>

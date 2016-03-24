@@ -8,6 +8,7 @@
                 $scope.example2 = value.data;
             });
         }]);
+  
 }());
 
   
