@@ -41,8 +41,27 @@ public class Main implements SparkApplication {
         staticFileLocation("/public");
 
         /* root API */
-        get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");
-       
+        get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");       
+
+        /* Post Review Route */
+        post(API_LOC + "/coursereviews", (request, response) -> {
+            Gson gson = new Gson();
+            CourseReview testReview = gson.fromJson(request.body(), CourseReview.class);
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (testReview.insertReview(dbc.getConn())) {
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) { 
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
         /* Login Route */
         post("/login", (request, response) -> {
             String ret = "";
@@ -160,8 +179,8 @@ public class Main implements SparkApplication {
                     }
                     // Close connection
                     dbc.closeConn();
-                    ret += "\nUser accepted: " + user.getEmail()
-                            + ". \n\"HTTP 202 - ACCEPTED\"";
+                    ret += "\nUser created: " + user.getEmail()
+                            + ". \n\"HTTP 201 - CREATED\"";
                     System.out.println(ret);
                 }
             } catch (NullPointerException ex) {
@@ -182,7 +201,9 @@ public class Main implements SparkApplication {
 
             return ret;
         });
-
+        
+        
+        
         /**
          * Signout Route
          */

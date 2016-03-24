@@ -6,31 +6,44 @@ var authApp = angular.module('authApp',['ui.router']);
 
 authApp.config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/first');
+    $urlRouterProvider.otherwise('/home');
 
     $stateProvider
 
         .state('first', {
-            url: '/first',
+            url: '/home',
             templateUrl: 'home.html',
             controller: 'firstController'
         }).state('second', {
-            url: '/second',
+            url: '/user',
             templateUrl: 'user.html',
             controller:'secondController'
         }).state('third', {
-            url: '/third',
+            url: '/course',
             templateUrl: 'course.html',
             controller:'thirdController'
         }).state('fourth', {
-            url: '/fourth',
+            url: '/schedule',
             templateUrl: 'schedule.html',
             controller:'fourthController'
-            }).state('reviews', {
+        }).state('reviews', {
             url: '/reviews',
             templateUrl: 'reviews.html',
         }).state('signup', {
             url: '/signup',
             templateUrl: 'signup.html'
-            });
+        }).state('forum', {
+            url: '/forum',
+            templateUrl: 'forumhome.html',
+            controller:'forumhome'
+        }).state('post', {
+            url: '/post',
+            templateUrl: 'forumpost.html',
+            controller:'forumpost'
+        }).state('search', {
+            url: '/search',
+            templateUrl: 'forumsearch.html',
+            controller:'forumsearch'
+    });
+
 });
