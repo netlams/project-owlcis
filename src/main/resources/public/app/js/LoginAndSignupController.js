@@ -34,7 +34,7 @@
         function ($scope, $state, CookieService) {
             $scope.memberNav = [{url: '#home', name: 'Home'},
                 {url: '#profile', name: 'Profile'},
-                {url: '#course', name: 'Course'},
+                {url: '#reviews', name: 'Course Reviews'},
                 {url: '#schedule', name: 'Schedule'},
                 {url: '#forum', name: 'Forum'}];
             $scope.modAdvNav = [{url: '#home', name: 'Home'},
@@ -73,6 +73,7 @@
                         $scope.formData = {
                             deptId: null,
                             major: null,
+                            
                             availDeptOptions: data,
                             err: null,
                         };
