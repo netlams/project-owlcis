@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * The ViewReviews class is used for Course table in the database.
  *
- * @author Puppala
+ * @author Puppala, Dhruvin
  */
 public class ViewReviews {
 
@@ -23,6 +23,12 @@ public class ViewReviews {
     private String user_type;
     private String f_name;
     private String l_name;
+    
+    private String courseid;
+    private String courseName;
+    private Double helpfulness;
+    private Double easiness;
+    private Double clarity;
 
     public ViewReviews() {
         this.comment_text = "";
@@ -30,16 +36,29 @@ public class ViewReviews {
         this.user_type = "";
         this.f_name = "";
         this.l_name = "";
+        
+        this.courseid= "";
+        this.courseName= "";
+        this.helpfulness= 0.0;
+        this.easiness= 0.0;
+        this.clarity= 0.0;
+        
 
     }
 
-    public ViewReviews(String c, String t, String u, String f, String l) {
+    public ViewReviews(String c, String t,  String c_id, String f, String l, 
+            double help, double e, double cl) {
         this.comment_text = c;
         this.time_stamp = t;
-        this.user_type = u;
+        //this.user_type = u;
+        this.courseid= c_id;
         this.f_name = f;
         this.l_name = l;
-
+        //this.courseid= c_id;
+        //this.courseName= n;
+        this.helpfulness= help;
+        this.easiness= e;
+        this.clarity= cl;
     }
 
     public static List getAllReviews() throws SQLException {
@@ -51,10 +70,13 @@ public class ViewReviews {
             ResultSet rs = null;
             try {
                 //String sql = "SELECT * FROM course_review_comment ORDER BY time_stamp";
-                String sql = "SELECT crc.comment_text, crc.time_stamp, u.user_type, u.f_name, u.l_name "
-                        + "FROM owlcis.course_review_comment crc "
-                        + "JOIN owlcis.user u ON u.user_id = crc.user_id "
-                        + "ORDER BY crc.time_stamp DESC";
+                String sql = "SELECT  crc.comment_text, crc.time_stamp, cr.course_id, u.f_name, u.l_name, cr.helpfulness, cr.easiness,cr.clarity"
++" FROM owlcis.course_review_comment crc" 
++" JOIN owlcis.user u ON u.user_id = crc.user_id"
++" JOIN owlcis.course_review cr on cr.review_id = crc.review_id"
++" JOIN owlcis.course c on c.course_id = cr.course_id"
++" ORDER BY crc.time_stamp DESC";
+                      
                 stmt = dbc.getConn().createStatement();
                 // execute query
                 rs = stmt.executeQuery(sql);
@@ -63,10 +85,14 @@ public class ViewReviews {
                 // add to list
                 while (rs.next()) {
                     list.add(new ViewReviews(rs.getString(1),
-                            rs.getString(2),
+                            rs.getString(2), 
                             rs.getString(3),
                             rs.getString(4),
-                            rs.getString(5)));
+                            rs.getString(5),
+                            rs.getDouble(6),
+                            rs.getDouble(7),
+                            rs.getDouble(8)));
+                            
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -167,5 +193,62 @@ public class ViewReviews {
     public void setl_name(String l) {
         this.l_name = l;
     }
+    /**
+     * @return the course id
+     */
+     
+    public String getCourseid() {
+        return courseid;
+    }
 
+    /**
+     * @param l the l to set
+     */
+    public void setCourseid(String courseid) {
+        this.courseid= courseid;
+    }
+    /**
+     * @return the course name/ title
+     */
+     public String getCourseName() {
+        return courseName;
+    }
+      public void setCourseName(String courseName){
+          this.courseName= courseName;
+          
+      }
+      /**
+     * @return the helpfulness
+     */
+       public Double getHelpfulness() {
+        return helpfulness;
+    }
+
+      public void setHelpfulness( Double help){
+          this.helpfulness= help;
+      }
+      
+      /**
+     * @return the easiness
+     */
+      
+       public Double getEasiness() {
+        return easiness;
+    }
+       public void setEasiness( Double easiness){
+          this.easiness = easiness;
+      }
+        
+       /**
+     * @return the clarity
+     */
+       public Double getClarity() {
+        return clarity;
+    }
+       
+       
+        public void setClarity( Double clarity){
+          this.clarity = clarity;
+      }
+      
 }
