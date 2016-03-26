@@ -1,12 +1,13 @@
 /* Temple Cherry Red #9E1B34 */
 /* btn color (green)): #1abc9c */
 
+/* Google Sign in button */
 #google-signin-btn, #appLoginMsg button {
     margin-top: 9px;
     margin-bottom: 9px;
 }
 
-/* animation */
+/* Angular animation */
 #profile-completed-course .ng-hide-remove      { animation:0.5s fadeInUp ease; }
 
 /* Loading animation */
@@ -17,7 +18,7 @@
     text-align: center;
     position: absolute;
     left: 50%;
-    top: 25%;
+    top: 35%;
     transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);

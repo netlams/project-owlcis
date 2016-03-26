@@ -82,9 +82,14 @@ public class Main implements SparkApplication {
                 User user = new User((String) payload.get("given_name"), (String) payload.get("family_name"), payload.getEmail());
 
                 Database dbc = new Database();
-
+                if (dbc.getError().length() == 0) {
+                    // Database errors
+                    response.status(500);
+                    ret = "OWLCIS failed: "
+                            + "\n\"HTTP 500 SERVER ERROR\"";
+                }
                 /* Check if email is from Temple University */
-                if (SignIn.isValidTempleEmailAddress(user.getEmail()) == true && dbc.getError().length() == 0) {
+                if (SignIn.isValidTempleEmailAddress(user.getEmail()) == true) {
                     try {
                         User newUser = SignIn.findUser(dbc.getConn(), user);
                         if (newUser != null) {
@@ -165,9 +170,9 @@ public class Main implements SparkApplication {
                     if (dbc.getError().length() == 0) {
                         newUser = SignUp.addNewUserAndReturn(dbc.getConn(), newUser);
                         request.session().attribute("USER", newUser);
-                        response.cookie("EMAIL", user.getEmail(), 3600);
-                        response.cookie("FNAME", user.getFname(), 3600);
-                        response.cookie("ROLE", user.getRole(), 3600);
+                        response.cookie("EMAIL", newUser.getEmail(), 3600);
+                        response.cookie("FNAME", newUser.getFname(), 3600);
+                        response.cookie("ROLE", newUser.getRole(), 3600);
                         response.status(203);
                     } else {
                         ret = dbc.getError();

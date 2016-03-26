@@ -2,7 +2,6 @@
 <div class="page-content">
     <div class="container center-block">
         <div class="row">
-            <!-- BASIC INPUT -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title section-heading no-margin text-center">Member's Profile</h2>
@@ -20,7 +19,7 @@
                         <div class="form-group">
                             <label for="email" class="col-sm-2 control-label col-sm-offset-3">Email</label>
                             <div class="col-sm-3">
-                                <input name="email" type="email" class="form-control" value="example@temple.edu" disabled>
+                                <input name="email" type="text" class="form-control" value="example@temple.edu" disabled>
                             </div>
                         </div>
                         <!--Status-->
@@ -133,7 +132,7 @@
                                                     <button type="button" class="list-group-item" data-ng-repeat="course in value">
                                                         <label for="{{course.name}}">{{course.id}} - {{course.name}}</label>
                                                         <input type="checkbox" id="{{course.name}}" value="{{course.val}}" class="pull-right">
-                                                        
+
                                                     </button>
                                                 </div>
                                             </td>

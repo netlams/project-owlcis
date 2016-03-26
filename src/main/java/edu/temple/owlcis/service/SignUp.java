@@ -50,8 +50,8 @@ public class SignUp {
                     case User.MEMBER:
                         try {
                             Member newM = (Member) user;
-                            sql = "INSERT INTO member (mem_id, is_curr_student, major, grad_date) VALUES ("
-                                    + "(SELECT user_id FROM user WHERE email = ? ), ?, ?, ?)"; //TODO add gradDate
+                            sql = "INSERT INTO member (mem_id, is_curr_student, major, grad_date, degree_type) VALUES ("
+                                    + "(SELECT user_id FROM user WHERE email = ? ), ?, ?, ?, ?)"; 
                             stmt = conn.prepareStatement(sql);
                             // set the params one-by-one
                             stmt.setString(1, newM.getEmail());
@@ -60,6 +60,7 @@ public class SignUp {
                             java.util.Date date1 = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(newM.getGradDate());
                             java.sql.Date newDate = new java.sql.Date(date1.getTime());
                             stmt.setDate(4, newDate);
+                            stmt.setString(5, newM.getDegreeType());
                         } catch (Exception ex) {
                             System.out.println("ERROR in adding to MEMBER TABLE");
                         }
