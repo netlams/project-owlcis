@@ -9,6 +9,8 @@
         <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
         <script src="app/plugin/angular/angular.min.js"></script>
         <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="app/plugin/angular-animate/angular-animate.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-filter/0.4.7/angular-filter.js"></script>
         <script src="app/js/app.js"></script>
         <script src="app/js/FirstController.js"></script>
         <script src="app/js/SecondController.js"></script>
@@ -18,12 +20,14 @@
         <script src="app/js/forumhome.js"></script>
         <script src="app/js/forumpost.js"></script>
         <script src="app/js/forumsearch.js"></script>
+        <script src="app/js/ProfileController.js"></script>
         <script src="app/js/DBService.js"></script>
 
-        <link rel="shortcut icon" href="assets/img/logo/owl.png">
+        <link rel="shortcut icon" href="assets/img/logo/owl.PNG">
         <!-- CSS -->
         <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/animate.min.css" rel="stylesheet" type="text/css">
         <link href="assets/css/main.css" rel="stylesheet" type="text/css">
         <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
         <link href="assets/css/ie.css" rel="stylesheet" type="text/css">
@@ -42,19 +46,19 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
         <style type="text/css">
-          .navbar-brand {
-              padding: 0px; /* firefox bug fix */
-          }
+            .navbar-brand {
+                padding: 0px; /* firefox bug fix */
+            }
 
-          .navbar-brand > img {
-              height: 100%;
-              padding: 8px; /* firefox bug fix */
-              width: auto;
-          }
+            .navbar-brand > img {
+                height: 100%;
+                padding: 8px; /* firefox bug fix */
+                width: auto;
+            }
 
-          .form-inline .form-group select {
-              width: 200px;
-          }
+            .form-inline .form-group select {
+                width: 200px;
+            }
         </style>
     </head>
 
@@ -100,12 +104,12 @@
             <!-- END NAVBAR -->
 
             <!-- PAGE CONTENT -->
-                <div class="container">
+            <div class="container">
 
-                    <!-- App View / States -->
-                    <div ui-view></div>
+                <!-- App View / States -->
+                <div ui-view></div>
 
-                </div>
+            </div>
             <!-- END PAGE CONTENT -->
 
             <!-- FOOTER -->
