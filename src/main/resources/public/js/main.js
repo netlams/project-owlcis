@@ -106,7 +106,9 @@ function logBackend(id) {
         console.log(xhr.responseText);
         if (xhr.readyState == 4 && xhr.status == 200) {
             // user logged in and session and cookie set
-            redirectTo("/");
+            setTimeout(function () {
+                redirectTo("/");
+            }, 200); // slight delay to make it look natural
         }
         else if (xhr.readyState == 4 && xhr.status == 202) {
             // no matching found, so added new user and session and cookie set
@@ -129,7 +131,6 @@ function logBackend(id) {
         else {
             ;
         }
-        stopLoadingAnim();
     };
     xhr.open('POST', 'login');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -150,7 +151,7 @@ function stopLoadingAnim() {
         document.getElementById("app").style.opacity = "1.0";
         var elem = document.getElementById("cssload-loader");
         elem.parentNode.removeChild(elem);
-    }, 1500);
+    }, 500);
     return true;
 }
 
@@ -173,7 +174,7 @@ function loadLoginMsg(msg, email) {
     } else {
         title = 'OWLCIS Login Failure';
         body = 'OWLCIS is unavailable at the moment. Please try again later.';
-        btn = "<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>";
+        btn = "<button type='button' class='btn btn-default' data-dismiss='modal' onClick='stopLoadingAnim()'>Close</button>";
     }
 
     /* Add a Bootstrap Modal */

@@ -146,7 +146,7 @@ public class Main implements SparkApplication {
          */
         post("/signup", (request, response) -> {
             String ret = "";
-
+            System.out.println("body :" + request.body());
             try {
                 if (request.session().attributes() != null) {
                     // Parser 

@@ -60,7 +60,6 @@
     /* Signup Controller */
     app.controller('signupController', ['$scope', '$state', '$http', '$window', 'DeptService', 'CookieService',
         function ($scope, $state, $http, $window, DeptService, CookieService) {
-            $scope.foundName = CookieService.getCookie('FNAME');
             $scope.foundEmail = CookieService.getCookie('EMAIL');
             $scope.formData = {
                 deptId: null,

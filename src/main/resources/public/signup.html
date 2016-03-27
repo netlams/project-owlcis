@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 <label for="major" class="col-sm-2 control-label col-sm-offset-3">Major</label>
                                 <div class="col-sm-2">
-                                    <select name="major" id="formData.major" data-ng-model="formData.major" class="form-control" data-ng-required="formData.role == 'member'">
+                                    <select name="major" id="major" data-ng-model="formData.major" class="form-control" data-ng-required="formData.role == 'member'">
                                         <option value="">-Select a Major-</option>
                                         <option data-ng-repeat="option in formData.availMajorOptions" value="{{option.shortname}}">{{option.name}}</option>
                                     </select>
@@ -51,7 +51,7 @@
                             <div class="form-group">
                                 <label for="degreeType" class="col-sm-2 control-label col-sm-offset-3">Degree Type</label>
                                 <div class="col-sm-2">
-                                    <select name="degreeType" id="formData.degree" data-ng-model="formData.degree" class="form-control" data-ng-required="formData.role == 'member'">
+                                    <select name="degreeType" id="degreeType" data-ng-model="formData.degreeType" class="form-control" data-ng-required="formData.role == 'member'">
                                         <option value="">-Select a Type-</option>
                                         <option data-ng-repeat="option in formData.availDegreeOptions" value="{{option.name}}">{{option.name}}</option>
                                     </select>
@@ -70,7 +70,7 @@
                             <!--Dept-->
                             <label for="deptId" class="col-sm-2 control-label col-sm-offset-3">Department</label>
                             <div class="col-sm-2">
-                                <select name="deptId" id="formData.deptId" data-ng-model="formData.deptId" class="form-control" data-ng-required="formData.role == 'advisor'">
+                                <select name="deptId" id="deptId" data-ng-model="formData.deptId" class="form-control" data-ng-required="formData.role == 'advisor'">
                                     <option value="">-Select a Dept-</option>
                                     <option data-ng-repeat="option in formData.availMajorOptions" value="{{option.id}}">{{option.name}}</option>
                                 </select>

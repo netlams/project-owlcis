@@ -24,23 +24,36 @@
                         </div>
                         <!--Status-->
                         <div class="form-group">
-                            <label for="status" class="col-sm-2 control-label col-sm-offset-3">Status</label>
+                            <label for="studentOrAlumni" class="col-sm-2 control-label col-sm-offset-3">Status</label>
                             <div class="col-sm-3">
-                                <input name="status" type="text" class="form-control" value="Student/Alumni">
+                                <select name="" id="formData.studentOrAlumni" data-ng-model="formData.studentOrAlumni" class="form-control" required>
+                                    <option data-ng-repeat="option in formData.studentOrAlumniOptions" value="{{option.val}}">{{option.name}}</option>
+                                </select>
                             </div>
                         </div>
                         <!--Major-->
                         <div class="form-group">
                             <label for="major" class="col-sm-2 control-label col-sm-offset-3">Major</label>
                             <div class="col-sm-3">
-                                <input name="major" type="text" class="form-control" value="CS" maxlength="3">
+                                <select name="major" id="formData.major" data-ng-model="formData.major" class="form-control" required>
+                                    <option data-ng-repeat="option in formData.availMajorOptions" value="{{option.shortname}}">{{option.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--Degree Type-->
+                        <div class="form-group">
+                            <label for="degreeType" class="col-sm-2 control-label col-sm-offset-3">Degree Type</label>
+                            <div class="col-sm-2">
+                                <select name="degreeType" id="formData.degree" data-ng-model="formData.degree" class="form-control" data-ng-required="formData.role == 'member'">
+                                    <option data-ng-repeat="option in formData.availDegreeOptions" value="{{option.name}}">{{option.name}}</option>
+                                </select>
                             </div>
                         </div>
                         <!--GradDate-->
                         <div class="form-group">
                             <label for="gradDate" class="col-sm-2 control-label col-sm-offset-3">Graduation Date</label>
                             <div class="col-sm-3">
-                                <input name="gradDate" type="date" class="form-control" value="2016-05-06">
+                                <input name="gradDate" type="date" class="form-control" value="2016-05-06" required>
                             </div>
                         </div>
                         <!--Submit-->
