@@ -24,6 +24,6 @@
 
     review.$inject = ['$scope','$state','DBService'];
 
-    angular.module('authApp').controller('review', review);
+    angular.module('authApp').controller('reviews', review);
 
 }());
