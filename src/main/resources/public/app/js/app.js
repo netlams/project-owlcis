@@ -45,7 +45,9 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/profile',
             templateUrl: 'profile.html',
             controller:'profileController'
-        });
-
+        }).state('review', {
+            url: '/review',
+            templateUrl: 'review.html',
+            controller:'review'
+    });
 });;
-
