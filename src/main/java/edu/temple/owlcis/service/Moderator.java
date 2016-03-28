@@ -26,16 +26,15 @@ public class Moderator extends User {
     /**
      * Parameterized Constructor for Moderator object
      *
+     * @param e the email to give to this object
      * @param f the first name to give to this object
      * @param l the last name to give to this object
-     * @param i the id to give to this object
-     * @param e the email to give to this object
      */
-    public Moderator(String f, String l, int i, String e) {
+    public Moderator(String e, String f, String l) {
+        this();
+        this.setEmail(e);
         this.setFname(f);
         this.setLname(l);
-        this.setId(i);
-        this.setEmail(e);
     }
     
     @Override
@@ -56,6 +55,16 @@ public class Moderator extends User {
     @Override
     public boolean canChangeUserRole() {
         return true;
+    }
+    
+    /**
+     * Gets string representation of object
+     *
+     * @return string representation
+     */
+    @Override
+    public String toString() {
+        return super.toString();
     }
    
 }

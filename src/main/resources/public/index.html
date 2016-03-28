@@ -9,6 +9,8 @@
         <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
         <script src="app/plugin/angular/angular.min.js"></script>
         <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="app/plugin/angular-animate/angular-animate.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-filter/0.4.7/angular-filter.js"></script>
         <script src="app/js/app.js"></script>
         <script src="app/js/FirstController.js"></script>
         <script src="app/js/SecondController.js"></script>
@@ -19,20 +21,19 @@
         <script src="app/js/forumpost.js"></script>
         <script src="app/js/forumsearch.js"></script>
         <script src="app/js/review.js"></script>
+        <script src="app/js/ProfileController.js"></script>
         <script src="app/js/DBService.js"></script>
 
-        <link rel="shortcut icon" href="assets/img/logo/owl.png">
+        <link rel="shortcut icon" href="assets/img/logo/owl.PNG">
         <!-- CSS -->
         <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/animate.min.css" rel="stylesheet" type="text/css">
         <link href="assets/css/main.css" rel="stylesheet" type="text/css">
         <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
         <link href="assets/css/ie.css" rel="stylesheet" type="text/css">
-    <link href="assets/css/footernav.css" rel="stylesheet" type="text/css">
-     <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="screen" />
-   
-       
-       
+        <link href="assets/css/footernav.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="screen" />
         <link href="assets/css/custom.css" rel="stylesheet">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -42,61 +43,57 @@
           <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
           <![endif]-->
 
-        <!-- fonts -->
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <!-- GOOGLE FONTS -->
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="assets/css/font-awesome.forum.css">
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
-    
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+            .navbar-brand {
+                padding: 0px; /* firefox bug fix */
+            }
 
-        <link rel="shortcut icon" href="assets/img/logo/owl.PNG">
+            .navbar-brand > img {
+                height: 100%;
+                padding: 8px; /* firefox bug fix */
+                width: auto;
+            }
 
-        
-    <style type="text/css">
-        .navbar-brand {
-            padding: 0px; /* firefox bug fix */
-        }
-
-        .navbar-brand > img {
-            height: 100%;
-            padding: 8px; /* firefox bug fix */
-            width: auto;
-        }
-
-        .form-inline .form-group select {
-            width: 200px;
-        }
-    </style>
+            .form-inline .form-group select {
+                width: 200px;
+            }
+        </style>
     </head>
 
     <body>
-        <!-- WRAPPER
-        <div id="app" class="wrapper">
-         -->
+        <!-- WRAPPER -->
+        <div id="app">
 
             <!-- NAVBAR -->
             <nav class="navbar navbar-default navbar-dark " role="navigation">
-                <div class="container">				
+                <div class="container">
 
                     <div class="navbar-header">
-                          <button type="button" class="navbar-toggle collapsed"
-                                  data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
                             <span class="sr-only">Toggle Navigation</span>
                             <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                        </button>					
-                        <a class="navbar-brand" href="#">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a href="#first" class="navbar-brand">
                             <img src="assets/img/logo/tu.PNG" alt="University Logo">
                         </a>
                     </div>
-                    
                     <!-- MAIN NAVIGATION -->
-                    <div id="nav-bar" class="navbar-collapse collapse">
+                    <div id="main-nav" class="navbar-collapse collapse navbar-mega-menu">
                         <ul class="nav navbar-nav navbar-right" ng-controller="loginController">
+                            <li data-ng-repeat="link in navbar">
+                                <a href="{{link.url}}">{{link.name}}</a>
+                            </li>
+
                             <li id="appLoginMsg">
                                 <p class="navbar-text" ng-hide="loginStatus">Sign in using your Temple University Email</p>
-                                <p class="navbar-text" ng-show="loginStatus">Welcome, {{fname}}.</p>
+                                <p class="navbar-text" ng-show="loginStatus">Welcome, {{fname}} [{{role}}]</p>
                                 <button type="button" class="btn btn-default" ng-show="loginStatus" onClick="signOut()">Sign out?</button>
                             </li>
                             <li>
@@ -110,27 +107,23 @@
             <!-- END NAVBAR -->
 
             <!-- PAGE CONTENT -->
-            
-                <div class="container">
-                    
-                    <!-- App View / States -->
-                    <div ui-view>
-                    </div>
+            <div class="container">
+                <!-- App View / States -->
+                <div ui-view></div>
 
-                </div>
-           
-            <!-- END PAGE CONTENT -->	
-      
+            </div>
+            <!-- END PAGE CONTENT -->
+
             <!-- FOOTER -->
-            <footer style="margin-bottom: 30px; padding-top: 10px;">			
-                
+            <footer style="margin-bottom: 30px; padding-top: 10px;">
+                <!-- COPYRIGHT -->
                 <div class="text-center copyright navbar-fixed-bottom">
                     &copy;2016 Team Rachel, Dau, Dhruvin, Mounya, Jeff.  All Rights Reserved.
                 </div>
                 <!-- END COPYRIGHT -->
             </footer>
             <!-- END FOOTER -->
-        
+        </div>
 
         <!-- JAVASCRIPTS -->
         <script src="assets/js/jquery-2.1.1.min.js"></script>
@@ -140,14 +133,8 @@
         <script src="assets/js/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
         <script src="assets/js/plugins/autohidingnavbar/jquery.bootstrap-autohidingnavbar.min.js"></script>
         <script src="assets/js/repute-scripts.js"></script>
-        <script src="https://apis.google.com/js/platform.js?onload=renderGButton" async defer></script>
-        <script src="https://apis.google.com/js/api:client.js"></script>
+        <script src="//apis.google.com/js/platform.js?onload=renderGButton" async defer></script>
+        <script src="//apis.google.com/js/api:client.js"></script>
         <script src="js/main.js"></script>
-
-        <!--Bootstrap Scripts and JQuery-->
-<script src="assets/js/jquery-2.1.1.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-</body>
-   
-
+    </body>
 </html>

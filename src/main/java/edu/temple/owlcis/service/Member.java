@@ -4,14 +4,15 @@
  * 2/25/2016
  */
 package edu.temple.owlcis.service;
+
 import java.time.Instant;
 import java.util.Date;
 
 /**
  * Member class is used for any user that is a Temple University student or
- * alumni. This is a subtype of User class and have additional data fields: 
- * major, studentOrAlumni, and gradDate. Based on this type's privileges, it 
- * overrides some access methods by setting them to true: canWriteReview, 
+ * alumni. This is a subtype of User class and have additional data fields:
+ * major, studentOrAlumni, and gradDate. Based on this type's privileges, it
+ * overrides some access methods by setting them to true: canWriteReview,
  * canWriteForumPost, canSaveSchedule.
  *
  * @author Dau
@@ -30,7 +31,10 @@ public class Member extends User {
      * The Member's graduation date
      */
     protected String gradDate;
-//    protected Date gradDate;
+    /**
+     * The Member's degree type
+     */
+    protected String degreeType;
     /**
      * Default Constructor for Member
      */
@@ -40,6 +44,7 @@ public class Member extends User {
         this.setMajor("Computer Science");
         this.setStudentOrAlumni("student");
         this.setGradDate("2016-05-12");
+        this.setDegreeType("BS");
     }
 
     /**
@@ -52,15 +57,40 @@ public class Member extends User {
      * @param m the major to give to this object
      * @param sa the status to give this object (Student or Alumni)
      * @param gd the graduation date to give this object
+     * @param dt the degree type to give this object
      */
-    public Member(String f, String l, int i, String e, String m, String sa, String gd) {
-        this.setFname(f);
-        this.setFname(l);
+    public Member(int i, String e, String f, String l, String m, String sa, String gd, String dt) {
+        this();
         this.setId(i);
         this.setEmail(e);
+        this.setFname(f);
+        this.setLname(l);
         this.setMajor(m);
         this.setStudentOrAlumni(sa);
         this.setGradDate(gd);
+        this.setDegreeType(dt);
+    }
+    
+    /**
+     * Parameterized Constructor for Member object
+     *
+     * @param e the email to give to this object
+     * @param f the first name to give to this object
+     * @param l the last name to give to this object
+     * @param m the major to give to this object
+     * @param sa the status to give this object (Student or Alumni)
+     * @param gd the graduation date to give this object
+     * @param dt the degree type to give this object
+     */
+    public Member(String e, String f, String l, String m, String sa, String gd, String dt) {
+        this();
+        this.setEmail(e);
+        this.setFname(f);
+        this.setLname(l);
+        this.setMajor(m);
+        this.setStudentOrAlumni(sa);
+        this.setGradDate(gd);
+        this.setDegreeType(dt);
     }
 
     @Override
@@ -132,33 +162,34 @@ public class Member extends User {
         this.gradDate = gradDate;
     }
     
-//    /**
-//     * Gets the gradDate
-//     *
-//     * @return the gradDate
-//     */
-//    public Date getGradDate() {
-//        return gradDate;
-//    }
-//
-//    /**
-//     * Sets the gradDate
-//     *
-//     * @param gradDate the graduation date to set
-//     */
-//    public void setGradDate(Date gradDate) {
-//        this.gradDate = gradDate;
-//    }
-    
+    /**
+     * Gets the degreeType
+     *
+     * @return the degreeType
+     */
+    public String getDegreeType() {
+        return degreeType;
+    }
+
+    /**
+     * Sets the degreeType
+     *
+     * @param degreeType the degreee type to set
+     */
+    public void setDegreeType(String degreeType) {
+        this.degreeType = degreeType;
+    }
+
     /**
      * Gets string representation of object
-     * 
+     *
      * @return string representation
      */
     @Override
     public String toString() {
-        return super.toString() + " studentOrAlumni: " 
-                + this.getStudentOrAlumni() + " Major: " + this.getMajor() 
-                + " GradDate: " + this.getGradDate();
+        return super.toString() + " Major: " + this.getMajor()
+                + " studentOrAlumni: " + this.getStudentOrAlumni() 
+                + " GradDate: " + this.getGradDate() 
+                + " DegreeType: " + this.getDegreeType();
     }
 }

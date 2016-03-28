@@ -2,7 +2,7 @@
  * Created by dhruvin sheth
  */
 
-var authApp = angular.module('authApp',['ui.router']);
+var authApp = angular.module('authApp',['ngAnimate', 'ui.router', 'angular.filter']);
 
 authApp.config(function($stateProvider, $urlRouterProvider) {
 
@@ -41,11 +41,13 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/search',
             templateUrl: 'forumsearch.html',
             controller:'forumsearch'
-    }).state('review', {
+        }).state('profile', {
+            url: '/profile',
+            templateUrl: 'profile.html',
+            controller:'profileController'
+        }).state('review', {
             url: '/review',
             templateUrl: 'review.html',
             controller:'review'
     });
-
 });;
-
