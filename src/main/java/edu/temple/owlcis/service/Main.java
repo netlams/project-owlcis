@@ -82,21 +82,26 @@ public class Main implements SparkApplication {
                 User user = new User((String) payload.get("given_name"), (String) payload.get("family_name"), payload.getEmail());
 
                 Database dbc = new Database();
-
+                if (dbc.getError().length() == 0) {
+                    // Database errors
+                    response.status(500);
+                    ret = "OWLCIS failed: "
+                            + "\n\"HTTP 500 SERVER ERROR\"";
+                }
                 /* Check if email is from Temple University */
                 if (SignIn.isValidTempleEmailAddress(user.getEmail()) == true) {
                     try {
-                        String userRole = SignIn.findUserRole(dbc.getConn(), user);
-                        if (userRole != null) {
+                        User newUser = SignIn.findUser(dbc.getConn(), user);
+                        if (newUser != null) {
                             // found user
                             response.status(200);
                             request.session(true);
-                            request.session().attribute("USER", user);
+                            request.session().attribute("USER", newUser);
                             // frontend can only access cookies, so we setting cookies here
-                            response.cookie("EMAIL", user.getEmail(), 3600);
-                            response.cookie("FNAME", user.getFname(), 3600);
-                            response.cookie("ROLE", userRole, 3600);
-                            ret = "User logged in: " + user.getEmail()
+                            response.cookie("EMAIL", newUser.getEmail(), 3600);
+                            response.cookie("FNAME", newUser.getFname(), 3600);
+                            response.cookie("ROLE", newUser.getRole(), 3600);
+                            ret = "User logged in: " + newUser.getEmail()
                                     + ". \n\"HTTP 200 OK\"";
                             System.out.println(ret);
                         } else {
@@ -105,7 +110,7 @@ public class Main implements SparkApplication {
                             response.status(202);
                             request.session().attribute("USER", user);
                             // frontend can only access cookies, so we setting cookies here
-                            // set cookie to timeout in 900 seconds
+                            // set cookie to timeout in 900 seconds or 15 minutes
                             response.cookie("EMAIL", user.getEmail(), 900);
                             ret = "User accepted: " + user.getEmail()
                                     + ". \n\"HTTP 202 - ACCEPTED\"";
@@ -141,8 +146,7 @@ public class Main implements SparkApplication {
          */
         post("/signup", (request, response) -> {
             String ret = "";
-            System.out.println("Starting signup. " + request.body());
-
+            System.out.println("body :" + request.body());
             try {
                 if (request.session().attributes() != null) {
                     // Parser 
@@ -153,9 +157,7 @@ public class Main implements SparkApplication {
 
                     // temporary holder to determine which user type
                     User newUser = gson.fromJson(request.body(), User.class);
-                    System.out.println("NO PROBLEM USER");
                     newUser = gson.fromJson(request.body(), User.userFactory(newUser.getRole()).getClass());
-                    System.out.println("New User's class " + newUser.getClass());
 
                     // Set new user's info from session data
                     newUser.setEmail(user.getEmail());
@@ -166,13 +168,12 @@ public class Main implements SparkApplication {
                     // Ready to add to database
                     Database dbc = new Database();
                     if (dbc.getError().length() == 0) {
-                        ret = SignUp.addNewUser(dbc.getConn(), newUser);
+                        newUser = SignUp.addNewUserAndReturn(dbc.getConn(), newUser);
                         request.session().attribute("USER", newUser);
-                        response.cookie("EMAIL", user.getEmail(), 3600);
-                        response.cookie("FNAME", user.getFname(), 3600);
-                        response.cookie("ROLE", user.getRole(), 3600);
+                        response.cookie("EMAIL", newUser.getEmail(), 3600);
+                        response.cookie("FNAME", newUser.getFname(), 3600);
+                        response.cookie("ROLE", newUser.getRole(), 3600);
                         response.status(203);
-//                        System.out.println(newUser.toString());
                     } else {
                         ret = dbc.getError();
                         throw new SQLException();
@@ -284,5 +285,6 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
+
     }
 }

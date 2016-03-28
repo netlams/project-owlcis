@@ -40,13 +40,13 @@ function onFailure(error) {
 
 /* Success at Google signin */
 function onSignIn(googleUser) {
-    
-        var profile = googleUser.getBasicProfile();
-        var id_token = googleUser.getAuthResponse().id_token;
 
-        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        console.log('Name: ' + profile.getName());
-        console.log('Email: ' + profile.getEmail());
+    var profile = googleUser.getBasicProfile();
+    var id_token = googleUser.getAuthResponse().id_token;
+
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Email: ' + profile.getEmail());
     /* only call this function one time! (first time when nonexistent cookies) */
     if (!getCookie("ROLE") && !getCookie("EMAIL") && !getCookie("FNAME")) {
         if (validateEmail(profile.getEmail())) {
@@ -55,9 +55,7 @@ function onSignIn(googleUser) {
             logBackend(id_token);
 
         } else {
-            alert("Sorry, OWLCIS only allows Temple students, alumnis, and faculty members."
-                    + " \nYour Gmail: " + profile.getEmail() + " has not been accepted.");
-            signOut();
+            loadLoginMsg('bad-email', profile.getEmail());
         }
     }
 }
@@ -67,7 +65,7 @@ function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
         console.log('User signed out.');
-        redirectTo("signout");
+        window.location = "/signout";
     });
 }
 
@@ -94,40 +92,39 @@ function getCookie(cname) {
 /* Redirect to a URL */
 function redirectTo(page) {
     window.location = page;
+    document.location.reload(true);
 }
 
 // Communicate with backend to set session data
 function logBackend(id) {
     loadLoadingAnim();
 
-    console.log("Communicating with backend")
+    console.log("Communicating with backend");
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
         console.log(xhr.responseText);
         if (xhr.readyState == 4 && xhr.status == 200) {
             // user logged in and session and cookie set
-            redirectTo("/");
+            setTimeout(function () {
+                redirectTo("/");
+            }, 200); // slight delay to make it look natural
         }
         else if (xhr.readyState == 4 && xhr.status == 202) {
             // no matching found, so added new user and session and cookie set
-            alert("New User! Redirecting you to complete signup.");
-            redirectTo("/#signup");
-            document.location.reload(true);
+            loadLoginMsg('new-user');
         }
         else if (xhr.readyState == 4 && xhr.status == 403) {
             // Bad response
             if (!backendError) {
-                alert("OWLCIS encounterd an error with your login credentials. Please make sure to use Temple email.");
-                stopLoadingAnim();
+                loadLoginMsg(false);
             }
             backendError = true;
         }
         else if (xhr.readyState == 4 && (xhr.status == 404 || xhr.status == 500)) {
             // Bad response
             if (!backendError) {
-                alert("OWLCIS is unavailable at the moment. Please try again later.");
-                stopLoadingAnim();
+                loadLoginMsg(false);
             }
             backendError = true;
         }
@@ -149,8 +146,57 @@ function loadLoadingAnim() {
 
 /* Stop loading animation */
 function stopLoadingAnim() {
-    document.getElementById("app").style.opacity = "1.0";
-    var elem = document.getElementById("cssload-loader");
-    elem.parentNode.removeChild(elem);
+    /* load for 1.5 seconds */
+    setTimeout(function () {
+        document.getElementById("app").style.opacity = "1.0";
+        var elem = document.getElementById("cssload-loader");
+        elem.parentNode.removeChild(elem);
+    }, 500);
     return true;
+}
+
+function loadLoginMsg(msg, email) {
+    var title, body, btn;
+    if (msg == 'bad-email') {
+        title = 'OWLCIS Login Failure';
+        body = "OWLCIS only allows Temple students, alumnis, and faculty members with a valid university email account.\n"
+                + "<span class='text-uppercase'>" + email + "</span>"
+                + " has not been accepted.";
+        btn = "<button type='button' class='btn btn-default' data-dismiss='modal' onClick='signOut();'>Close</button>"
+                + "<a href='https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://owlcis.me'"
+                + "type='button' class='btn btn-warning'>"
+                + "Log out of Google"
+                + "</a>";
+    } else if (msg == 'new-user') {
+        title = 'Welcome New User';
+        body = 'Redirecting you to sign up';
+        btn = "<button type='button' class='btn btn-default' data-dismiss='modal' onClick='redirectTo(\"/#signup\")'>Close</button>";
+    } else {
+        title = 'OWLCIS Login Failure';
+        body = 'OWLCIS is unavailable at the moment. Please try again later.';
+        btn = "<button type='button' class='btn btn-default' data-dismiss='modal' onClick='stopLoadingAnim()'>Close</button>";
+    }
+
+    /* Add a Bootstrap Modal */
+    $(document.body)
+            .prepend("<div class='modal fade' id='login-msg-modal' tabindex='-1' role='dialog' aria-labelledby='login-msg-label'>"
+                    + "<div class='modal-dialog' role='document'>"
+                    + "<div class='modal-content'>"
+                    + "<div class='modal-header'>"
+                    + "<button type='button' class='close' data-dismiss='modal' aria-label='Close'>"
+                    + "<span aria-hidden='true'>&times;</span>"
+                    + "</button>"
+                    + "<h2 class='modal-title text-center' id='login-msg-label'>" + title + "</h2>"
+                    + "</div>"
+                    + "<div class='modal-body text-center'>"
+                    + body
+                    + "</div>"
+                    + "<div class='modal-footer'>"
+                    + btn
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>");
+    /* Activate Modal */
+    $('#login-msg-modal').modal();
 }
