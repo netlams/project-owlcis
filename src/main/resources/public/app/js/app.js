@@ -26,6 +26,9 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/schedule',
             templateUrl: 'schedule.html',
             controller:'fourthController'
+        }).state('reviews', {
+            url: '/reviews',
+            templateUrl: 'reviews.html',
         }).state('signup', {
             url: '/signup',
             templateUrl: 'signup.html'
@@ -51,3 +54,4 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'review'
     });
 });;
+

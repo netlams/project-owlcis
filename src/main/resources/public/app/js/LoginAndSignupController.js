@@ -31,7 +31,7 @@
         function ($scope, $state, CookieService) {
             $scope.memberNav = [{url: '#home', name: 'Home'},
                 {url: '#profile', name: 'Profile'},
-                {url: '#course', name: 'Course'},
+                {url: '#reviews', name: 'Course Reviews'},
                 {url: '#schedule', name: 'Schedule'},
                 {url: '#forum', name: 'Forum'}];
             $scope.modAdvNav = [{url: '#home', name: 'Home'},
@@ -58,6 +58,7 @@
             $scope.loginStatus = $scope.checkLogin();
         }]);
     /* Signup Controller */
+
     app.controller('signupController', ['$scope', '$state', '$http', '$window', 'DeptService', 'CookieService',
         function ($scope, $state, $http, $window, DeptService, CookieService) {
             $scope.foundEmail = CookieService.getCookie('EMAIL');
@@ -70,6 +71,7 @@
                 availDegreeOptions: [{name: 'BS'}, {name: 'BA'}],
                 err: null,
             };
+
             // process the form
             $scope.processForm = function () {
                 $http.post('/signup', $scope.formData)
