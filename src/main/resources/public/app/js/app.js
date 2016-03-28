@@ -40,6 +40,10 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/post',
             templateUrl: 'forumpost.html',
             controller:'forumpost'
+        }).state('/echo/json', {
+        url: '/echo/json',
+        templateUrl: 'sample.html',
+        
         }).state('search', {
             url: '/search',
             templateUrl: 'forumsearch.html',

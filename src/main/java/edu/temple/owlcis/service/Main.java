@@ -138,11 +138,71 @@ public class Main implements SparkApplication {
 
         /**
          * Signup Route
+         * 
+         * post("/signup", (request, response) -> {
+         * String ret = "";
+         * if (request.session().attributes() != null) {
+         *  Gson gson = new Gson();
+         * User newUser = gson.fromJson(request.body(), User.class);
+         * SignUp.addNewUser(dbc.getConn(), newUser);
+         * }
+         * }
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
          */
+        /*
+        post(API_LOC + "/viewreviews", (request, response) -> {
+         //String ret ;
+         //List list = new <ViewReviews> ;
+         //if (request.session().attributes() != null) 
+           Gson gson = new Gson();
+          ViewReviews reviews = gson.fromJson(request.body(),ViewReviews.class);
+          List list = reviews.getAllReviews();
+                response.type("application/json");
+                if (list.isEmpty()) 
+                    response.status(404);
+                else 
+                    response.status(200);
+
+                
+          //reviews.getAllReviews();
+          
+         //return ret;
+         return new Gson().toJson(list);
+          });
+        */
+        
+        
+        post(API_LOC + "/viewreviews", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+             ViewReviews selected = new ViewReviews();
+             selected.setSelectedCourse(request.body());
+             List list =  selected.getAllReviews();
+//           return new Gson().toJson(list);
+         //return ret;
+         //return ret;
+         response.status(200);
+            System.out.println(gson.toJson(list));
+                        return gson.toJson(list);
+                
+           
+        });
+        
+       
+        
+        
+        
         post("/signup", (request, response) -> {
             String ret = "";
             System.out.println("Starting signup. " + request.body());
-
             try {
                 if (request.session().attributes() != null) {
                     // Parser 
@@ -198,7 +258,7 @@ public class Main implements SparkApplication {
                 ret = "OWLCIS failed: " + ex.getMessage()
                         + "\n\"HTTP 500 SERVER ERROR\"";
             }
-
+                
             return ret;
         });
         
@@ -249,16 +309,14 @@ public class Main implements SparkApplication {
             }
         });
         
-        /**
-         * ViewCourseReviews GET Route
-         */
-        get(API_LOC + "/viewreviews", (request, response) -> {
+        /*
+         * ViewCourseReviews GET Route*/
+         
+        get(API_LOC +"/viewreviews", (request, response) -> {
             try {
-                List list = ViewReviews.getAllReviews();
+                ViewReviews rev = new ViewReviews();
+                List list = rev.getAllReviews();
                 response.type("application/json");
-                if (list.isEmpty()) 
-                    response.status(404);
-                else 
                     response.status(200);
 
                 return new Gson().toJson(list);
@@ -268,7 +326,6 @@ public class Main implements SparkApplication {
             }
         });
 
-        
             get(API_LOC + "/courselist", (request, response) -> {
             try {
                 List list = Courselist.getAllCourses();

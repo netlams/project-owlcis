@@ -1,24 +1,34 @@
-<div class="rows">
+<div class="rows" ng-controller="PromiseCtrl">
 
     <h3 class="widget-title">Looking for reviews?</h3>
-    <form class="form-inline">
-        <div class="form-group">
-            <label for="course-list">Courses:</label>
-
-            <select id="course-list" class="form-control">
-                <option value="">Select Course</option>
-                <option value="cis 1068">CIS 1068</option>
-                <option value="cis 2107">CIS 2107</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Search</button>
+    
+    <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
+        <!--<div data-ng-controller="CourselistCtrl"> -->
+            <div class="form-group">
+                <label for="course-list">Courses:</label>
+    
+              <!-- <select name="deptId" id="formData.deptId" data-ng-model="formData.deptId" class="form-control" data-ng-required="formData.role == 'advisor'">-->
+               <select  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
+                    <option value="">Select Course</option>
+                    <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+                   <!-- <option data-ng-repeat="option in formData.availDeptOptions" value="{{option.id}}">{{option.name}}</option>-->
+                </select>
+             
+              
+              
+            </div>
+                
+        <button type="submit" class="btn btn-primary" >Search</button>
+        Selected Value is:{{ddlvalue}}
+       
+        
     </form>
 
-</div>
-<div class="text-center"   ng-controller="PromiseCtrl">
+<!--</div>-->
 
-    <form class="form-horizontal" action="/signup" method="POST">
+
+
+    <form class="form-horizontal" >
         <h1 class="widget-title">Course Review</h1>
         <div class="col-md-12">
             <div class="list-group-item" >
@@ -59,7 +69,7 @@
 
                 </div>
             </div>
-
+</div>
     </form>
-</div>
-</div>
+
+ </div>
