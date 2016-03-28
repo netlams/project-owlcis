@@ -1,13 +1,15 @@
 <div class="text-center" data-ng-controller="signupController">
+   
 
     <h1 class="text-center">Sign up for OWLCIS</h1>
 
-    <form class="form-horizontal" data-ng-submit="processForm()">
+    <form name="signupForm" class="form-horizontal" data-ng-submit="processForm()">
 
         <div class="form-group">
             <div class="col-sm-2 col-sm-offset-5">
-                <select name="role" id="role" data-ng-model="formData.role" class="form-control" required>
-                    <option value="">---Please select---</option>
+                <label for="role">User Role Type</label>
+                <select name="role" id="role" data-ng-model="formData.role" class="form-control" data-ng-required="true">
+                    <option value="">-Select a role-</option>
                     <option value="member">Member</option>
                     <option value="moderator">Moderator</option>
                     <option value="advisor">Advisor</option>
@@ -25,31 +27,47 @@
             </div>
 
             <div class="form-group">
-                <label for="major" class="col-sm-2 control-label col-sm-offset-3">Major</label>
-                <div class="col-sm-3">
-                    <input name="major" data-ng-model="formData.major" type="text" class="form-control" placeholder="CIS / IST" data-ng-required="formData.role == 'member'" maxlength="3">
+                <label for="major" class="col-sm-2 control-label col-sm-offset-3">Major (abbr.)</label>
+                <!--                <div class="col-sm-3">
+                                    <input name="major" data-ng-model="formData.major" type="text" class="form-control" placeholder="CIS / IST" data-ng-required="formData.role == 'member'" data-ng-maxlength="3">
+                                </div>-->
+                <div class="col-sm-2">
+                    <select name="major" id="formData.major" data-ng-model="formData.major" class="form-control" data-ng-required="formData.role == 'member'">
+                        <option value="">-Select a Major-</option>
+                        <option data-ng-repeat="option in formData.availDeptOptions" value="{{option.shortname}}">{{option.name}}</option>
+                    </select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="gradDate" class="col-sm-2 control-label col-sm-offset-3">Graduation Date</label>
                 <div class="col-sm-3">
-                    <input name="gradDate" data-ng-model="formData.gradDate" type="date" class="form-control" >
+                    <input name="gradDate" data-ng-model="formData.gradDate" type="date" class="form-control" data-ng-required="formData.role == 'member'">
                 </div>
             </div>
 
         </div>
 
         <div class="form-group" data-ng-show="formData.role == 'advisor'">
-            <label for="deptId" class="col-sm-2 control-label col-sm-offset-4">Department Id</label>
-            <div class="col-sm-1">
-                <input name="deptId" data-ng-model="formData.deptId" type="number" class="form-control" placeholder="1" data-ng-required="formData.role == 'advisor'">
+            <label for="deptId" class="col-sm-2 control-label col-sm-offset-3">Department</label>
+            <div class="col-sm-2">
+                <select name="deptId" id="formData.deptId" data-ng-model="formData.deptId" class="form-control" data-ng-required="formData.role == 'advisor'">
+                    <option value="">-Select a Dept-</option>
+                    <option data-ng-repeat="option in formData.availDeptOptions" value="{{option.id}}">{{option.name}}</option>
+                </select>
             </div>
         </div>
 
         <div class="form-group">
+            <div class="row">
+                <p class="alert alert-warning fade in col-md-6 col-md-offset-3" data-ng-show="signupForm.$invalid && !signupForm.$pristine">Please fill all the fields</p>
+                <p class="alert alert-danger fade in col-md-6 col-md-offset-3" data-ng-show="formData.err">{{formData.err}}
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                </p>
+            </div>
+
             <div class="col-sm-2 col-sm-offset-5">
-                <input type="submit" class="btn btn-default" value="Sign me up!">
+                <input type="submit" class="btn btn-default" value="Sign me up!" data-ng-disabled="signupForm.$invalid">
             </div>
         </div>
 
