@@ -129,9 +129,10 @@
                                 </div>
                             </form>
                             <!--Only Show this when in Edit Tab-->
-                            <form data-ng-show="tab == 'del'">
+                            <form data-ng-show="tab == 'del'" data-ng-submit="processForm()">
                                 <table class="table table-striped course-listing">
                                     <thead>
+                                        <tr><th><input type="submit" class="btn btn-danger" value="Delete Selected Courses"/></th></tr>
                                         <tr>
                                             <th>Semester</th>
                                             <th>CRN - Course Name</th>
@@ -143,14 +144,12 @@
                                             <td>
                                                 <div class="list-group">
                                                     <button type="button" class="list-group-item" data-ng-repeat="course in value">
-                                                        <label for="{{course.name}}">{{course.id}} - {{course.name}}</label>
-                                                        <input type="checkbox" id="{{course.name}}" value="{{course.val}}" class="pull-right">
-
+                                                        <label for="{{course.name}}" data-ng-click="deleteCourseList.push(course.id)">{{course.id}} - {{course.name}}</label>
+                                                        <input type="checkbox" id="{{course.name}}" name="{{course.name}}" value="{{course.val}}" class="pull-right">
                                                     </button>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr><input type="submit" class="btn btn-danger" value="Delete Selected Courses"/></tr>
                                     </tbody>
                                 </table>
                             </form>

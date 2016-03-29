@@ -30,6 +30,7 @@
 
     /* Completed Courses Controller */
     app.controller('completedCourseController', ['$scope', function ($scope) {
+            $scope.deleteCourseList = [];
             // dummy data
             $scope.courses = [{semester: 'Fall 2015', id: 'CIS 1001', name: 'Intro to Acad...'},
                 {semester: 'Fall 2015', id: 'CIS 1056', name: 'Intro to Python...'},
@@ -42,6 +43,11 @@
             // change tab to ...
             $scope.changeTab = function (tab) {
                 $scope.tab = tab;
+            };
+            // process the form submission
+            $scope.processForm = function() {
+                alert("Removing these courses: " + $scope.deleteCourseList );
+                console.log($scope.deleteCourseList);
             };
         }]);
 

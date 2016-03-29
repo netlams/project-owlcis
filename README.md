@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # How to deploy to server:
 NOTE: if Database.java is pointing to localhost:3307, change that to localhost:3306 since our mysql server is always listening on 3306.</br>
 1.) Clean and Build </br>

@@ -35,8 +35,6 @@
 
                 $http.post('/api/viewreviews', $scope.Dataform.selectedID)
                         .then(function (response) {
-                            console.log("the sel: " + $scope.Dataform.selectedID);
-                            console.log("Sending this" + $scope.Dataform.selectedID);
                             $scope.example2 = response.data;
                         }, function (response) {
                             console.log("Sending this" + $scope.Dataform.selectedID);
