@@ -1,6 +1,5 @@
 (function () {
     var app = angular.module('authApp');
-
     /* Gets the cookie */
     app.service('CookieService', function () {
         this.getCookie = function (cname) {
@@ -16,7 +15,6 @@
             return null;
         };
     });
-
     /* Gets the dept JSON list */
     app.service('DeptService', function ($q, $http) {
         this.getDeptList = function () {
@@ -28,7 +26,6 @@
             return defer.promise;
         };
     });
-
     /* Login Controller */
     app.controller('loginController', ['$scope', '$state', 'CookieService',
         function ($scope, $state, CookieService) {
@@ -44,7 +41,6 @@
             $scope.role = CookieService.getCookie('ROLE');
             $scope.email = CookieService.getCookie('EMAIL');
             $scope.navbar = [];
-
             $scope.loginStatus = false;
             $scope.checkLogin = function () {
                 if ($scope.fname != null
@@ -52,32 +48,29 @@
                         && $scope.email != null) {
                     if ($scope.role === 'member')
                         $scope.navbar = $scope.memberNav;
-                    else 
+                    else
                         $scope.navbar = $scope.modAdvNav;
                     return true;
                 } else {
                     return false;
                 }
             };
-
             $scope.loginStatus = $scope.checkLogin();
         }]);
-
     /* Signup Controller */
-    app.controller('signupController', ['$scope', '$state', '$http', '$window', 'DeptService',
-        function ($scope, $state, $http, $window, DeptService) {
-            $scope.formData = {};
-            // get dept list
-            DeptService.getDeptList()
-                    .then(function (data) {
-                        $scope.formData = {
-                            deptId: null,
-                            major: null,
-                            
-                            availDeptOptions: data,
-                            err: null,
-                        };
-                    });
+
+    app.controller('signupController', ['$scope', '$state', '$http', '$window', 'DeptService', 'CookieService',
+        function ($scope, $state, $http, $window, DeptService, CookieService) {
+            $scope.foundEmail = CookieService.getCookie('EMAIL');
+            $scope.formData = {
+                deptId: null,
+                major: null,
+                availMajorOptions: [{shortname: 'CS', name: 'Computer Science'},
+                    {shortname: 'CSM', name: 'Computer Science & Math'},
+                    {shortname: 'IST', name: 'Information Science & Technology'}],
+                availDegreeOptions: [{name: 'BS'}, {name: 'BA'}],
+                err: null,
+            };
 
             // process the form
             $scope.processForm = function () {
@@ -86,8 +79,12 @@
                             console.log("Signup status: " + response.status);
                             console.log(response.data);
                             if (response.status == 203) {
-                                alert("Successfully Added");
-                                $window.location.href = '/';
+//                                alert("Successfully Added");
+//                                $window.location.href = '/';
+                                $scope.formData.succ = 'Successfully signed up. Redirecting you in 3 seconds ...';
+                                setTimeout(function () {
+                                    $window.location.href = '/';
+                                }, 3000);
                             }
                         }, function (response) {
                             $scope.formData.err = "Cannot sign up at the moment.\n\
@@ -97,5 +94,4 @@
                         });
             };
         }]);
-
 }());

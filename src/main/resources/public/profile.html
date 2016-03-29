@@ -1,0 +1,164 @@
+<!-- PAGE CONTENT -->
+<div class="page-content">
+    <div class="container center-block">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title section-heading no-margin text-center">Member's Profile</h2>
+                </div>
+                <div class="panel-body">
+                    <form name="updateProfileForm" class="form-horizontal">
+                        <!--Name-->
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label col-sm-offset-3">Name</label>
+                            <div class="col-sm-3">
+                                <input name="name" type="text" class="form-control" value="Jane Doe" disabled>
+                            </div>
+                        </div>
+                        <!--Email-->
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label col-sm-offset-3">Email</label>
+                            <div class="col-sm-3">
+                                <input name="email" type="text" class="form-control" value="example@temple.edu" disabled>
+                            </div>
+                        </div>
+                        <!--Status-->
+                        <div class="form-group">
+                            <label for="studentOrAlumni" class="col-sm-2 control-label col-sm-offset-3">Status</label>
+                            <div class="col-sm-3">
+                                <select name="" id="formData.studentOrAlumni" data-ng-model="formData.studentOrAlumni" class="form-control" required>
+                                    <option data-ng-repeat="option in formData.studentOrAlumniOptions" value="{{option.val}}">{{option.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--Major-->
+                        <div class="form-group">
+                            <label for="major" class="col-sm-2 control-label col-sm-offset-3">Major</label>
+                            <div class="col-sm-3">
+                                <select name="major" id="formData.major" data-ng-model="formData.major" class="form-control" required>
+                                    <option data-ng-repeat="option in formData.availMajorOptions" value="{{option.shortname}}">{{option.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--Degree Type-->
+                        <div class="form-group">
+                            <label for="degreeType" class="col-sm-2 control-label col-sm-offset-3">Degree Type</label>
+                            <div class="col-sm-2">
+                                <select name="degreeType" id="formData.degree" data-ng-model="formData.degree" class="form-control" data-ng-required="formData.role == 'member'">
+                                    <option data-ng-repeat="option in formData.availDegreeOptions" value="{{option.name}}">{{option.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--GradDate-->
+                        <div class="form-group">
+                            <label for="gradDate" class="col-sm-2 control-label col-sm-offset-3">Graduation Date</label>
+                            <div class="col-sm-3">
+                                <input name="gradDate" type="date" class="form-control" value="2016-05-06" required>
+                            </div>
+                        </div>
+                        <!--Submit-->
+                        <div class="form-group">
+                            <div class="col-sm-2 col-sm-offset-5">
+                                <input type="submit" class="btn btn-warning" value="Update my Profle">
+                            </div>
+                        </div>
+                    </form>
+                    <hr/>
+
+                    <!--Completed Courses-->
+                    <div id="profile-completed-course" class="form-group" data-ng-controller="completedCourseController">
+                        <label class="col-sm-2 control-label col-sm-offset-3">Completed Courses</label>
+                        <div class="col-sm-7 col-md-6">
+                            <!--Tab Menu-->
+                            <ul class="nav nav-tabs nav-justified">
+                                <li role="presentation" data-ng-class="{active: tab == 'view'}">
+                                    <a data-ng-click="changeTab('view')">View</a>
+                                </li>
+                                <li role="presentation" data-ng-class="{active: tab == 'add'}">
+                                    <a data-ng-click="changeTab('add')">Add</a>
+                                </li>
+                                <li role="presentation" data-ng-class="{active: tab == 'del'}">
+                                    <a data-ng-click="changeTab('del')">Delete</a>
+                                </li>
+                            </ul>
+                            <br/>
+                            <!--Only Show this when in View Tab-->
+                            <table class="table table-striped course-listing" data-ng-show="tab == 'view'">
+                                <thead>
+                                    <tr>
+                                        <th>Semester</th>
+                                        <th>CRN - Course Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="(key, value) in courses | groupBy: 'semester'">
+                                        <td>{{key}}</td>
+                                        <td>
+                                            <ul class="list-group">
+                                                <li class="list-group-item" data-ng-repeat="course in value">
+                                                    {{course.id}} - {{course.name}}
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!--Only Show this when in Add Tab-->
+                            <form class="form" data-ng-show="tab == 'add'">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-3">
+                                        <select name='season' class="form-control" required>
+                                            <option value='1'>Fall</option>
+                                            <option value='2'>Spring</option>
+                                            <option value='2'>Summer</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-3">
+                                        <input type='number' class="form-control" max='2100' min='1990' value="2016" required/>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <select name='course' class="form-control" required>
+                                            <option value='1'>CIS 1001</option>
+                                            <option value='2'>CIS 1056</option>
+                                            <option value='2'>CIS 1057</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <button type="submit" class="btn btn-primary">Add Course</button>
+                                </div>
+                            </form>
+                            <!--Only Show this when in Edit Tab-->
+                            <form data-ng-show="tab == 'del'">
+                                <table class="table table-striped course-listing">
+                                    <thead>
+                                        <tr>
+                                            <th>Semester</th>
+                                            <th>CRN - Course Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-ng-repeat="(key, value) in courses | groupBy: 'semester'">
+                                            <td>{{key}}</td>
+                                            <td>
+                                                <div class="list-group">
+                                                    <button type="button" class="list-group-item" data-ng-repeat="course in value">
+                                                        <label for="{{course.name}}">{{course.id}} - {{course.name}}</label>
+                                                        <input type="checkbox" id="{{course.name}}" value="{{course.val}}" class="pull-right">
+
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr><input type="submit" class="btn btn-danger" value="Delete Selected Courses"/></tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
