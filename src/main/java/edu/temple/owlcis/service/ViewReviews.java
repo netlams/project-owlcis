@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * The ViewReviews class is used for Course table in the database.
  *
- * @author Puppala, Dhruvin
+ * @author Group Project
  */
 public class ViewReviews {
 
@@ -23,8 +23,8 @@ public class ViewReviews {
     private String user_type;
     private String f_name;
     private String l_name;
-    
     private String courseid;
+    private String selected_courseid;
     private String courseName;
     private Double helpfulness;
     private Double easiness;
@@ -36,32 +36,38 @@ public class ViewReviews {
         this.user_type = "";
         this.f_name = "";
         this.l_name = "";
-        
-        this.courseid= "";
-        this.courseName= "";
-        this.helpfulness= 0.0;
-        this.easiness= 0.0;
-        this.clarity= 0.0;
-        
+        this.courseid = "";
+        this.courseName = "";
+        this.helpfulness = 0.0;
+        this.easiness = 0.0;
+        this.clarity = 0.0;
+        this.selected_courseid = "";
 
     }
 
-    public ViewReviews(String c, String t,  String c_id, String f, String l, 
-            double help, double e, double cl) {
+    public ViewReviews(String c, String t, String c_id, String f, String l,
+            double help, double e, double cl, String k) {
         this.comment_text = c;
         this.time_stamp = t;
-        //this.user_type = u;
-        this.courseid= c_id;
+        this.courseid = c_id;
         this.f_name = f;
         this.l_name = l;
-        //this.courseid= c_id;
-        //this.courseName= n;
-        this.helpfulness= help;
-        this.easiness= e;
-        this.clarity= cl;
+        this.helpfulness = help;
+        this.easiness = e;
+        this.clarity = cl;
+        this.selected_courseid = k;
     }
 
-    public static List getAllReviews() throws SQLException {
+    public String getSelectedCourse() {
+        return selected_courseid;
+    }
+
+    public void setSelectedCourse(String selected) {
+        this.selected_courseid = selected;
+
+    }
+
+    public List getAllReviews() throws SQLException {
         Database dbc = new Database();
         if (dbc.getError().length() == 0) {
             // no errors
@@ -69,30 +75,27 @@ public class ViewReviews {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                //String sql = "SELECT * FROM course_review_comment ORDER BY time_stamp";
-                String sql = "SELECT  crc.comment_text, crc.time_stamp, cr.course_id, u.f_name, u.l_name, cr.helpfulness, cr.easiness,cr.clarity"
-+" FROM owlcis.course_review_comment crc" 
-+" JOIN owlcis.user u ON u.user_id = crc.user_id"
-+" JOIN owlcis.course_review cr on cr.review_id = crc.review_id"
-+" JOIN owlcis.course c on c.course_id = cr.course_id"
-+" ORDER BY crc.time_stamp DESC";
-                      
+                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
+                        + " FROM owlcis.course_review cr"
+                        + " JOIN owlcis.user u ON u.user_id = cr.user_id"
+                        + " WHERE cr.course_id = '" + selected_courseid + "'"
+                        + " ORDER BY cr.time_stamp DESC";
+
                 stmt = dbc.getConn().createStatement();
-                // execute query
                 rs = stmt.executeQuery(sql);
                 System.out.println("getAllReviews Query executed.");
 
                 // add to list
                 while (rs.next()) {
                     list.add(new ViewReviews(rs.getString(1),
-                            rs.getString(2), 
+                            rs.getString(2),
                             rs.getString(3),
                             rs.getString(4),
                             rs.getString(5),
                             rs.getDouble(6),
                             rs.getDouble(7),
-                            rs.getDouble(8)));
-                            
+                            rs.getDouble(8),
+                            rs.getString(9)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -193,10 +196,10 @@ public class ViewReviews {
     public void setl_name(String l) {
         this.l_name = l;
     }
+
     /**
      * @return the course id
      */
-     
     public String getCourseid() {
         return courseid;
     }
@@ -205,50 +208,52 @@ public class ViewReviews {
      * @param l the l to set
      */
     public void setCourseid(String courseid) {
-        this.courseid= courseid;
+        this.courseid = courseid;
     }
+
     /**
      * @return the course name/ title
      */
-     public String getCourseName() {
+    public String getCourseName() {
         return courseName;
     }
-      public void setCourseName(String courseName){
-          this.courseName= courseName;
-          
-      }
-      /**
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+
+    }
+
+    /**
      * @return the helpfulness
      */
-       public Double getHelpfulness() {
+    public Double getHelpfulness() {
         return helpfulness;
     }
 
-      public void setHelpfulness( Double help){
-          this.helpfulness= help;
-      }
-      
-      /**
+    public void setHelpfulness(Double help) {
+        this.helpfulness = help;
+    }
+
+    /**
      * @return the easiness
      */
-      
-       public Double getEasiness() {
+    public Double getEasiness() {
         return easiness;
     }
-       public void setEasiness( Double easiness){
-          this.easiness = easiness;
-      }
-        
-       /**
+
+    public void setEasiness(Double easiness) {
+        this.easiness = easiness;
+    }
+
+    /**
      * @return the clarity
      */
-       public Double getClarity() {
+    public Double getClarity() {
         return clarity;
     }
-       
-       
-        public void setClarity( Double clarity){
-          this.clarity = clarity;
-      }
-      
+
+    public void setClarity(Double clarity) {
+        this.clarity = clarity;
+    }
+
 }

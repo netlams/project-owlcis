@@ -40,10 +40,14 @@ public class Main implements SparkApplication {
         /* serve all public files from this location */
         staticFileLocation("/public");
 
-        /* root API */
-        get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");       
+        /**
+         * root API
+         */
+        get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");
 
-        /* Post Review Route */
+        /**
+         * Post Review Route
+         */
         post(API_LOC + "/coursereviews", (request, response) -> {
             Gson gson = new Gson();
             CourseReview testReview = gson.fromJson(request.body(), CourseReview.class);
@@ -54,15 +58,17 @@ public class Main implements SparkApplication {
                         response.status(201);
                         return "HTTP 201 - CREATED";
                     }
-                } catch (Exception ex) { 
+                } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
             }
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        /* Login Route */
+
+        /**
+         * Login Route
+         */
         post("/login", (request, response) -> {
             String ret = "";
             HttpTransport transport = new NetHttpTransport();
@@ -142,14 +148,14 @@ public class Main implements SparkApplication {
         });
 
         /**
-         * Signup Route
+         * Sign up Route
          */
         post("/signup", (request, response) -> {
             String ret = "";
-            System.out.println("body :" + request.body());
+            System.out.println("Starting signup. ");
             try {
                 if (request.session().attributes() != null) {
-                    // Parser 
+                    // Parser
                     Gson gson = new Gson();
                     // get user data from session
                     User user = request.session().attribute("USER");
@@ -202,9 +208,7 @@ public class Main implements SparkApplication {
 
             return ret;
         });
-        
-        
-        
+
         /**
          * Signout Route
          */
@@ -238,10 +242,11 @@ public class Main implements SparkApplication {
             try {
                 List list = Department.getAllDepartments();
                 response.type("application/json");
-                if (list.isEmpty()) 
+                if (list.isEmpty()) {
                     response.status(404);
-                else 
+                } else {
                     response.status(200);
+                }
 
                 return new Gson().toJson(list);
             } catch (Exception ex) {
@@ -249,18 +254,16 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
-        
-        /**
+
+        /*
          * ViewCourseReviews GET Route
          */
         get(API_LOC + "/viewreviews", (request, response) -> {
             try {
-                List list = ViewReviews.getAllReviews();
+                ViewReviews rev = new ViewReviews();
+                List list = rev.getAllReviews();
                 response.type("application/json");
-                if (list.isEmpty()) 
-                    response.status(404);
-                else 
-                    response.status(200);
+                response.status(200);
 
                 return new Gson().toJson(list);
             } catch (Exception ex) {
@@ -269,21 +272,39 @@ public class Main implements SparkApplication {
             }
         });
 
-        
-            get(API_LOC + "/courselist", (request, response) -> {
+        /**
+         * Get All Course Review Route
+         */
+        get(API_LOC + "/courselist", (request, response) -> {
             try {
                 List list = Courselist.getAllCourses();
                 response.type("application/json");
-                if (list.isEmpty()) 
+                if (list.isEmpty()) {
                     response.status(404);
-                else 
+                } else {
                     response.status(200);
+                }
 
                 return new Gson().toJson(list);
             } catch (Exception ex) {
                 response.status(500);
                 return "Error " + ex.getMessage();
             }
+        });
+
+        /**
+         * Get Course Reviews for one course id Route
+         */
+        post(API_LOC + "/viewreviews", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            ViewReviews selected = new ViewReviews();
+            selected.setSelectedCourse(request.body());
+            List list = selected.getAllReviews();
+            response.status(200);
+            System.out.println(gson.toJson(list));
+            return gson.toJson(list);
         });
 
     }
