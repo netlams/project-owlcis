@@ -9,6 +9,8 @@
         <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
         <script src="app/plugin/angular/angular.min.js"></script>
         <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="app/plugin/angular-animate/angular-animate.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-filter/0.4.7/angular-filter.js"></script>
         <script src="app/js/app.js"></script>
         <script src="app/js/FirstController.js"></script>
         <script src="app/js/SecondController.js"></script>
@@ -18,12 +20,16 @@
         <script src="app/js/forumhome.js"></script>
         <script src="app/js/forumpost.js"></script>
         <script src="app/js/forumsearch.js"></script>
+        <script src="app/js/review.js"></script>
+        <script src="app/js/ViewCourseReviews.js"></script>
+        <script src="app/js/ProfileController.js"></script>
         <script src="app/js/DBService.js"></script>
 
-        <link rel="shortcut icon" href="assets/img/logo/owl.png">
+        <link rel="shortcut icon" href="assets/img/logo/owl.PNG">
         <!-- CSS -->
         <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/animate.min.css" rel="stylesheet" type="text/css">
         <link href="assets/css/main.css" rel="stylesheet" type="text/css">
         <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
         <link href="assets/css/ie.css" rel="stylesheet" type="text/css">
@@ -31,31 +37,18 @@
         <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="screen" />
         <link href="assets/css/custom.css" rel="stylesheet">
 
-        <!-- IE 9 Fallback-->
-        <!--[if IE 9]>
-                <link href="assets/css/ie.css" rel="stylesheet">
-        <![endif]-->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+          <![endif]-->
 
         <!-- GOOGLE FONTS -->
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="assets/css/font-awesome.forum.css">
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
-        <style type="text/css">
-          .navbar-brand {
-              padding: 0px; /* firefox bug fix */
-          }
-
-          .navbar-brand > img {
-              height: 100%;
-              padding: 8px; /* firefox bug fix */
-              width: auto;
-          }
-
-          .form-inline .form-group select {
-              width: 200px;
-          }
-        </style>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
     </head>
 
     <body>
@@ -100,16 +93,15 @@
             <!-- END NAVBAR -->
 
             <!-- PAGE CONTENT -->
-                <div class="container">
+            <div class="container">
+                <!-- App View / States -->
+                <div ui-view></div>
 
-                    <!-- App View / States -->
-                    <div ui-view></div>
-
-                </div>
+            </div>
             <!-- END PAGE CONTENT -->
 
             <!-- FOOTER -->
-            <footer style="margin-bottom: 30px; padding-top: 10px;">
+            <footer>
                 <!-- COPYRIGHT -->
                 <div class="text-center copyright navbar-fixed-bottom">
                     &copy;2016 Team Rachel, Dau, Dhruvin, Mounya, Jeff.  All Rights Reserved.
@@ -127,10 +119,8 @@
         <script src="assets/js/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
         <script src="assets/js/plugins/autohidingnavbar/jquery.bootstrap-autohidingnavbar.min.js"></script>
         <script src="assets/js/repute-scripts.js"></script>
-        <script src="https://apis.google.com/js/platform.js?onload=renderGButton" async defer></script>
-        <script src="https://apis.google.com/js/api:client.js"></script>
+        <script src="//apis.google.com/js/platform.js?onload=renderGButton" async defer></script>
+        <script src="//apis.google.com/js/api:client.js"></script>
         <script src="js/main.js"></script>
-
     </body>
-
 </html>

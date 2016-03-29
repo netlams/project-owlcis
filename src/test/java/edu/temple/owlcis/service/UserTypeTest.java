@@ -44,14 +44,15 @@ public class UserTypeTest {
     @Test
     public void memberShouldHaveCorrectAttr() {
         // Parameterized Constructor
-        User user = new Member("ex@temple.edu", "Jane", "Doe", "CS", "student", "2016-05-06");
+        User user = new Member("ex@temple.edu", "Jane", "Doe", "CS", "student", "2016-05-06", "BS");
         String expected = "First Name: Jane "
                 + "Last Name: Doe "
                 + "Email: ex@temple.edu "
                 + "Role: member "
                 + "Major: CS "
                 + "studentOrAlumni: student "
-                + "GradDate: 2016-05-06";
+                + "GradDate: 2016-05-06 "
+                + "DegreeType: BS";
         assertEquals("Member should have correct attributes", expected, user.toString());
     }
 

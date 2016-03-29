@@ -2,14 +2,13 @@
  * Created by dhruvin sheth
  */
 
-var authApp = angular.module('authApp',['ui.router']);
+var authApp = angular.module('authApp',['ngAnimate', 'ui.router', 'angular.filter']);
 
 authApp.config(function($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.otherwise('/home');
 
     $stateProvider
-
         .state('first', {
             url: '/home',
             templateUrl: 'home.html',
@@ -26,6 +25,9 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/schedule',
             templateUrl: 'schedule.html',
             controller:'fourthController'
+        }).state('reviews', {
+            url: '/reviews',
+            templateUrl: 'reviews.html',
         }).state('signup', {
             url: '/signup',
             templateUrl: 'signup.html'
@@ -41,7 +43,14 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/search',
             templateUrl: 'forumsearch.html',
             controller:'forumsearch'
-    });
-
-});;
+        }).state('profile', {
+            url: '/profile',
+            templateUrl: 'profile.html',
+            controller:'profileController'
+        }).state('review', {
+            url: '/review',
+            templateUrl: 'review.html',
+            controller:'review'
+        });
+});
 
