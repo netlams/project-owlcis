@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * The ViewReviews class is used for Course table in the database.
  *
- * @author Puppala, Dhruvin
+ * @author Group Project
  */
 public class ViewReviews {
 
@@ -23,7 +23,6 @@ public class ViewReviews {
     private String user_type;
     private String f_name;
     private String l_name;
-
     private String courseid;
     private String selected_courseid;
     private String courseName;
@@ -37,14 +36,12 @@ public class ViewReviews {
         this.user_type = "";
         this.f_name = "";
         this.l_name = "";
-
         this.courseid = "";
-
         this.courseName = "";
         this.helpfulness = 0.0;
         this.easiness = 0.0;
         this.clarity = 0.0;
-        this.selected_courseid = "CIS 1001";
+        this.selected_courseid = "";
 
     }
 
@@ -52,13 +49,9 @@ public class ViewReviews {
             double help, double e, double cl, String k) {
         this.comment_text = c;
         this.time_stamp = t;
-        //this.user_type = u;
         this.courseid = c_id;
         this.f_name = f;
         this.l_name = l;
-        //this.courseid= c_id;
-        //this.courseName= n;
-
         this.helpfulness = help;
         this.easiness = e;
         this.clarity = cl;
@@ -81,26 +74,14 @@ public class ViewReviews {
             ArrayList<ViewReviews> list = new ArrayList();
             Statement stmt = null;
             ResultSet rs = null;
-
-           // if (selected_courseid == null) {
-              //  selected_courseid = "CIS 1001";
-            //}
             try {
-                //String sql = "SELECT * FROM course_review_comment ORDER BY time_stamp";
-                String sql = "SELECT  crc.comment_text, crc.time_stamp, cr.course_id, u.f_name, u.l_name, cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
-                        + " FROM owlcis.course_review_comment crc"
-                        + " JOIN owlcis.user u ON u.user_id = crc.user_id"
-                        + " JOIN owlcis.course_review cr on cr.review_id = crc.review_id"
-                        + " JOIN owlcis.course c on c.course_id = cr.course_id"
-                        + " WHERE c.course_id = '" + selected_courseid + "'"
-                        + " ORDER BY crc.time_stamp DESC";
-                System.out.println("the sql: " + sql);
-                //
-                stmt = dbc.getConn().createStatement();
+                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
+                        + " FROM owlcis.course_review cr"
+                        + " JOIN owlcis.user u ON u.user_id = cr.user_id"
+                        + " WHERE cr.course_id = '" + selected_courseid + "'"
+                        + " ORDER BY cr.time_stamp DESC";
 
-                //stmt = dbc.getConn().createStatement(sql);
-                //   stmt.setString(8,selected_courseid);
-                // execute query
+                stmt = dbc.getConn().createStatement();
                 rs = stmt.executeQuery(sql);
                 System.out.println("getAllReviews Query executed.");
 
@@ -219,7 +200,6 @@ public class ViewReviews {
     /**
      * @return the course id
      */
-
     public String getCourseid() {
         return courseid;
     }
@@ -245,12 +225,7 @@ public class ViewReviews {
 
     /**
      * @return the helpfulness
-     *
-     * public String getCoId() { return ; }
-     *
-     * public void setHelpfulness( Double help){ this.helpfulness= help; }
      */
-
     public Double getHelpfulness() {
         return helpfulness;
     }

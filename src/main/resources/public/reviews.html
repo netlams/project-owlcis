@@ -1,75 +1,47 @@
 <div class="rows" ng-controller="PromiseCtrl">
-
     <h3 class="widget-title">Looking for reviews?</h3>
-    
     <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
-        <!--<div data-ng-controller="CourselistCtrl"> -->
-            <div class="form-group">
-                <label for="course-list">Courses:</label>
-    
-              <!-- <select name="deptId" id="formData.deptId" data-ng-model="formData.deptId" class="form-control" data-ng-required="formData.role == 'advisor'">-->
-               <select  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
-                    <option value="">Select Course</option>
-                    <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
-                   <!-- <option data-ng-repeat="option in formData.availDeptOptions" value="{{option.id}}">{{option.name}}</option>-->
-                </select>
-             
-              
-              
-            </div>
-                
+        <div class="form-group">
+            <label for="course-list">Courses:</label>
+            <select  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
+                <option value="">Select Course</option>
+                <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary" >Search</button>
-        Selected Value is:{{ddlvalue}}
-       
-        
     </form>
-
-<!--</div>-->
-
-
-
-    <form class="form-horizontal" >
-        <h1 class="widget-title">Course Review</h1>
-        <div class="col-md-12">
-            <div class="list-group-item" >
-
-                <div class="row" ng-repeat="x in example2">
-                    <div class="col-md-2" style="float: left; font-weight: 16px;">
-                        <br style="float:left;"> {{x.courseid}}
-                        <br style="float:left;"> Helpfulness: {{x.helpfulness}}
-                        <br style="float:left;"> Easiness: {{x.easiness}}
-                        <br style="float:left;"> Clarity: {{x.clarity}}
-                    </div>
-
-
-                    <div class="col-md-10">
-                        <textarea class="form-control" rows="4"> {{x.comment_text}}</textarea>
-                    </div>
-                    <div class="postinfobot">
-
-                        <div class="likeblock pull-left">
-                            <a href="#" class="up"><i class="fa fa-thumbs-o-up"></i>10</a>
-                            <a href="#" class="down"><i class="fa fa-thumbs-o-down"></i>2</a>
+    <div class="text-center" >
+        <form class="form-horizontal" >
+            <h1 class="widget-title">Course Review</h1>
+            <div class="col-md-12">
+                <div class="list-group-item" >
+                    <div class="row" ng-repeat="x in example2">
+                        <div class="col-md-2" style="float: left; font-weight: 16px;">
+                            <br style="float:left;"> {{x.courseid}}
+                            <br style="float:left;"> Helpfulness: {{x.helpfulness}}
+                            <br style="float:left;"> Easiness: {{x.easiness}}
+                            <br style="float:left;"> Clarity: {{x.clarity}}
                         </div>
-
-                        <div class="prev pull-left">
-                            <a href="#"><i class="fa fa-reply"></i></a>
+                        <div class="col-md-10">
+                            <textarea class="form-control" rows="4"> {{x.comment_text}}</textarea>
                         </div>
-
-                        <div class="posted pull-left">
-                            <i class="fa fa-clock-o"></i>
-
-                            Posted:
-                            {{x.f_name}} {{x.l_name}}
-                            {{x.time_stamp}}</div>
-
-
-
+                        <div class="postinfobot">
+                            <div class="likeblock pull-left">
+                                <a href="#" class="up"><i class="fa fa-thumbs-o-up"></i>10</a>
+                                <a href="#" class="down"><i class="fa fa-thumbs-o-down"></i>2</a>
+                            </div>
+                            <div class="prev pull-left">
+                                <a href="#"><i class="fa fa-reply"></i></a>
+                            </div>
+                            <div class="posted pull-left">
+                                <i class="fa fa-clock-o"></i>
+                                Posted:
+                                {{x.f_name}} {{x.l_name}}
+                                {{x.time_stamp}}</div>
+                        </div>
                     </div>
-
                 </div>
             </div>
+        </form>
+    </div>
 </div>
-    </form>
-
- </div>
