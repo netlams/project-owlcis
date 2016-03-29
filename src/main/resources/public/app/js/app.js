@@ -9,7 +9,6 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');
 
     $stateProvider
-
         .state('first', {
             url: '/home',
             templateUrl: 'home.html',
@@ -40,10 +39,6 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/post',
             templateUrl: 'forumpost.html',
             controller:'forumpost'
-        }).state('/echo/json', {
-        url: '/echo/json',
-        templateUrl: 'sample.html',
-        
         }).state('search', {
             url: '/search',
             templateUrl: 'forumsearch.html',
@@ -56,6 +51,6 @@ authApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/review',
             templateUrl: 'review.html',
             controller:'review'
-    });
-});;
+        });
+});
 
