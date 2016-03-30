@@ -1,21 +1,17 @@
 
 <div class="row">
-    <div class="col-md-4">						
-
+    <div class="col-md-4" ng-controller="PromiseCtrl">
         <h3 class="widget-title">Looking for reviews?</h3>
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="course-list">Courses:</label>
-                
-                <select id="course-list" class="form-control">
-                    <option value="">Select Course</option>
-                    <option value="cis 1068">CIS 1068</option>
-                    <option value="cis 2107">CIS 2107</option>
-                </select>
-            </div>
-            <p> </p>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
+        <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
+        <div class="form-group">
+            <label for="course-list">Courses:</label>
+            <select  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
+                <option value="">Select Course</option>
+                <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" >Search</button>
+    </form>
 
     </div>
     <div class="col-md-7">
