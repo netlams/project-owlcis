@@ -1,117 +1,116 @@
-    <div class="page-content">
-                <div class="container">
-                    <div class="row">					
-                        <!-- BASIC INPUT -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h2 class="panel-title section-heading no-margin">Course Feedback</h2>
-                            </div>
-                            <div class="panel-body" style=" color: black; font-size: 16px;">
-                                <div class="form-horizontal">
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Course</label>
-                                        <div class="col-md-10">
-                                            <select class="form-control">
-                                                <option value="">Select Course</option>
-                                                <option value="cis 1068">CIS 1068</option>
-                                                <option value="cis 2107">cs 2107</option>
-                                                
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Semester</label>
-                                        <div class="col-md-10">
-                                            <input type="text" class="form-control" placeholder="When did you take it?">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Comment</label>
-                                        <div class="col-md-10">
-                                            <textarea class="form-control" placeholder="Comment about the course based on requirement, feedback" rows="4"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Helpfulness</label>
-                                <form action="">
-                                    <input class="star star-1" id="star-01" type="radio" name="star"/>
-                                    <label class="star star-1" for="star-01"></label>
-                                    <input class="star star-2" id="star-02" type="radio" name="star"/>
-                                    <label class="star star-2" for="star-02"></label>
-                                    <input class="star star-3" id="star-03" type="radio" name="star"/>
-                                    <label class="star star-3" for="star-03"></label>
-                                    <input class="star star-4" id="star-04" type="radio" name="star"/>
-                                    <label class="star star-4" for="star-04"></label>
-                                    <input class="star star-5" id="star-05" type="radio" name="star"/>
-                                    <label class="star star-5" for="star-5"></label>
-                                </form>
-                            </div>
-                                    <div class="form-group">
-                                        
-                                        <label class="col-md-2 control-label">Easiness</label>
-                                        <form action="">
-                                            
-                                    <input class="star star-1" id="star-1" type="radio" name="star"/>
-                                    <label class="star star-1" for="star-1"></label>
-                                    <input class="star star-2" id="star-2" type="radio" name="star"/>
-                                    <label class="star star-2" for="star-2"></label>
-                                    <input class="star star-3" id="star-3" type="radio" name="star"/>
-                                    <label class="star star-3" for="star-3"></label>
-                                    <input class="star star-4" id="star-4" type="radio" name="star"/>
-                                    <label class="star star-4" for="star-4"></label>
-                                    <input class="star star-5" id="star-5" type="radio" name="star"/>
-                                    <label class="star star-5" for="star-5"></label>
-                                            
-                                </form>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Clarity</label>
-                                        <form action="">
-                                    <input class="star star-1" id="star-6" type="radio" name="star"/>
-                                    <label class="star star-1" for="star-6"></label>
-                                    <input class="star star-2" id="star-7" type="radio" name="star"/>
-                                    <label class="star star-2" for="star-7"></label>
-                                    <input class="star star-3" id="star-8" type="radio" name="star"/>
-                                    <label class="star star-3" for="star-8"></label>
-                                    <input class="star star-4" id="star-9" type="radio" name="star"/>
-                                    <label class="star star-4" for="star-9"></label>
-                                    <input class="star star-5" id="star-10" type="radio" name="star"/>
-                                    <label class="star star-5" for="star-10"></label>
-                                </form>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Recommended Elective (Optional)</label>
-                                        <div class="col-md-10">
-                                            <input type="text" class="form-control" placeholder="When did you take it?">
-                                        </div>
-                                    </div>
-                                    <div class="form-horizontal text-center">								
-                                        <input type="submit" class="btn btn-primary" value="Submit">
-                                    </div>									
-                                </div>
+<div class="page-content">
+    <div class="container">
+        <div class="row">					
+            <!-- BASIC INPUT -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title section-heading no-margin">Course Feedback</h2>
+                </div>
+                <div class="panel-body" style=" color: black; font-size: 16px;">
+                    <div class="form-horizontal">
+                        <div class="form-group" ng-controller="PromiseCtrl">
+
+                            <label class="col-md-2 control-label">Courses:</label>
+                            <div class="col-md-10">
+                                <select  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
+                                    <option value="">Select Course</option>
+                                    <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+                                </select>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Semester</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="When did you take it?">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Comment</label>
+                            <div class="col-md-10">
+                                <textarea class="form-control" placeholder="Comment about the course based on requirement, feedback" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Helpfulness</label>
+                            <form action="">
+                                <input class="star star-1" id="star-01" type="radio" name="star"/>
+                                <label class="star star-1" for="star-01"></label>
+                                <input class="star star-2" id="star-02" type="radio" name="star"/>
+                                <label class="star star-2" for="star-02"></label>
+                                <input class="star star-3" id="star-03" type="radio" name="star"/>
+                                <label class="star star-3" for="star-03"></label>
+                                <input class="star star-4" id="star-04" type="radio" name="star"/>
+                                <label class="star star-4" for="star-04"></label>
+                                <input class="star star-5" id="star-05" type="radio" name="star"/>
+                                <label class="star star-5" for="star-5"></label>
+                            </form>
+                        </div>
+                        <div class="form-group">
+
+                            <label class="col-md-2 control-label">Easiness</label>
+                            <form action="">
+
+                                <input class="star star-1" id="star-1" type="radio" name="star"/>
+                                <label class="star star-1" for="star-1"></label>
+                                <input class="star star-2" id="star-2" type="radio" name="star"/>
+                                <label class="star star-2" for="star-2"></label>
+                                <input class="star star-3" id="star-3" type="radio" name="star"/>
+                                <label class="star star-3" for="star-3"></label>
+                                <input class="star star-4" id="star-4" type="radio" name="star"/>
+                                <label class="star star-4" for="star-4"></label>
+                                <input class="star star-5" id="star-5" type="radio" name="star"/>
+                                <label class="star star-5" for="star-5"></label>
+
+                            </form>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Clarity</label>
+                            <form action="">
+                                <input class="star star-1" id="star-6" type="radio" name="star"/>
+                                <label class="star star-1" for="star-6"></label>
+                                <input class="star star-2" id="star-7" type="radio" name="star"/>
+                                <label class="star star-2" for="star-7"></label>
+                                <input class="star star-3" id="star-8" type="radio" name="star"/>
+                                <label class="star star-3" for="star-8"></label>
+                                <input class="star star-4" id="star-9" type="radio" name="star"/>
+                                <label class="star star-4" for="star-9"></label>
+                                <input class="star star-5" id="star-10" type="radio" name="star"/>
+                                <label class="star star-5" for="star-10"></label>
+                            </form>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Recommended Elective (Optional)</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="When did you take it?">
+                            </div>
+                        </div>
+                        <div class="form-horizontal text-center">								
+                            <input type="submit" class="btn btn-primary" value="Submit">
+                        </div>									
                     </div>
                 </div>
             </div>
-            <!-- END PAGE CONTENT -->		
-<!-- FOOTER -->
-            <footer style="margin-bottom: 30px; padding-top: 10px;">			
-                <!-- COPYRIGHT -->
-                <div class="text-center copyright navbar-fixed-bottom">
-                    &copy;2016 The Develovers. All Rights Reserved.
-                </div>
-                <!-- END COPYRIGHT -->
-            </footer>
         </div>
-        <!-- END WRAPPER -->
-        <!-- JAVASCRIPTS -->
-        <script src="assets/js/jquery-2.1.1.min.js"></script>
-        <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/plugins/slick/slick.min.js"></script>
-        <script src="assets/js/plugins/stellar/jquery.stellar.min.js"></script>
-        <script src="assets/js/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
-        <script src="assets/js/plugins/autohidingnavbar/jquery.bootstrap-autohidingnavbar.min.js"></script>
-        <script src="assets/js/repute-scripts.js"></script>	
-    </body>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->		
+<!-- FOOTER -->
+<footer style="margin-bottom: 30px; padding-top: 10px;">			
+    <!-- COPYRIGHT -->
+    <div class="text-center copyright navbar-fixed-bottom">
+        &copy;2016 The Develovers. All Rights Reserved.
+    </div>
+    <!-- END COPYRIGHT -->
+</footer>
+</div>
+<!-- END WRAPPER -->
+<!-- JAVASCRIPTS -->
+<script src="assets/js/jquery-2.1.1.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/plugins/slick/slick.min.js"></script>
+<script src="assets/js/plugins/stellar/jquery.stellar.min.js"></script>
+<script src="assets/js/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
+<script src="assets/js/plugins/autohidingnavbar/jquery.bootstrap-autohidingnavbar.min.js"></script>
+<script src="assets/js/repute-scripts.js"></script>	
+</body>
 </html>
