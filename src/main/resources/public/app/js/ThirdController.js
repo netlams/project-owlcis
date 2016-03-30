@@ -18,5 +18,5 @@
     thirdController.$inject = ['$scope','$state','DBService'];
 
     angular.module('authApp').controller('thirdController', thirdController);
-
+   
 }());
