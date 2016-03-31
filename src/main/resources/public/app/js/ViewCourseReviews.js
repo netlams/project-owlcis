@@ -40,6 +40,35 @@
                             console.log("Sending this" + $scope.Dataform.selectedID);
                         });
             };
+            
+             $scope.send_fields = function (){
+            console.log('Send Fields');
+            console.log($scope.semester);
+            console.log($scope.comment);
+            console.log($scope.selected_course);
+            $scope.json_object = { 
+                                'userID': 1,
+                                'courseID': 'CIS 1001', 
+                                'reviewText': 'Very nice profesor, but a lot of labs',
+                                'semester': 'Fall', 
+                                'helpfulness': 2,
+                                'esasiness': 2,
+                                'clarity':2,
+                                'thumbsUp': 1,
+                                'thumbsDown': 1
+                              };
+            $scope.send_fields = function ($http) {
+
+                $http.post('/api/viewreviews', $scope.Dataform.selectedID)
+                        .then(function (response) {
+                            $scope.example2 = response.data;
+                        }, function (response) {
+                            console.log("Sending this" + $scope.Dataform.selectedID);
+                        });                  
+            };
+            
+        };
+            
         }]);
 
 }());  
