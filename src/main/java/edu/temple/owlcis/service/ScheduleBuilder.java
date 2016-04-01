@@ -5,6 +5,8 @@
  */
 package edu.temple.owlcis.service;
 
+import java.util.ArrayList;
+
 /**
  * The purpose of the ScheduleBuilder class is to provide
  * users with the ability to build a course schedule to save for personal
@@ -21,7 +23,11 @@ public class ScheduleBuilder {
     //Global variables
     private String username; //the username of the student who created the schedule (e.g., tue11223@temple.edu)
     private String creationDateTime; //the time and date at which the schedule was created
-
+    
+    public ScheduleBuilder(){
+        ;
+    }
+    
     /**
      * the constructor for the ScheduleBuilder object
      *
@@ -93,5 +99,36 @@ public class ScheduleBuilder {
     private boolean generateFlowchart() {
         return true;
     }
-
+    
+    public StudentFlowchart getSchedule() {
+        StudentFlowchart flow = new StudentFlowchart();
+        // query 'takes' db, ORDFER BY semester (FA, SP, SU)
+            // take each row and store in StudentSemester; increment semesterCnt
+        // add to list
+        Schedule element = new Schedule(new String("MATH 0701"), new String("FL15"));
+        Schedule algebra = new Schedule(new String("MATH 1021"), new String("SP16"));
+        Schedule precal = new Schedule(new String("MATH 1022"), new String("FL16"));
+        Schedule intro = new Schedule(new String("CIS 1001"), new String("FL15"));
+        Schedule abst = new Schedule(new String("CIS 1068"), new String("FL15"));
+        Schedule mathc = new Schedule(new String("CIS 1166"), new String("FL15"));
+        System.out.println("ELEMENT    "+element.toString());
+        CourseNode tree = new CourseNode("Start", "null");
+        tree.addCourse(element);
+        tree.getChildren().get(0).addCourse(algebra);
+        tree.getChildren().get(0).getChildren().get(0).addCourse(precal);
+        tree.addCourse(intro);
+        tree.getChildren().get(1).addCourse(abst);
+        tree.getChildren().get(1).getChildren().get(0).addCourse(mathc);
+        
+        flow.getSemesterList().add(tree);
+        
+        ArrayList<HeaderItem> list = new ArrayList<>();
+        list.add(new HeaderItem("FA15", 1));
+        list.add(new HeaderItem("SP16", 2));
+        list.add(new HeaderItem("FA16", 3));
+        flow.setHeader(list);
+//        flow.setSemesterList(tree);
+        return flow;
+    }
+    
 }
