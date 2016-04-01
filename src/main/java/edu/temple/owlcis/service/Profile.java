@@ -23,74 +23,11 @@ public class Profile {
     
     
     //Constructor that sets all variables to empty
-    public Profile() {
-        member = new Member();
+    public Profile(Member mem) {
+        member = mem;
         takenCourses = new LinkedList<>();
     }
 
-    /**
-     * 
-     * @return degree type (BA or BS) 
-     */
-    public String getDegreeType() {
-        return member.getDegreeType();
-    }
-
-    /**
-     * sets degree type
-     * @param degreeType 
-     */
-    public void setDegreeType(String degreeType) {
-        this.member.degreeType = degreeType;
-    }
-
-    /**
-     * 
-     * @return student/alumni status of this user
-     */
-    public String getStudentOrAlumni() {
-        return member.getStudentOrAlumni();
-    }
-
-    /**
-     * sets the student/alumni status of this user
-     * @param studentOrAlumni 
-     */
-    public void setStudentOrAlumni(String studentOrAlumni) {
-        this.member.setStudentOrAlumni(studentOrAlumni);
-    }
-
-    /**
-     * 
-     * @return user's graduation date
-     */
-    public String getGradDate() {
-        return this.member.getGradDate();
-    }
-
-    /**
-     * sets the user's graduation date
-     * @param gradDate 
-     */
-    public void setGradDate(String gradDate) {
-        this.member.setGradDate(gradDate);
-    }
-
-    /**
-     * 
-     * @return user's major
-     */
-    public String getMajor() {
-        return this.member.getMajor();
-    }
-
-    /**
-     * 
-     * @param major set user's major
-     */
-    public void setMajor(String major) {
-        this.member.setMajor(major);
-    }
     
     /**
      * adds the parameter course ID to the list
@@ -120,6 +57,12 @@ public class Profile {
             }
         }
     }
+    
+    public LinkedList getTakenCourses () {
+        return this.takenCourses;
+    }
+    
+    
     
     
     /**
@@ -198,18 +141,26 @@ public class Profile {
                /* Updating takes table....................... */
                 
                 //if linked list contains items
-                if (!takenCourses.isEmpty()) {
+                
                     //get all data from takes table
                     sql = "SELECT * FROM takes "
                             + "WHERE mem_id = ?";
                     stmt = conn.prepareStatement(sql);
                     
                     //Set param
-                    stmt.setInt(1, this.memID);
+                    stmt.setInt(1, 45);
+                    System.out.println(45);
                     
                     //Execute query
                     ResultSet results = stmt.executeQuery();
-                    String course_id, semester;
+                    
+                    while (results.next()) {
+                        Schedule schedule = new Schedule(results.getString(2), results.getString(3));
+                        takenCourses.add(schedule);
+                        schedule.toString();
+                    }
+                    
+                    /*String course_id, semester;
                     sql = "INSERT INTO takes (mem_id, course_id, semester) "
                             + "VALUES (?,?,?)";
                     stmt = conn.prepareStatement(sql);
@@ -243,8 +194,8 @@ public class Profile {
                             stmt.executeQuery();
                         }
                         //move to next course in linked list
-                    }
-                }
+                    }*/
+                
                 return true;
             } catch (SQLException ex) {
                 //Handle errors
@@ -267,5 +218,6 @@ public class Profile {
         }
         return false;
     }
+    
     
 }

@@ -84,6 +84,19 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
         
+        
+        get(API_LOC + "/courselist", (request, response) -> {
+            User user = request.session().attribute("USER");
+            Member member = (Member)user;
+            Profile profile = new Profile(member);
+            Database dbc = new Database();
+            profile.updateTakenCourses(dbc.getConn());
+            Gson gson = new Gson();
+            System.out.println("You've reached this page");
+            return gson.toJson(profile.getTakenCourses());
+        });
+        
+        
         /* Login Route */
         post("/login", (request, response) -> {
             String ret = "";

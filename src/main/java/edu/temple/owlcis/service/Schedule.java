@@ -26,9 +26,9 @@ public class Schedule {
     /**
      * the constructor for the Schedule object
      */
-    protected Schedule() {
-        courseID = "";
-        semester = "";
+    protected Schedule(String cid, String sem) {
+        courseID = cid;
+        semester = sem;
     }
 
     public String getCourseID() {
@@ -45,6 +45,11 @@ public class Schedule {
 
     public void setSemester(String semester) {
         this.semester = semester.toUpperCase();
+    }
+
+    @Override
+    public String toString() {
+        return "Schedule{" + "courseID=" + courseID + ", semester=" + semester + '}';
     }
     
     
