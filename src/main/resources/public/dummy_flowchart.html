@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>MAP MY CLASSES</title>
+    <style>
+    .node circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 3px;
+    }
+
+    .node text {
+        font: 12px sans-serif;
+    }
+
+    .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+    }
+    </style>
+</head>
+<body>
+
+    <script>
+
+    // ************** Generate the tree diagram  *****************
+    var margin = {top: 20, right: 120, bottom: 20, left: 120},
+    width = 960 - margin.right - margin.left,
+    height = 500 - margin.top - margin.bottom;
+
+    var mySchedule = [
+        {semester:'FL15', level:1},
+        {semester:'SP16', level:2},
+        {semester:'FL16', level:3},
+    ];
+
+    function renderHeader(data) {
+        // bind data
+        var rect = svg.selectAll('rect').data(data);
+        // enter data
+        rect.enter().append('rect')
+            .attr('transform', "translate(-85, 0)")
+            .attr('x', function(d) { return d.level * 180;})
+            .attr('y', 20)
+            .attr('width', 170)
+            .attr('height', 50)
+            .attr('fill', 'green');
+        rect.enter().append('text')
+        .attr('transform', "translate(-20, 50)")
+        .attr('x', function(d) { return d.level * 180;})
+        .attr('text-anchor', "start")
+        .text(function(d) { return d.semester; })
+        .style('fill-opacity', 1)
+        .attr('fill', '#999');
+    }
+
+    var treeData = [
+        {
+            "name": "START",
+            "parent": "null",
+            "children": [
+                {
+                    "name": "MATH 0701",
+                    "parent": "START",
+                    "children": [
+                        {
+                            "name": "MATH 1021",
+                            "parent": "MATH 1021",
+                            "children": [
+                                {
+                                    "name": "MATH 1022",
+                                    "parent": "MATH 1021"
+                                },
+                                {
+                                    "name": "CIS 1068",
+                                    "parent": "MATH 1021"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "CIS 1166",
+                            "parent": "MATH 0701"
+                        }
+                    ]
+                },
+                {
+                    "name": "CIS 1001",
+                    "parent": "START"
+                }
+            ]
+        }
+    ];
+
+    console.log(treeData);
+
+    var i = 0;
+
+    var tree = d3.layout.tree()
+    .size([height, width]);
+
+    var diagonal = d3.svg.diagonal()
+    .projection(function(d) { return [d.y, d.x]; });
+
+    var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    root = treeData[0];
+
+    update(root);
+    renderHeader(mySchedule);
+    function update(source) {
+
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root).reverse(),
+        links = tree.links(nodes);
+
+        // Normalize for fixed-depth.
+        nodes.forEach(function(d) { d.y = d.depth * 180; });
+
+        // Declare the nodesâ€¦
+        var node = svg.selectAll("g.node")
+        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+        // Enter the nodes.
+        var nodeEnter = node.enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) {
+            return "translate(" + d.y + "," + d.x + ")"; });
+
+            nodeEnter.append("circle")
+            .attr("r", 10)
+            .style("fill", "#fff");
+
+            nodeEnter.append("text")
+            .attr("x", function(d) {
+                return d.children || d._children ? -13 : 13;
+            })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function(d) {
+                    return d.children || d._children ? "end" : "start"; })
+                    .text(function(d) { return d.name; })
+                    .style("fill-opacity", 1);
+
+
+                }
+
+                </script>
+            </body>
+            </html>
