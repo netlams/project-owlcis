@@ -41,7 +41,7 @@ public class UserTypeTest {
      * parameters.
      *
      */
-    @Test
+    /*@Test
     public void memberShouldHaveCorrectAttr() {
         // Parameterized Constructor
         User user = new Member("ex@temple.edu", "Jane", "Doe", "CS", "student", "2016-05-06", "BS");
@@ -54,7 +54,7 @@ public class UserTypeTest {
                 + "GradDate: 2016-05-06 "
                 + "DegreeType: BS";
         assertEquals("Member should have correct attributes", expected, user.toString());
-    }
+    }*/
 
     /**
      * Case 3 - Moderator object should have correct attributes

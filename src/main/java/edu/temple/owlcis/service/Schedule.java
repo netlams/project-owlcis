@@ -20,13 +20,39 @@ import java.util.LinkedList;
 public class Schedule {
 
     //Global variables
-    protected LinkedList<Course> courses; //the list of courses in the schedule
+    protected String courseID; //ID of course taken this semester
+    protected String semester; //semester in which course was taken
 
     /**
      * the constructor for the Schedule object
      */
-    protected Schedule() {
-        courses = new LinkedList<>();
+    protected Schedule(String cid, String sem) {
+        courseID = cid;
+        semester = sem;
     }
+
+    public String getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(String courseID) {
+        this.courseID = courseID.toUpperCase();
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester.toUpperCase();
+    }
+
+    @Override
+    public String toString() {
+        return "Schedule{" + "courseID=" + courseID + ", semester=" + semester + '}';
+    }
+    
+    
+    
 
 }
