@@ -62,6 +62,28 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
         
+        
+        /* Update Profile Route */
+        post(API_LOC + "/updateprofile", (request, response) -> {
+            Gson gson = new Gson();
+            Profile testProfile = gson.fromJson(request.body(), Profile.class);
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    //this only gets called if they update profile and courses taken
+                    if (testProfile.updateProfile(dbc.getConn())
+                            && testProfile.updateTakenCourses(dbc.getConn())) {
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
         /* Login Route */
         post("/login", (request, response) -> {
             String ret = "";
@@ -201,8 +223,6 @@ public class Main implements SparkApplication {
 
             return ret;
         });
-        
-        
         
         /**
          * Signout Route

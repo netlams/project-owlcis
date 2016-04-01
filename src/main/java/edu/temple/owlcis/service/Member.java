@@ -31,7 +31,10 @@ public class Member extends User {
      * The Member's graduation date
      */
     protected String gradDate;
-
+    /**
+     * The Member's degree type
+     */
+    protected String degreeType;
     /**
      * Default Constructor for Member
      */
@@ -41,6 +44,7 @@ public class Member extends User {
         this.setMajor("Computer Science");
         this.setStudentOrAlumni("student");
         this.setGradDate("2016-05-12");
+        this.setDegreeType("BS");
     }
 
     /**
@@ -53,8 +57,9 @@ public class Member extends User {
      * @param m the major to give to this object
      * @param sa the status to give this object (Student or Alumni)
      * @param gd the graduation date to give this object
+     * @param dt the degree type to give this object
      */
-    public Member(int i, String e, String f, String l, String m, String sa, String gd) {
+    public Member(int i, String e, String f, String l, String m, String sa, String gd, String dt) {
         this();
         this.setId(i);
         this.setEmail(e);
@@ -63,6 +68,7 @@ public class Member extends User {
         this.setMajor(m);
         this.setStudentOrAlumni(sa);
         this.setGradDate(gd);
+        this.setDegreeType(dt);
     }
     
     /**
@@ -74,8 +80,9 @@ public class Member extends User {
      * @param m the major to give to this object
      * @param sa the status to give this object (Student or Alumni)
      * @param gd the graduation date to give this object
+     * @param dt the degree type to give this object
      */
-    public Member(String e, String f, String l, String m, String sa, String gd) {
+    public Member(String e, String f, String l, String m, String sa, String gd, String dt) {
         this();
         this.setEmail(e);
         this.setFname(f);
@@ -83,6 +90,7 @@ public class Member extends User {
         this.setMajor(m);
         this.setStudentOrAlumni(sa);
         this.setGradDate(gd);
+        this.setDegreeType(dt);
     }
 
     @Override
@@ -153,6 +161,24 @@ public class Member extends User {
     public void setGradDate(String gradDate) {
         this.gradDate = gradDate;
     }
+    
+    /**
+     * Gets the degreeType
+     *
+     * @return the degreeType
+     */
+    public String getDegreeType() {
+        return degreeType;
+    }
+
+    /**
+     * Sets the degreeType
+     *
+     * @param degreeType the degreee type to set
+     */
+    public void setDegreeType(String degreeType) {
+        this.degreeType = degreeType;
+    }
 
     /**
      * Gets string representation of object
@@ -163,6 +189,7 @@ public class Member extends User {
     public String toString() {
         return super.toString() + " Major: " + this.getMajor()
                 + " studentOrAlumni: " + this.getStudentOrAlumni() 
-                + " GradDate: " + this.getGradDate();
+                + " GradDate: " + this.getGradDate() 
+                + " DegreeType: " + this.getDegreeType();
     }
 }
