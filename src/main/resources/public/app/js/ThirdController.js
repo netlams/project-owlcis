@@ -6,8 +6,8 @@
     app.controller('thirdController', ['$scope', '$state', '$http', '$window', 'CourseList',
         function ($scope, $state, $http, $window, CourseList) {
           $scope.semester = '';
-          $scope.comment  = '';
-          $scope.course_id = '';
+          $scope.reviewText  = '';
+          $scope.courseID = '';
           $scope.recElectiveID = '';
             $scope.starh = {
                 name: ''
@@ -23,7 +23,7 @@
             
            $scope.Dataform2 = {
                                 'selectedID': null,
-                                'course_ID': {},
+                                'courseID': {},
                                 'err': null
           };
 
@@ -35,20 +35,21 @@
   
           $scope.send_fields = function (){
             console.log('Send Fields');
-            console.log($scope.semester);
-            console.log($scope.comment);
-            console.log($scope.starh.name);
-            console.log($scope.stare.name);
-            console.log($scope.starc.name);
-            console.log($scope.Dataform2.selectedID);
+            console.log('Semester',$scope.semester);
+            console.log('Comment',$scope.reviewText);
+            console.log('Helpfulness',$scope.helpfulness);
+            console.log('easiness',$scope.easiness);
+            console.log('clarity',$scope.clarity);
+            console.log('course id',$scope.Dataform2.selectedID);
+            console.log('elective', $scope.recElectiveID);
             $scope.json_object = { 
                                 'userID':      41,
                                 'courseID':    $scope.Dataform2.selectedID, 
-                                'reviewText':  $scope.comment,
+                                'reviewText':  $scope.reviewText,
                                 'semester':    $scope.semester, 
-                                'helpfulness': $scope.starh.name,
-                                'easiness':   $scope.stare.name,
-                                'clarity':     $scope.starc.name,
+                                'helpfulness': $scope.helpfulness,
+                                'easiness':   $scope.easiness,
+                                'clarity':     $scope.clarity,
                                 'hasRecElective': true,
                                 'recElectiveID': $scope.recElectiveID,
                                 'thumbsUp':    1,
