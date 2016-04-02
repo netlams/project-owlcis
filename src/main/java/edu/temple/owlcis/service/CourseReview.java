@@ -39,6 +39,7 @@ public class CourseReview {
         helpfulness = 0;
         easiness = 0;
         clarity = 0;
+                
         hasRecElective = false;
         recElectiveID = "";
         electiveSemester = "";

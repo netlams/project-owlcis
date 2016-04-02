@@ -14,12 +14,20 @@
 
                             <label class="col-md-2 control-label">Courses:</label>
                             <div class="col-md-10">
-                                <select  name="selectedID" id="selectedID" ng-change="select_course(this.value)" 
+                               <!-- <select  name="selectedID" id="selectedID" ng-change="select_course(this.value)" 
                                          data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
                                     <option value="">Select Course</option>
                                     <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
-                                </select>
+                                </select>                             
+                               -->
+                                <div class="col-md-10">                      
+                                    <select  name="selectedID" id="selectedID" class="form-control" data-ng-model ="Dataform2.selectedID"  data-ng-required="true">
+                                        <option value="">Select Course</option>
+                                        <option data-ng-repeat="y in Dataform2.course_ID">{{y.course_id}}</option>
+                                    </select>
+                                </div>
                             </div>
+
                         </div>
                                                 
                         <div class="form-group">
@@ -86,12 +94,17 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Recommended Elective (Optional)</label>
                             <div class="col-md-10">
-                                <input type="text" class="form-control" placeholder="When did you take it?">
+                                <input type="text" class="form-control" ng-model="recElectiveID" placeholder="When did you take it?">
                             </div>
                         </div>
                         <div class="form-horizontal text-center">								
                             <input type="submit" class="btn btn-primary" ng-click="send_fields()" value="Submit">
-                        </div>									
+                        </div>		
+                        
+                        <pre>
+                        {{json_object}}
+</pre>
+                        
                     </div>
                 </div>
             </div>
