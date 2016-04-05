@@ -44,7 +44,7 @@ public class Main implements SparkApplication {
          * root API
          */
         get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");
-
+        
         /**
          * Post Review Route
          */
@@ -410,6 +410,13 @@ public class Main implements SparkApplication {
             response.status(200);
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
+        });
+        
+        
+        get(API_LOC + "/testflow", (request, response) -> {
+            ScheduleBuilder model = new ScheduleBuilder();
+            Gson gson = new Gson();
+            return gson.toJson(model.getSchedule()); 
         });
 
     }

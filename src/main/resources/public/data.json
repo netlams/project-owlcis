@@ -1,0 +1,50 @@
+{
+    "semesterList": [
+    {
+        "name": "START",
+        "parent": "null",
+        "children": [
+            {
+                "name": "MATH 0701",
+                "parent": "START",
+                "children": [
+                    {
+                        "name": "MATH 1021",
+                        "parent": "MATH 1021",
+                        "children": [
+                            {
+                                "name": "MATH 1022",
+                                "parent": "MATH 1021"
+                            },
+                            {
+                                "name": "CIS 1068",
+                                "parent": "MATH 1021"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "CIS 1166",
+                        "parent": "MATH 0701"
+                    }
+                ]
+            },
+            {
+                "name": "CIS 1001",
+                "parent": "START"
+            }
+        ]
+    }
+],
+        "header":
+        [
+            {
+                "semester":"FL15", "level":1
+            },
+            {
+                "semester":"SP16", "level":2
+            },
+            {
+                "semester":"FL16", "level":3
+            }
+        ]
+}

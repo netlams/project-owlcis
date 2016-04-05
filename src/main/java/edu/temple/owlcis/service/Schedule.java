@@ -1,6 +1,6 @@
 /**
- * CIS4398 Projects 
- * Spring 2016 
+ * CIS4398 Projects
+ * Spring 2016
  * 2/25/2016
  */
 package edu.temple.owlcis.service;
@@ -51,8 +51,4 @@ public class Schedule {
     public String toString() {
         return "Schedule{" + "courseID=" + courseID + ", semester=" + semester + '}';
     }
-    
-    
-    
-
 }
