@@ -234,7 +234,7 @@ public class User {
      * @return the id
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**

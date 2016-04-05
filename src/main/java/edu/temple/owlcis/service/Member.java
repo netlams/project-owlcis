@@ -47,6 +47,13 @@ public class Member extends User {
         this.setDegreeType("BS");
     }
 
+    public Member(User user) {
+        this();
+        this.setId(user.getId());
+        this.setEmail(user.getEmail());
+        this.setFname(user.getFname());
+        this.setLname(user.getLname());
+    }
     /**
      * Parameterized Constructor for Member object
      *

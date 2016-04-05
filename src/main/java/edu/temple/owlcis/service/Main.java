@@ -66,9 +66,113 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
-        /**
-         * Login Route
-         */
+        
+        
+        /* Update Profile Route */
+        post(API_LOC + "/updateprofile", (request, response) -> {
+            Gson gson = new Gson();
+            Profile testProfile = gson.fromJson(request.body(), Profile.class);
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (testProfile.updateProfile(dbc.getConn())) {
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
+                        
+        /* Get Profile Taken Courses Route */
+        get(API_LOC + "/profilecourse", (request, response) -> {
+            User user = request.session().attribute("USER");
+            Member member = new Member(user);
+            Profile profile = new Profile(member);
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (profile.fetchTakenCourses(dbc.getConn())) {
+                        Gson gson = new Gson();
+                        return gson.toJson(profile.getTakenCourses());
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                } finally {
+                    if (!dbc.getConn().isClosed())
+                        dbc.closeConn();
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";            
+        });
+                
+        
+        /* Add Taken Courses Route */
+        post(API_LOC + "/addtakencourses", (request, response) -> {
+            //User user = request.session().attribute("USER");
+            //Member member = new Member(user);
+            Member member = new Member();
+            member.setId(45);
+            Profile profile = new Profile(member);
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    Gson gson = new Gson();
+                    Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                    System.out.println(schedule.toString());
+                    if (profile.fetchTakenCourses(dbc.getConn()) //load taken courses from db into linked list
+                            && profile.addTakenCourse(schedule, dbc.getConn())) { //attempt to add new taken course
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                } finally {
+                    if (!dbc.getConn().isClosed())
+                        dbc.closeConn();
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR"; 
+        });
+        
+        
+        
+        /* Delete Taken Courses Route */
+        post(API_LOC + "/deletetakencourses", (request, response) -> {
+            //User user = request.session().attribute("USER");
+            //Member member = new Member(user);
+            Member member = new Member();
+            member.setId(45);
+            Profile profile = new Profile(member);
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    Gson gson = new Gson();
+                    Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                    System.out.println(schedule.toString());
+                    if (profile.removeTakenCourse(schedule, dbc.getConn())) {
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                } finally {
+                    if (!dbc.getConn().isClosed())
+                        dbc.closeConn();
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";       
+        });
+        
+        
+        /* Login Route */
         post("/login", (request, response) -> {
             String ret = "";
             HttpTransport transport = new NetHttpTransport();
@@ -98,6 +202,7 @@ public class Main implements SparkApplication {
                 if (SignIn.isValidTempleEmailAddress(user.getEmail()) == true) {
                     try {
                         User newUser = SignIn.findUser(dbc.getConn(), user);
+                       
                         if (newUser != null) {
                             // found user
                             response.status(200);
