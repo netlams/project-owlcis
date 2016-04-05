@@ -50,7 +50,9 @@ public class Main implements SparkApplication {
          */
         post(API_LOC + "/coursereviews", (request, response) -> {
             Gson gson = new Gson();
+            User user = request.session().attribute("USER");
             CourseReview testReview = gson.fromJson(request.body(), CourseReview.class);
+            testReview.setUserID(user.getId());
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
@@ -65,7 +67,58 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-
+        
+        
+        /* Increment Thumbs-up Count */
+        post(API_LOC + "/incthumbsup", (request, response) -> {
+            Gson gson = new Gson();
+            User user = request.session().attribute("USER");
+            ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
+            tr.setUserID(user.getId());
+            
+            Database dbc = new Database();
+            
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
+                        if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
+                            response.status(201);
+                            return "HTTP 201 - CREATED";
+                        }
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
+        
+        /* Increment Thumbs-down Count */
+        post(API_LOC + "/incthumbsdown", (request, response) -> {
+            Gson gson = new Gson();
+            User user = request.session().attribute("USER");
+            ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
+            tr.setUserID(user.getId());
+            
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
+                        if (tr.incThumbsDown(dbc.getConn())) { //attempt to call method to inc thumbs-up
+                            response.status(201);
+                            return "HTTP 201 - CREATED";
+                        }
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
         
         
         /* Update Profile Route */

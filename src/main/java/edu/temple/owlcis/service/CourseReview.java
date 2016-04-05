@@ -7,7 +7,6 @@ package edu.temple.owlcis.service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -27,8 +26,7 @@ public class CourseReview {
     private boolean hasRecElective;
     private String recElectiveID;
     private String electiveSemester;
-    private int thumbsUp;
-    private int thumbsDown;
+    
     
     //Constructor that sets all variables to empty
     public CourseReview() {
@@ -42,13 +40,11 @@ public class CourseReview {
         hasRecElective = false;
         recElectiveID = "";
         electiveSemester = "";
-        thumbsUp = 0;
-        thumbsDown = 0;
     }
 
     @Override
     public String toString() {
-        return "CourseReview{" + "userID=" + userID + ", courseID=" + courseID + ", reviewText=" + reviewText + ", semester=" + semester + ", helpfulness=" + helpfulness + ", easiness=" + easiness + ", clarity=" + clarity + ", hasRecElective=" + hasRecElective + ", thumbsUp=" + thumbsUp + ", thumbsDown=" + thumbsDown + '}';
+        return "CourseReview{" + "userID=" + userID + ", courseID=" + courseID + ", reviewText=" + reviewText + ", semester=" + semester + ", helpfulness=" + helpfulness + ", easiness=" + easiness + ", clarity=" + clarity + ", hasRecElective=" + hasRecElective + '}';
     } 
     
     public String getRecElectiveID() {
@@ -66,9 +62,6 @@ public class CourseReview {
     public void setElectiveSemester(String electiveSemester) {
         this.electiveSemester = electiveSemester;
     }
-    
-    
-       
     
     /**
      * 
@@ -116,40 +109,6 @@ public class CourseReview {
      */
     public void setReviewText(String reviewText) {
         this.reviewText = reviewText;
-    }
-
-    /**
-     * 
-     * @return thumbs up count of this review
-     */
-    public int getThumbsUp() {
-        return thumbsUp;
-    }
-
-    /**
-     * Increments thumbs up count by 1
-     * 
-     * @param thumbsUp
-     */
-    public void setThumbsUp(int thumbsUp) {
-        this.thumbsUp = thumbsUp;
-    }
-
-    /**
-     * 
-     * @return thumbs down count
-     */
-    public int getThumbsDown() {
-        return thumbsDown;
-    }
-
-    /**
-     * Increments thumbs down count by 1
-     * 
-     * @param thumbsDown
-     */
-    public void setThumbsDown(int thumbsDown) {
-        this.thumbsDown = thumbsDown;
     }
 
     /**
@@ -252,8 +211,8 @@ public class CourseReview {
                 stmt.setInt(5, easiness);
                 stmt.setInt(6, clarity);
                 stmt.setString(7, reviewText);
-                stmt.setInt(8, thumbsUp);
-                stmt.setInt(9, thumbsDown);
+                stmt.setInt(8, 0);
+                stmt.setInt(9, 0);
                 
                 //Execute query
                 stmt.executeUpdate();
