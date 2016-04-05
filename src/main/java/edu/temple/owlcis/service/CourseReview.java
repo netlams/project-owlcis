@@ -268,15 +268,16 @@ public class CourseReview {
                 {
                     sql = "INSERT INTO rec_elective (review_id, course_id, semester) "
                             + "VALUES ((SELECT review_id FROM course_review "
-                            + "WHERE user_id = ? AND course_id = ?), ?, ?)";
+                            + "WHERE user_id = ? AND semester = ? AND course_id = ?), ?, ?)";
                     
                     stmt = conn.prepareStatement(sql);
 
                     //Set parameters
                     stmt.setInt(1, userID);
-                    stmt.setString(2, courseID);
-                    stmt.setString(3, recElectiveID);
-                    stmt.setString(4, electiveSemester);
+                    stmt.setString(2, semester);
+                    stmt.setString(3, courseID);
+                    stmt.setString(4, recElectiveID);
+                    stmt.setString(5, electiveSemester);
                     
                     //Execute query
                     stmt.executeUpdate();
