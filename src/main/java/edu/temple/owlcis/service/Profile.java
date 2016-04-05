@@ -17,6 +17,7 @@ import java.util.LinkedList;
  * @author Rachel Tritsch
  */
 public class Profile {
+    
     //Global variables
     private Member member;
     private LinkedList<Schedule> takenCourses;
@@ -27,43 +28,165 @@ public class Profile {
         member = mem;
         takenCourses = new LinkedList<>();
     }
-
     
     /**
-     * adds the parameter course ID to the list
-     * @param sch the schedule to be added to the list
+     * getter for takenCourses list
+     * @return takenCourses linked list
      */
-    public void addTakenCourse(Schedule sch) {
-        //first search if list already has this schedule
-        for (Schedule takenCourse : takenCourses) {
-            if (takenCourse.courseID.equals(sch.getCourseID()) && takenCourse.semester.equals(sch.getSemester())) {
-                //list already has this schedule, so don't add it
-                break;
-            }
-        }
-        //if reaches here, then this schedule is not in list, so add it
-        takenCourses.add(sch);
-    }
-    
-    /**
-     * removes the parameter course ID and semester from both lists
-     * @param sch the schedule containing the course ID and semester to be removed from list
-     */
-    public void removeTakenCourse(Schedule sch) {
-        for (int i = 0; i < takenCourses.size(); i++) {
-            if (takenCourses.get(i).courseID.equals(sch.getCourseID())
-                    && takenCourses.get(i).semester.equals(sch.getSemester())) { //if found this course ID and semester
-                takenCourses.remove(i); //remove this schedule from taken courses
-            }
-        }
-    }
-    
     public LinkedList getTakenCourses () {
         return this.takenCourses;
     }
     
     
     
+    /**
+     * adds the parameter course ID to the db for this member, if doesn't already exist there
+     * @param sch the course and semester to be added to the db
+     * @param conn db connection
+     * @return true if successful, false if error occurred
+     * @throws java.sql.SQLException 
+     */
+    public boolean addTakenCourse(Schedule sch, Connection conn) throws SQLException {
+        //Check if this course ID and semester is already in db for this member
+        boolean insertCourse = true;
+        for (Schedule takenCourse : takenCourses) {
+            if (takenCourse.getCourseID().equals(sch.getCourseID())
+                    && takenCourse.getSemester().equals(sch.getSemester())) {
+                insertCourse = false;
+                break;
+            }
+        }
+        
+        //Insert this course ID and semester into db if it was not in there already
+        if (insertCourse) {
+            PreparedStatement stmt = null;
+            String sql;
+
+            if (conn != null) {
+                try {
+                    sql = "INSERT INTO takes (mem_id, course_id, semester) "
+                        + "VALUES (?,?,?)";
+                    stmt = conn.prepareStatement(sql);
+
+                    //Set parameters
+                    stmt.setInt(1, this.member.getId());
+                    stmt.setString(2, sch.getCourseID().toUpperCase());
+                    stmt.setString(3, sch.getSemester().toUpperCase());
+
+                    //Execute query
+                    stmt.executeUpdate();
+
+                    return true;
+                } catch (SQLException ex) {
+                    //Handle errors
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                    throw new SQLException(ex);
+                } finally {
+                    if (stmt != null) {
+                        try {
+                            stmt.close();
+                        } catch (SQLException sqlEx) {} //ignore
+                    }
+                    if (!conn.isClosed()) {
+                        try {
+                            conn.close();
+                        } catch (SQLException sqlEx) {} //ignore
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    //for delete, don't need to check in db first
+    public boolean removeTakenCourse(Schedule sch, Connection conn) throws SQLException {
+        PreparedStatement stmt = null;
+        String sql;
+
+        if (conn != null) {
+            try {
+                sql = "DELETE FROM takes "
+                    + "WHERE mem_id = ? "
+                    + "AND course_id = ? "
+                    + "AND semester = ?";
+                stmt = conn.prepareStatement(sql);
+
+                //Set parameters
+                stmt.setInt(1, this.member.getId());
+                stmt.setString(2, sch.getCourseID().toUpperCase());
+                stmt.setString(3, sch.getSemester().toUpperCase());
+
+                //Execute query
+                stmt.executeUpdate();
+
+                return true;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {} //ignore
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * retrieves previously taken courses from database for this member, storing
+     * them in takenCourses linked list
+     * @param conn the db connection
+     * @return true if SQL query was successfully executed; false otherwise
+     * @throws SQLException 
+     */
+    public boolean fetchTakenCourses (Connection conn) throws SQLException {
+        PreparedStatement stmt = null;
+        String sql;
+        
+        if (conn != null) {
+            try {
+                /* Querying takes table ....................... */          
+                sql = "SELECT * FROM takes "
+                        + "WHERE mem_id = ?";
+                stmt = conn.prepareStatement(sql);
+
+                //Set param
+                stmt.setInt(1, this.member.getId());
+                System.out.println(this.member.getId());
+
+                //Execute query
+                ResultSet results = stmt.executeQuery();
+
+                while (results.next()) {
+                    Schedule schedule = new Schedule(results.getString(2), results.getString(3));
+                    takenCourses.add(schedule);
+                    schedule.toString();
+                }
+                
+                return true;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {} //ignore
+                }
+            }
+        }
+        return false; //will only return false if connection is null
+    }
     
     /**
      * updates profile information for members, including student/alumni status,
@@ -124,100 +247,5 @@ public class Profile {
         }
         return false;
     }
-    
-    /**
-     * inserts courses and semesters into this member's list of previously
-     * taken courses
-     * @param conn
-     * @return true if SQL query was successfully executed; false otherwise
-     * @throws SQLException 
-     */
-    public boolean updateTakenCourses (Connection conn) throws SQLException {
-        PreparedStatement stmt = null;
-        String sql;
-        
-        if (conn != null) {
-            try {
-               /* Updating takes table....................... */
-                
-                //if linked list contains items
-                
-                    //get all data from takes table
-                    sql = "SELECT * FROM takes "
-                            + "WHERE mem_id = ?";
-                    stmt = conn.prepareStatement(sql);
-                    
-                    //Set param
-                    stmt.setInt(1, 45);
-                    System.out.println(45);
-                    
-                    //Execute query
-                    ResultSet results = stmt.executeQuery();
-                    
-                    while (results.next()) {
-                        Schedule schedule = new Schedule(results.getString(2), results.getString(3));
-                        takenCourses.add(schedule);
-                        schedule.toString();
-                    }
-                    
-                    /*String course_id, semester;
-                    sql = "INSERT INTO takes (mem_id, course_id, semester) "
-                            + "VALUES (?,?,?)";
-                    stmt = conn.prepareStatement(sql);
-                    boolean insertCourse; //this var says whether to insert course into table
-                    
-                    //for each taken course for this member
-                    for (int i = 0; i < takenCourses.size(); i++) {
-                        //reset iterator here
-                        insertCourse = true;
-                        results.beforeFirst();
-                        while (results.next()) {                                    
-                            //get course ID and semester for current row
-                            course_id = results.getString("course_id").toUpperCase();
-                            semester = results.getString("semester").toUpperCase();
-                            
-                            //if current row is for the course you are trying to add
-                            if (course_id.equals(takenCourses.get(i))
-                                    && semester.equals(semesters.get(i))) {
-                                insertCourse = false;
-                                break;//skip to next course and semester
-                            } //else move to next row in results
-                        }
-                        //if course/semester set were never found in table, insert them
-                        if (insertCourse) {
-                            //Set parameters
-                            stmt.setInt(1, this.memID);
-                            stmt.setString(2, takenCourses.get(i));
-                            stmt.setString(3, semesters.get(i));
-                            
-                            //Execute query
-                            stmt.executeQuery();
-                        }
-                        //move to next course in linked list
-                    }*/
-                
-                return true;
-            } catch (SQLException ex) {
-                //Handle errors
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-                throw new SQLException(ex);
-            } finally {
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (SQLException sqlEx) {} //ignore
-                }
-                if (!conn.isClosed()) {
-                    try {
-                        conn.close();
-                    } catch (SQLException sqlEx) {} //ignore
-                }
-            }
-        }
-        return false;
-    }
-    
     
 }
