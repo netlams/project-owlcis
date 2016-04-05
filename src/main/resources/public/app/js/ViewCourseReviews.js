@@ -1,7 +1,6 @@
 (function () {
     var app = angular.module('authApp');
-
-    /* Gets the dept JSON list */
+/* Gets the dept JSON list */
     app.service('CourseList', function ($q, $http) {
         this.getCourseList = function () {
             var defer = $q.defer();
@@ -44,5 +43,10 @@
     
             
         }]);
-
+ 
+app.controller('check', function($scope) {
+  $scope.count = function(inc){
+  $scope.counter += inc;
+  };
+});
 }());  

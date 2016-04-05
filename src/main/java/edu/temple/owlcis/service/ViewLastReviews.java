@@ -1,8 +1,9 @@
-/**
- * CIS4398 Projects
- * Spring 2016
- * 3/16/2016
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
+
 package edu.temple.owlcis.service;
 
 import java.sql.Statement;
@@ -12,11 +13,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * The ViewReviews class is used for Course table in the database.
+ * The ViewLastReviews class is used for Course table in the database.
  *
- * @author Group Project
+ * @author sheth
  */
-public class ViewReviews {
+public class ViewLastReviews {
 
     private String comment_text;
     private String time_stamp;
@@ -30,7 +31,7 @@ public class ViewReviews {
     private Double easiness;
     private Double clarity;
 
-    public ViewReviews() {
+    public ViewLastReviews() {
         this.comment_text = "";
         this.time_stamp = "";
         this.user_type = "";
@@ -45,7 +46,7 @@ public class ViewReviews {
 
     }
 
-    public ViewReviews(String c, String t, String c_id, String f, String l,
+    public ViewLastReviews(String c, String t, String c_id, String f, String l,
             double help, double e, double cl, String k) {
         this.comment_text = c;
         this.time_stamp = t;
@@ -67,28 +68,27 @@ public class ViewReviews {
 
     }
 
-    public List getAllReviews() throws SQLException {
+    public List getLastReviews() throws SQLException {
         Database dbc = new Database();
         if (dbc.getError().length() == 0) {
             // no errors
-            ArrayList<ViewReviews> list = new ArrayList();
+            ArrayList<ViewLastReviews> list = new ArrayList();
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, "
-                        + "substring(u.f_name,1,1),substring(u.l_name,1,1), cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
+                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, "
+                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
                         + " FROM owlcis.course_review cr"
                         + " JOIN owlcis.user u ON u.user_id = cr.user_id"
-                        + " WHERE cr.course_id = '" + selected_courseid + "'"
-                        + " ORDER BY cr.time_stamp DESC";
+                        +  "WHERE 1 ORDER BY cr.time_stamp DESC LIMIT 10";
 
                 stmt = dbc.getConn().createStatement();
                 rs = stmt.executeQuery(sql);
-                System.out.println("getAllReviews Query executed.");
+                System.out.println("getFirstReviews Query executed.");
 
                 // add to list
                 while (rs.next()) {
-                    list.add(new ViewReviews(rs.getString(1),
+                    list.add(new ViewLastReviews(rs.getString(1),
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4),

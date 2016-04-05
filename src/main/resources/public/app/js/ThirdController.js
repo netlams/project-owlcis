@@ -43,7 +43,7 @@
             console.log('course id',$scope.Dataform2.selectedID);
             console.log('elective', $scope.recElectiveID);
             $scope.json_object = { 
-                                'userID':      41,
+                                'userID':      1,
                                 'courseID':    $scope.Dataform2.selectedID, 
                                 'reviewText':  $scope.reviewText,
                                 'semester':    $scope.semester, 
@@ -55,12 +55,15 @@
                                 'thumbsUp':    1,
                                 'thumbsDown':  1
                               };
+                               
            
                 $http.post('/api/coursereviews', $scope.json_object)
                         .then(function (response) {
                             $scope.example2 = response.data;
+                    console.log($scope.json_object);
                             console.log($scope.example2);
                         }, function (response) {
+                            console.log($scope.json_object);
                             
                         }); 
             

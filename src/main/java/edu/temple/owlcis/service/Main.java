@@ -50,7 +50,9 @@ public class Main implements SparkApplication {
          */
         post(API_LOC + "/coursereviews", (request, response) -> {
             Gson gson = new Gson();
+            System.out.println(request.body());
             CourseReview testReview = gson.fromJson(request.body(), CourseReview.class);
+            System.out.println(testReview.toString());
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
@@ -324,6 +326,8 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
+        
+    
 
     }
 }
