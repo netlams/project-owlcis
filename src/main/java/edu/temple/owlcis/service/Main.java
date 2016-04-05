@@ -103,7 +103,6 @@ public class Main implements SparkApplication {
                             response.status(200);
                             request.session(true);
                             request.session().attribute("USER", newUser);
-                            System.out.println("The user: " + newUser.toString() + " "  + newUser.getId());//
                             // frontend can only access cookies, so we setting cookies here
                             response.cookie("EMAIL", newUser.getEmail(), 3600);
                             response.cookie("FNAME", newUser.getFname(), 3600);
