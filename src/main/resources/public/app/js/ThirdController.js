@@ -35,6 +35,7 @@
   
           $scope.send_fields = function (){
             console.log('Send Fields');
+            console.log('userID', $scope.userID);
             console.log('Semester',$scope.semester);
             console.log('Comment',$scope.reviewText);
             console.log('Helpfulness',$scope.helpfulness);
@@ -43,7 +44,7 @@
             console.log('course id',$scope.Dataform2.selectedID);
             console.log('elective', $scope.recElectiveID);
             $scope.json_object = { 
-                                'userID':      1,
+                                'userID':      $scope.userID,
                                 'courseID':    $scope.Dataform2.selectedID, 
                                 'reviewText':  $scope.reviewText,
                                 'semester':    $scope.semester, 

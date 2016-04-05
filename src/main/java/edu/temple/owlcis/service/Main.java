@@ -50,9 +50,12 @@ public class Main implements SparkApplication {
          */
         post(API_LOC + "/coursereviews", (request, response) -> {
             Gson gson = new Gson();
-            System.out.println(request.body());
+            //System.out.println(request.body());
+            User user= request.session().attribute("USER");
             CourseReview testReview = gson.fromJson(request.body(), CourseReview.class);
-            System.out.println(testReview.toString());
+            testReview.setUserID(user.getId());
+            
+            System.out.println(user.getId());
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
