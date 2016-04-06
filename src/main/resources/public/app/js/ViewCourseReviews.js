@@ -44,9 +44,4 @@
             
         }]);
  
-app.controller('check', function($scope) {
-  $scope.count = function(inc){
-  $scope.counter += inc;
-  };
-});
 }());  

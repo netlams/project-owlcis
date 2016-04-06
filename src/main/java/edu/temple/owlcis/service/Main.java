@@ -330,6 +330,23 @@ public class Main implements SparkApplication {
             }
         });
         
+           /*
+         * ViewlastReviews GET Route
+         */
+        get(API_LOC + "/viewlastreviews", (request, response) -> {
+            try {
+                ViewLastReviews rev = new ViewLastReviews();
+                List list = rev.getLastReviews();
+                response.type("application/json");
+                response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
+        
     
 
     }

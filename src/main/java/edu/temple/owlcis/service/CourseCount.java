@@ -29,16 +29,19 @@ public class CourseCount {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT  course_id, count(course_id) from course_review "
-                        + "group by course_id order by course_id desc;";
+                String sql = "SELECT  course_id from course_review\n" +
+"group by course_id\n" +
+"order by count(course_id) DESC LIMIT 5;";
                 stmt = dbc.getConn().createStatement();
                 // execute query
                 rs = stmt.executeQuery(sql);
+                
                 System.out.println("course count Query executed.");
 
                 // add to list
                 while (rs.next()) {
                     list.add(new Courselist(rs.getString(1)));
+                    
                 }
             } catch (SQLException ex) {
                 // handle any errors
