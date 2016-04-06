@@ -4,26 +4,17 @@
  * and open the template in the editor.
  */
 
+(function () {
 
+    var app = angular.module('authApp');
 
+     app.controller('LastReview', ['$scope', '$state', '$http', '$window', 'CourseList',
+        function ($scope, $state, $http, $window, CourseList) {
+            $http.get('/api/viewlastreviews').then(function (value) {
+                $scope.example2 = value.data;
+            });
+           
+        }]);
+ 
 
-(function() {
-
-    var viewLastreview = function($scope,$state,DBService) {
-
-    	
-    	DBService.getDemo().then(function(success) {
-
-    		console.log("success in service")
-
-    	}, function(error) {
-
-    	});
-
-    };
-
-    viewLastreview.$inject = ['$scope','$state','DBService'];
-
-    angular.module('authApp').controller('viewLastreview', viewLastreview);
-
-}());
+}());  
