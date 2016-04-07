@@ -52,10 +52,9 @@
             $scope.like = function () {
                 $scope.thumbsup++;  
                 $scope.json_object = {
-                                        'userID': $scope.userID,
-                                        'courseID': $scope.Dataform.selectedID,
+                                        'reviewid': $scope.example2[0].reviewid,
                                         'thumbsUp': $scope.thumbsup,
-                                        'semester': $scope.example2[0].semester
+                                        
                 };
                 
             $scope.myjson = $scope.json_object;
@@ -66,10 +65,10 @@
                         .then(function (response) {
                             $scope.update_like_response = response.data;
                         }, function (response) {
-                           console.log("Sending thistto db" + $scope.Dataform.selectedID,$scope.userID, 
-                           $scope.thumbsup, $scope.example2[0].semester );
+                           console.log("Sending this to db thumbs up:" ,
+                           $scope.thumbsup, $scope.example2[0].reviewid );
                         });
-                console.log($scope.update_like_response);
+                //console.log($scope.update_like_response);
               };
             $scope.thisreview = 'This review';
 

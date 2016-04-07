@@ -14,9 +14,7 @@ import java.sql.SQLException;
 public class ThumbRatings {
     
     //Global variables
-    private int userID;
-    private String courseID;
-    private String semester;
+    private int reviewID;
     private int thumbsUp;
     private int thumbsDown;
     private final int THUMBS_DIFF = 10; //this number defines the max difference between thumbs up and down
@@ -24,36 +22,20 @@ public class ThumbRatings {
     
     /* Constructor sets values to dummy values */
     public ThumbRatings () {
-        this.userID = 0;
-        this.courseID = "CIS 1001";
-        this.semester = "SP16";
+        this.reviewID = 0;
         this.thumbsUp = 0;
         this.thumbsDown = 0;
     }
 
-    public int getUserID() {
-        return userID;
+    
+    public int getReviewID() {
+        return reviewID;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setReviewID(int reviewID) {
+        this.reviewID = reviewID;
     }
 
-    public String getCourseID() {
-        return courseID;
-    }
-
-    public void setCourseID(String courseID) {
-        this.courseID = courseID;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
     
     
     /**
@@ -71,16 +53,12 @@ public class ThumbRatings {
             try {
                 sql = "SELECT thumbs_up "
                         + "FROM course_review "
-                        + "WHERE user_id = ? "
-                        + "AND course_id = ? "
-                        + "AND semester = ?";
+                        + "WHERE review_id = ?";
                 
                 stmt = conn.prepareStatement(sql);
                 
                 //Set parameters
-                stmt.setInt(1, this.userID);
-                stmt.setString(2, this.courseID);
-                stmt.setString(3, this.semester);
+                stmt.setInt(1, this.reviewID);
                 
                 //Execute query
                 rs = stmt.executeQuery();
@@ -123,16 +101,12 @@ public class ThumbRatings {
             try {
                 sql = "SELECT thumbs_down "
                         + "FROM course_review "
-                        + "WHERE user_id = ? "
-                        + "AND course_id = ? "
-                        + "AND semester = ?";
+                        + "WHERE review_id = ?";
                 
                 stmt = conn.prepareStatement(sql);
                 
                 //Set parameters
-                stmt.setInt(1, this.userID);
-                stmt.setString(2, this.courseID);
-                stmt.setString(3, this.semester);
+                stmt.setInt(1, this.reviewID);
                 
                 //Execute query
                 rs = stmt.executeQuery();
@@ -173,17 +147,13 @@ public class ThumbRatings {
             try {
                 sql = "UPDATE course_review "
                             + "SET thumbs_up = ? "
-                            + "WHERE user_id = ? "
-                            + "AND course_id = ? "
-                            + "AND semester = ?";
+                            + "WHERE review_id = ?";
                 
                 stmt = conn.prepareStatement(sql);
                 
                 //Set parameters
                 stmt.setInt(1, this.thumbsUp + 1);
-                stmt.setInt(2, this.userID);
-                stmt.setString(3, this.courseID);
-                stmt.setString(4, this.semester);
+                stmt.setInt(2, this.reviewID);
                 
                 //Execute query
                 stmt.execute();
@@ -230,16 +200,12 @@ public class ThumbRatings {
                 if ((this.thumbsDown + 1) == (this.thumbsUp + THUMBS_DIFF)) {
                     //remove the course review from db
                     sql = "DELETE FROM course_review "
-                            + "WHERE user_id = ? "
-                            + "AND course_id = ? "
-                            + "AND semester = ?";
+                            + "WHERE review_id = ?";
                     
                     stmt = conn.prepareStatement(sql);
                     
                     //Set parameters
-                    stmt.setInt(1, this.userID);
-                    stmt.setString(2, this.courseID);
-                    stmt.setString(3, this.semester);
+                    stmt.setInt(1, this.reviewID);
                     
                     //Execute query
                     stmt.execute();
@@ -248,17 +214,13 @@ public class ThumbRatings {
                     //increment the thumbs-down count
                     sql = "UPDATE course_review "
                             + "SET thumbs_down = ? "
-                            + "WHERE user_id = ? "
-                            + "AND course_id = ? "
-                            + "AND semester = ?";
+                            + "WHERE review_id = ?";
                     
                     stmt = conn.prepareStatement(sql);
                     
                     //Set parameters
                     stmt.setInt(1, this.thumbsDown + 1);
-                    stmt.setInt(2, this.userID);
-                    stmt.setString(3, this.courseID);
-                    stmt.setString(4, this.semester);
+                    stmt.setInt(2, this.reviewID);
                     
                     //Execute statement
                     stmt.execute();

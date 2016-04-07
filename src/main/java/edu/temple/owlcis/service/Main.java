@@ -68,25 +68,17 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
         
-        
         /* Increment Thumbs-up Count */
         post(API_LOC + "/incthumbsup", (request, response) -> {
             Gson gson = new Gson();
-            User user = request.session().attribute("USER");
             ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
-            tr.setUserID(user.getId());
-            
             Database dbc = new Database();
-            
+            System.out.println("Test 1");
             if (dbc.getError().length() == 0) {
                 try {
-                    System.out.println("test");
                     if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
-                        
                         if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
-                            
                             response.status(201);
-                            //System.out.println("Connectionnn TEst2");
                             return "HTTP 201 - CREATED";
                         }
                     }
@@ -102,11 +94,9 @@ public class Main implements SparkApplication {
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
             Gson gson = new Gson();
-            User user = request.session().attribute("USER");
             ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
-            tr.setUserID(user.getId());
-            
             Database dbc = new Database();
+            
             if (dbc.getError().length() == 0) {
                 try {
                     if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
@@ -122,10 +112,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        
-        
-        /* Update Profile Route */
+       /* Update Profile Route */
         post(API_LOC + "/updateprofile", (request, response) -> {
             Gson gson = new Gson();
             Profile testProfile = gson.fromJson(request.body(), Profile.class);
