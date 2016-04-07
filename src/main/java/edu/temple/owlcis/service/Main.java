@@ -53,9 +53,9 @@ public class Main implements SparkApplication {
             //System.out.println(request.body());
             User user= request.session().attribute("USER");
             CourseReview testReview = gson.fromJson(request.body(), CourseReview.class);
-            testReview.setUserID(user.getId());
+            //testReview.setUserID(user.getId());
             
-            System.out.println(user.getId());
+            //System.out.println(user.getId());
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {

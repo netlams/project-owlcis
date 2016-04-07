@@ -29,8 +29,14 @@ public class ViewReviews {
     private Double helpfulness;
     private Double easiness;
     private Double clarity;
-
+/*Added semester, thumbsup and down fields */
+    private String semester;
+    private int thumbsup;
+    private int thumbsdown;
+    private int reviewid;
+    
     public ViewReviews() {
+        this.reviewid=0;
         this.comment_text = "";
         this.time_stamp = "";
         this.user_type = "";
@@ -42,11 +48,15 @@ public class ViewReviews {
         this.easiness = 0.0;
         this.clarity = 0.0;
         this.selected_courseid = "";
+         this.semester= "";
+        this.thumbsdown= 0;
+        this.thumbsup= 0;
 
     }
 
-    public ViewReviews(String c, String t, String c_id, String f, String l,
-            double help, double e, double cl, String k) {
+    public ViewReviews(int r,String c, String t, String c_id, String f, String l,
+            double help, double e, double cl, String k, String s, int down, int up) {
+        this.reviewid=r;
         this.comment_text = c;
         this.time_stamp = t;
         this.courseid = c_id;
@@ -56,6 +66,9 @@ public class ViewReviews {
         this.easiness = e;
         this.clarity = cl;
         this.selected_courseid = k;
+        this.semester= s;
+        this.thumbsdown= down;
+        this.thumbsup= up;
     }
 
     public String getSelectedCourse() {
@@ -75,8 +88,9 @@ public class ViewReviews {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, "
-                        + "substring(u.f_name,1,1),substring(u.l_name,1,1), cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
+                String sql = "SELECT  cr.review_id, cr.review_text, cr.time_stamp, cr.course_id, "
+                        + "substring(u.f_name,1,1),substring(u.l_name,1,1), "
+                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_down, cr.thumbs_up"
                         + " FROM owlcis.course_review cr"
                         + " JOIN owlcis.user u ON u.user_id = cr.user_id"
                         + " WHERE cr.course_id = '" + selected_courseid + "'"
@@ -88,15 +102,19 @@ public class ViewReviews {
 
                 // add to list
                 while (rs.next()) {
-                    list.add(new ViewReviews(rs.getString(1),
+                    list.add(new ViewReviews(rs.getInt(1),
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4),
                             rs.getString(5),
-                            rs.getDouble(6),
+                            rs.getString(6),
                             rs.getDouble(7),
                             rs.getDouble(8),
-                            rs.getString(9)));
+                            rs.getDouble(9),
+                            rs.getString(10),
+                    rs.getString(11),
+                    rs.getInt(12),
+                    rs.getInt(13)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -257,4 +275,25 @@ public class ViewReviews {
         this.clarity = clarity;
     }
 
+     /**
+     * @return the thumbsup
+     */
+    public int getthumbsup() {
+        return thumbsup;
+    }
+
+    public void setthumbsup(int thumbsup) {
+        this.thumbsup = thumbsup;
+    }
+    
+    /**
+     * @return the thumbsup
+     */
+    public int getthumbsdown() {
+        return thumbsdown;
+    }
+
+    public void setthumbsdown(int thumbsdown) {
+        this.thumbsdown = thumbsdown;
+    }
 }
