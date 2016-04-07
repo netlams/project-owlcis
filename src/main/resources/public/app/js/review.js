@@ -50,10 +50,10 @@
         
             $scope.myjson = {}
             $scope.like = function () {
-                $scope.thumbsup++;  
+                //$scope.thumbsup++;  
                 $scope.json_object = {
-                                        'reviewid': $scope.example2[0].reviewid,
-                                        'thumbsUp': $scope.thumbsup,
+                                        'reviewid': $scope.example2[0].reviewid
+                                        //'thumbsUp': $scope.thumbsup,
                                         
                 };
                 
@@ -66,7 +66,8 @@
                             $scope.update_like_response = response.data;
                         }, function (response) {
                            console.log("Sending this to db thumbs up:" ,
-                           $scope.thumbsup, $scope.example2[0].reviewid );
+                           //$scope.thumbsup, 
+                           $scope.example2[0].reviewid );
                         });
                 //console.log($scope.update_like_response);
               };

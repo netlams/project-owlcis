@@ -18,6 +18,9 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.Arrays;
+import static jdk.nashorn.internal.runtime.JSType.toInt32;
+import spark.Request;
+import spark.Response;
 
 /**
  * The Main class contains the init method for OWLCIS, executing the backend
@@ -69,10 +72,16 @@ public class Main implements SparkApplication {
         });
         
         /* Increment Thumbs-up Count */
-        post(API_LOC + "/incthumbsup", (request, response) -> {
+        post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
             Gson gson = new Gson();
             ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
+            System.out.println("Request body: " + request.body());
+            String rb = request.body().replaceAll("\\D+","");
+            int revid = toInt32(rb);
+            System.out.println("The review id is " + revid);
+            tr.setReviewID(revid);
             Database dbc = new Database();
+            
             System.out.println("Test 1");
             if (dbc.getError().length() == 0) {
                 try {
@@ -112,6 +121,8 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
+        
+        
        /* Update Profile Route */
         post(API_LOC + "/updateprofile", (request, response) -> {
             Gson gson = new Gson();

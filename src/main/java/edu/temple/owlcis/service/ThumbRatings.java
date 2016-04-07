@@ -21,8 +21,8 @@ public class ThumbRatings {
                                         //before the course review is removed from the db
     
     /* Constructor sets values to dummy values */
-    public ThumbRatings () {
-        this.reviewID = 0;
+    public ThumbRatings (int rid) {
+        this.reviewID = rid;
         this.thumbsUp = 0;
         this.thumbsDown = 0;
     }
@@ -65,7 +65,7 @@ public class ThumbRatings {
                 
                 while (rs.next())
                     this.thumbsUp = rs.getInt(1);
-                
+                System.out.println("THUMBS UP COUNT: " + this.thumbsUp);
                 return true;
             } catch (SQLException ex) {
                 //Handle errors
@@ -142,12 +142,12 @@ public class ThumbRatings {
     public boolean incThumbsUp (Connection conn) throws SQLException {
         PreparedStatement stmt = null;
         String sql;
-        
+        System.out.println("REVIEW ID: " + this.reviewID);
         if (conn != null) {
             try {
                 sql = "UPDATE course_review "
                             + "SET thumbs_up = ? "
-                            + "WHERE review_id = ?";
+                            + "WHERE review_id = ? ";
                 
                 stmt = conn.prepareStatement(sql);
                 
@@ -157,7 +157,7 @@ public class ThumbRatings {
                 
                 //Execute query
                 stmt.execute();
-                
+                System.out.println("IncThumbsUp query executed.");
                 return true;
                 
             } catch (SQLException ex) {
