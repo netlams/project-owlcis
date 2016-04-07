@@ -68,7 +68,7 @@
                 availMajorOptions: [{shortname: 'CS', name: 'Computer Science'},
                     {shortname: 'CSM', name: 'Computer Science & Math'},
                     {shortname: 'IST', name: 'Information Science & Technology'}],
-                availDegreeOptions: [{name: 'BS'}, {name: 'BA'}],
+                availDegreeOptions: [{name: 'BS'}, {name: 'BA'}, {name: 'Master'}, {name: 'Ph.D'}],
                 err: null,
             };
 
