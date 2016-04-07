@@ -1,4 +1,4 @@
-<div class="rows" ng-controller="PromiseCtrl">
+<div class="rows" ng-controller="review"> 
     <h3 class="widget-title">Looking for reviews?</h3>
     <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
         <div class="form-group">
@@ -12,12 +12,20 @@
     </form>
     <div class="text-center" >
         <form class="form-horizontal" >
-            <h1 class="widget-title">Course Review</h1>
+            
+            <h1 class="widget-title">Course Review</h1>        
+           {{thisreview}}
+           
+
+           
+           
+           
             <div class="col-md-12">
                 <div class="list-group-item" >
                     <div class="row" ng-repeat="x in example2">
                         <div class="col-md-2" style="float: left; font-weight: 16px;">
                             <br style="float:left;"> {{x.courseid}}
+                            <br style="float:left;"> <!--{{x.semester}}-->
                             <br style="float:left;"> Helpfulness: {{x.helpfulness}}
                             <br style="float:left;"> Easiness: {{x.easiness}}
                             <br style="float:left;"> Clarity: {{x.clarity}}
@@ -28,8 +36,11 @@
                         <div class="postinfobot">
                             <div class="likeblock pull-left">
                                 <a href="#" class="up">
-                                    <i class="fa fa-thumbs-o-up">
-                                     </i>10</a>
+                                    <i class="fa fa-thumbs-o-up" ng-click="like()">
+                                    </i>{{countlikes}}</a>
+                                
+                                {{myjson}}
+                                
                                 <a href="#" class="down"><i class="fa fa-thumbs-o-down">
                                     
                                     </i>2</a>

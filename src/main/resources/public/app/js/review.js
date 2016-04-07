@@ -1,29 +1,93 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+(function () {
+    var app = angular.module('authApp');
+
+    /* Gets the dept JSON list */
+    app.service('CourseList', function ($q, $http) {
+        this.getCourseList = function () {
+            var defer = $q.defer();
+            $http.get('/api/courselist', {cache: 'true'})
+                    .success(function (data) {
+                        defer.resolve(data);
+                    });
+            return defer.promise;
+        };
+    });
+
+    /* Display JSON list */
+    app.controller('review', ['$scope', '$state', '$http', '$window', 'CourseList',
+        function ($scope, $state, $http, $window, CourseList) {
+            $http.get('/api/viewreviews').then(function (value) {
+                $scope.example2 = value.data;
+            });
+            $scope.Dataform = {};
+            // get dept list
+            CourseList.getCourseList()
+                    .then(function (data) {
+                        $scope.Dataform = {
+                            selectedID: null,
+                            course_ID: data,
+                            err: null
+                        };
+                    });
+             $scope.countlikes = 0;
+            // process the form
+            $scope.Formprocess = function () {
+
+                $http.post('/api/viewreviews', $scope.Dataform.selectedID)
+                        .then(function (response) {
+                            $scope.example2 = response.data;
+                            $scope.countlikes = $scope.example2[0].thumbsup;
+                          
+                        }, function (response) {
+                            console.log("Sending this" + $scope.Dataform.selectedID);
+                        });
+            };
+
+            $scope.thisreview = 'This review';
+
+            
+            $scope.json_object = {};
+        
+            $scope.myjson = {}
+            $scope.like = function () {
+                $scope.countlikes++;  
+                $scope.json_object = {
+                    
+                                        'courseID': $scope.Dataform.selectedID,
+                                        'thumbsUp': $scope.countlikes,
+                                        'semester': $scope.example2[0].semester
+                };
+                
+            $scope.myjson = $scope.json_object;
+//                console.log($scope.example2[0]);
+//                console.log($scope.json_object);
+                
+               $http.post('/api/incthumbsup', $scope.json_object)
+                        .then(function (response) {
+                            $scope.update_like_response = response.data;
+                        }, function (response) {
+                           // console.log("Sending this" + $scope.Dataform.selectedID);
+                        });
+                console.log($scope.update_like_response);
+              
+                
+            };
+            
+
+
+            /*   
+             this.userID = 0;
+             this.courseID = "CIS 1001";
+             this.semester = "SP16";
+             this.thumbsUp = 0;
+             this.thumbsDown = 0;
+             */
 
 
 
-(function() {
+            $scope.thisreview = 'This review';
 
-    var review = function($scope,$state,DBService) {
 
-    	console.log("more reviews called.");
+        }]);
 
-    	DBService.getDemo().then(function(success) {
-
-    		console.log("success in service")
-
-    	}, function(error) {
-
-    	});
-
-    };
-
-    review.$inject = ['$scope','$state','DBService'];
-
-    angular.module('authApp').controller('reviews', review);
-
-}());
+}());  

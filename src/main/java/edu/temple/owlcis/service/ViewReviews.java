@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * The ViewReviews class is used for Course table in the database.
  *
- * @author Group Project
+ * @author Groi Project
  */
 public class ViewReviews {
 
@@ -29,6 +29,10 @@ public class ViewReviews {
     private Double helpfulness;
     private Double easiness;
     private Double clarity;
+    
+    private String semester;
+    private int thumbsup;
+    private int thumbsdown;
 
     public ViewReviews() {
         this.comment_text = "";
@@ -42,11 +46,14 @@ public class ViewReviews {
         this.easiness = 0.0;
         this.clarity = 0.0;
         this.selected_courseid = "";
+        this.semester= "";
+        this.thumbsdown= 0;
+        this.thumbsup= 0;
 
     }
 
     public ViewReviews(String c, String t, String c_id, String f, String l,
-            double help, double e, double cl, String k) {
+            double help, double e, double cl, String k, String s, int down, int up) {
         this.comment_text = c;
         this.time_stamp = t;
         this.courseid = c_id;
@@ -56,6 +63,9 @@ public class ViewReviews {
         this.easiness = e;
         this.clarity = cl;
         this.selected_courseid = k;
+        this.semester= s;
+        this.thumbsdown= down;
+        this.thumbsup= up;
     }
 
     public String getSelectedCourse() {
@@ -66,6 +76,16 @@ public class ViewReviews {
         this.selected_courseid = selected;
 
     }
+    
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+
+    }
+
 
     public List getAllReviews() throws SQLException {
         Database dbc = new Database();
@@ -75,7 +95,8 @@ public class ViewReviews {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
+                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, "
+                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_up, cr.thumbs_down"
                         + " FROM owlcis.course_review cr"
                         + " JOIN owlcis.user u ON u.user_id = cr.user_id"
                         + " WHERE cr.course_id = '" + selected_courseid + "'"
@@ -95,7 +116,10 @@ public class ViewReviews {
                             rs.getDouble(6),
                             rs.getDouble(7),
                             rs.getDouble(8),
-                            rs.getString(9)));
+                            rs.getString(9),
+                    rs.getString(10),
+                    rs.getInt(11),
+                    rs.getInt(12)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -254,6 +278,28 @@ public class ViewReviews {
 
     public void setClarity(Double clarity) {
         this.clarity = clarity;
+    }
+    
+      /**
+     * @return the thumbsup
+     */
+    public int getthumbsup() {
+        return thumbsup;
+    }
+
+    public void setthumbsup(int thumbsup) {
+        this.thumbsup = thumbsup;
+    }
+    
+    /**
+     * @return the thumbsup
+     */
+    public int getthumbsdown() {
+        return thumbsdown;
+    }
+
+    public void setthumbsdown(int thumbsdown) {
+        this.thumbsdown = thumbsdown;
     }
 
 }
