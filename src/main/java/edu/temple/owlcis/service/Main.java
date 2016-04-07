@@ -72,10 +72,7 @@ public class Main implements SparkApplication {
         /* Increment Thumbs-up Count */
         post(API_LOC + "/incthumbsup", (request, response) -> {
             Gson gson = new Gson();
-            User user = request.session().attribute("USER");
             ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
-            tr.setUserID(user.getId());
-            
             Database dbc = new Database();
             
             if (dbc.getError().length() == 0) {
@@ -98,11 +95,9 @@ public class Main implements SparkApplication {
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
             Gson gson = new Gson();
-            User user = request.session().attribute("USER");
             ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
-            tr.setUserID(user.getId());
-            
             Database dbc = new Database();
+            
             if (dbc.getError().length() == 0) {
                 try {
                     if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
