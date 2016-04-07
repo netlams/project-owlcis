@@ -43,9 +43,7 @@
                         });
             };
 
-            $scope.thisreview = 'This review';
-
-            
+           
             $scope.json_object = {};
         
             $scope.myjson = {}
