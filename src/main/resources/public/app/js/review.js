@@ -36,7 +36,7 @@
                 $http.post('/api/viewreviews', $scope.Dataform.selectedID)
                         .then(function (response) {
                             $scope.example2 = response.data;
-                            $scope.countlikes = $scope.example2[0].thumbsup;
+                            $scope.thumbsup = $scope.example2[0].thumbsup;
                           
                         }, function (response) {
                             console.log("Sending this" + $scope.Dataform.selectedID);
@@ -50,11 +50,11 @@
         
             $scope.myjson = {}
             $scope.like = function () {
-                $scope.countlikes++;  
+                $scope.thumbsup++;  
                 $scope.json_object = {
-                    
+                                        'userID': $scope.userID,
                                         'courseID': $scope.Dataform.selectedID,
-                                        'thumbsUp': $scope.countlikes,
+                                        'thumbsUp': $scope.thumbsup,
                                         'semester': $scope.example2[0].semester
                 };
                 
@@ -66,25 +66,11 @@
                         .then(function (response) {
                             $scope.update_like_response = response.data;
                         }, function (response) {
-                           // console.log("Sending this" + $scope.Dataform.selectedID);
+                           console.log("Sending thistto db" + $scope.Dataform.selectedID,$scope.userID, 
+                           $scope.thumbsup, $scope.example2[0].semester );
                         });
                 console.log($scope.update_like_response);
-              
-                
-            };
-            
-
-
-            /*   
-             this.userID = 0;
-             this.courseID = "CIS 1001";
-             this.semester = "SP16";
-             this.thumbsUp = 0;
-             this.thumbsDown = 0;
-             */
-
-
-
+              };
             $scope.thisreview = 'This review';
 
 

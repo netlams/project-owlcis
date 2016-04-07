@@ -25,7 +25,7 @@
                     <div class="row" ng-repeat="x in example2">
                         <div class="col-md-2" style="float: left; font-weight: 16px;">
                             <br style="float:left;"> {{x.courseid}}
-                            <br style="float:left;"> <!--{{x.semester}}-->
+                            <br style="float:left;"> {{x.reviewid}}
                             <br style="float:left;"> Helpfulness: {{x.helpfulness}}
                             <br style="float:left;"> Easiness: {{x.easiness}}
                             <br style="float:left;"> Clarity: {{x.clarity}}
@@ -37,13 +37,14 @@
                             <div class="likeblock pull-left">
                                 <a href="#" class="up">
                                     <i class="fa fa-thumbs-o-up" ng-click="like()">
-                                    </i>{{countlikes}}</a>
-                                
+                                         DB: {{x.thumbsup}}
+                                    </i></a>
+                                       
                                 {{myjson}}
                                 
                                 <a href="#" class="down"><i class="fa fa-thumbs-o-down">
                                     
-                                    </i>2</a>
+                                    </i>DB: {{x.thumbsdown}}</a>
                             </div>
                             <div class="prev pull-left">
                                 <a href="#"><i class="fa fa-reply"></i></a>

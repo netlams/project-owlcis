@@ -80,9 +80,13 @@ public class Main implements SparkApplication {
             
             if (dbc.getError().length() == 0) {
                 try {
+                    System.out.println("test");
                     if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
+                        
                         if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
+                            
                             response.status(201);
+                            //System.out.println("Connectionnn TEst2");
                             return "HTTP 201 - CREATED";
                         }
                     }
