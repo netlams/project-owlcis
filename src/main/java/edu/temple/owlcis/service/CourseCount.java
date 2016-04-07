@@ -29,9 +29,9 @@ public class CourseCount {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT  course_id from course_review\n" +
-"group by course_id\n" +
-"order by count(course_id) DESC LIMIT 5;";
+                String sql = "SELECT  course_id from course_review" +
+" group by course_id" +
+" order by count(course_id) DESC LIMIT 10;";
                 stmt = dbc.getConn().createStatement();
                 // execute query
                 rs = stmt.executeQuery(sql);

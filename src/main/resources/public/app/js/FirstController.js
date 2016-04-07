@@ -20,6 +20,16 @@
 
     angular.module('authApp').controller('firstController', firstController);
     
- 
+      /* Gets the dept JSON list */
+    app.service('CourseCount', function ($q, $http) {
+        this.getCourseCount = function () {
+            var defer = $q.defer();
+            $http.get('/api/coursecount', {cache: 'true'})
+                    .success(function (data) {
+                        defer.resolve(data);
+                    });
+            return defer.first;
+        };
+    });
 
 }());
