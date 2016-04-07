@@ -1,8 +1,9 @@
-/**
- * CIS4398 Projects
- * Spring 2016
- * 3/16/2016
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
+
 package edu.temple.owlcis.service;
 
 import java.sql.Statement;
@@ -12,11 +13,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * The ViewReviews class is used for Course table in the database.
+ * The ViewLastReviews class is used for Course table in the database.
  *
- * @author Group Project
+ * @author sheth
  */
-public class ViewReviews {
+public class ViewLastReviews {
 
     private String comment_text;
     private String time_stamp;
@@ -29,14 +30,8 @@ public class ViewReviews {
     private Double helpfulness;
     private Double easiness;
     private Double clarity;
-    /*Added semester, thumbsup and down fields */
-    private String semester;
-    private int thumbsup;
-    private int thumbsdown;
-    private int reviewid;
 
-    public ViewReviews() {
-        this.reviewid=0;
+    public ViewLastReviews() {
         this.comment_text = "";
         this.time_stamp = "";
         this.user_type = "";
@@ -48,16 +43,12 @@ public class ViewReviews {
         this.easiness = 0.0;
         this.clarity = 0.0;
         this.selected_courseid = "";
-        this.semester= "";
-        this.thumbsdown= 0;
-        this.thumbsup= 0;
 
     }
 
-    public ViewReviews(int r,String c, String t, String c_id, String f, String l,
-            double help, double e, double cl, String k, String s, int down, int up) {
-       this.reviewid=r;
-       this.comment_text = c;
+    public ViewLastReviews(String c, String t, String c_id, String f, String l,
+            double help, double e, double cl, String k) {
+        this.comment_text = c;
         this.time_stamp = t;
         this.courseid = c_id;
         this.f_name = f;
@@ -66,20 +57,8 @@ public class ViewReviews {
         this.easiness = e;
         this.clarity = cl;
         this.selected_courseid = k;
-        this.semester= s;
-        this.thumbsdown= down;
-        this.thumbsup= up;
     }
 
-    public int getreviewID() {
-        return reviewid;
-    }
-
-    public void setreviewid(int reviewid ) {
-        this.reviewid = reviewid;
-
-    }
-    
     public String getSelectedCourse() {
         return selected_courseid;
     }
@@ -88,51 +67,36 @@ public class ViewReviews {
         this.selected_courseid = selected;
 
     }
-    
-    public String getSemester() {
-        return semester;
-    }
 
-    public void setSemester(String semester) {
-        this.semester = semester;
-
-    }
-
-
-    public List getAllReviews() throws SQLException {
+    public List getLastReviews() throws SQLException {
         Database dbc = new Database();
         if (dbc.getError().length() == 0) {
             // no errors
-            ArrayList<ViewReviews> list = new ArrayList();
+            ArrayList<ViewLastReviews> list = new ArrayList();
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT  cr.review_id, cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, "
-                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_down, cr.thumbs_up"
+                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, "
+                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
                         + " FROM owlcis.course_review cr"
                         + " JOIN owlcis.user u ON u.user_id = cr.user_id"
-                        + " WHERE cr.course_id = '" + selected_courseid + "'"
-                        + " ORDER BY cr.time_stamp DESC";
+                        +  "WHERE 1 ORDER BY cr.time_stamp DESC LIMIT 10";
 
                 stmt = dbc.getConn().createStatement();
                 rs = stmt.executeQuery(sql);
-                System.out.println("getAllReviews Query executed.");
+                System.out.println("getFirstReviews Query executed.");
 
                 // add to list
                 while (rs.next()) {
-                    list.add(new ViewReviews(rs.getInt(1),
+                    list.add(new ViewLastReviews(rs.getString(1),
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4),
                             rs.getString(5),
-                            rs.getString(6),
+                            rs.getDouble(6),
                             rs.getDouble(7),
                             rs.getDouble(8),
-                            rs.getDouble(9),
-                            rs.getString(10),
-                    rs.getString(11),
-                    rs.getInt(12),
-                    rs.getInt(13)));
+                            rs.getString(9)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -291,28 +255,6 @@ public class ViewReviews {
 
     public void setClarity(Double clarity) {
         this.clarity = clarity;
-    }
-    
-      /**
-     * @return the thumbsup
-     */
-    public int getthumbsup() {
-        return thumbsup;
-    }
-
-    public void setthumbsup(int thumbsup) {
-        this.thumbsup = thumbsup;
-    }
-    
-    /**
-     * @return the thumbsup
-     */
-    public int getthumbsdown() {
-        return thumbsdown;
-    }
-
-    public void setthumbsdown(int thumbsdown) {
-        this.thumbsdown = thumbsdown;
     }
 
 }

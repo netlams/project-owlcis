@@ -68,13 +68,12 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
         
-        
         /* Increment Thumbs-up Count */
         post(API_LOC + "/incthumbsup", (request, response) -> {
             Gson gson = new Gson();
             ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
             Database dbc = new Database();
-            
+            System.out.println("Test 1");
             if (dbc.getError().length() == 0) {
                 try {
                     if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
@@ -113,10 +112,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        
-        
-        /* Update Profile Route */
+       /* Update Profile Route */
         post(API_LOC + "/updateprofile", (request, response) -> {
             Gson gson = new Gson();
             Profile testProfile = gson.fromJson(request.body(), Profile.class);
@@ -460,5 +456,7 @@ public class Main implements SparkApplication {
             return gson.toJson(list);
         });
 
+         
+         
     }
 }
