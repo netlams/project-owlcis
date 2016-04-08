@@ -44,7 +44,7 @@ public class Main implements SparkApplication {
          * root API
          */
         get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");
-        
+
         /**
          * Post Review Route
          */
@@ -66,52 +66,107 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
-        
-        
-        /* Update Profile Route */
-        post(API_LOC + "/updateprofile", (request, response) -> {
-            Gson gson = new Gson();
-            Profile testProfile = gson.fromJson(request.body(), Profile.class);
-            Database dbc = new Database();
-            if (dbc.getError().length() == 0) {
-                try {
-                    if (testProfile.updateProfile(dbc.getConn())) {
-                        response.status(201);
-                        return "HTTP 201 - CREATED";
+        /**
+         * Get Member Profile Route
+         */
+        get(API_LOC + "/profile", (request, response) -> {
+            // get session
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                // setting up member to fetch
+                Member member = new Member();
+                member.setId(user.getId());
+                Profile profile = new Profile(member);
+                Database dbc = new Database();
+                // Database connection OK
+                if (dbc.getError().length() == 0) {
+                    try {
+                        if (profile.fetchProfile(dbc.getConn())) {
+                            // found member
+                            response.status(200);
+                            return new Gson().toJson(profile.getMember());
+                        } else {
+                            // not valid member
+                            response.status(400);
+                            return "HTTP 400 - Bad Request";
+                        }
+                    } catch (Exception ex) {
+                        response.status(500);
+                        System.out.println("Error: " + ex.getMessage());
+                        return "HTTP 500 - Internal Server Error";
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
                     }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(401);
+            return "HTTP 401 - Unauthorized";
+        });
+
+        /* Update Profile Route */
+        post(API_LOC + "/profile", (request, response) -> {
+            // get session
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                // get post data
+                Gson gson = new Gson();
+                Member member = gson.fromJson(request.body(), Member.class);
+                member.setId(user.getId());
+                Profile testProfile = new Profile(member);
+                Database dbc = new Database();
+                // Database connection OK
+                if (dbc.getError().length() == 0) {
+                    try {
+                        if (testProfile.updateProfile(dbc.getConn())) {
+                            response.status(200);
+                            return "HTTP 200 - OK";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    }
                 }
             }
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-                        
+
         /* Get Profile Taken Courses Route */
-        get(API_LOC + "/profilecourse", (request, response) -> {
-            User user = request.session().attribute("USER");
-            Member member = new Member(user);
-            Profile profile = new Profile(member);
-            Database dbc = new Database();
-            if (dbc.getError().length() == 0) {
-                try {
-                    if (profile.fetchTakenCourses(dbc.getConn())) {
-                        Gson gson = new Gson();
-                        return gson.toJson(profile.getTakenCourses());
+        get(API_LOC + "/profile/courses", (request, response) -> {
+            User user = request.session().attribute("USER"); 
+            // check if there's a logged-in session
+            if (user != null) {
+                Member member = new Member(user);
+                Profile profile = new Profile(member);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        if (profile.fetchTakenCourses(dbc.getConn())) {
+                            response.status(200);
+                            return new Gson().toJson(profile.getTakenCourses());
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
                     }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                } finally {
-                    if (!dbc.getConn().isClosed())
-                        dbc.closeConn();
                 }
             }
             response.status(500);
-            return "OWLCIS failed: HTTP 500 SERVER ERROR";            
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-                
-        
+
         /* Add Taken Courses Route */
         post(API_LOC + "/addtakencourses", (request, response) -> {
             //User user = request.session().attribute("USER");
@@ -133,16 +188,15 @@ public class Main implements SparkApplication {
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 } finally {
-                    if (!dbc.getConn().isClosed())
+                    if (!dbc.getConn().isClosed()) {
                         dbc.closeConn();
+                    }
                 }
             }
             response.status(500);
-            return "OWLCIS failed: HTTP 500 SERVER ERROR"; 
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        
-        
+
         /* Delete Taken Courses Route */
         post(API_LOC + "/deletetakencourses", (request, response) -> {
             //User user = request.session().attribute("USER");
@@ -157,21 +211,21 @@ public class Main implements SparkApplication {
                     Schedule schedule = gson.fromJson(request.body(), Schedule.class);
                     System.out.println(schedule.toString());
                     if (profile.removeTakenCourse(schedule, dbc.getConn())) {
-                        response.status(201);
-                        return "HTTP 201 - CREATED";
+                        response.status(200);
+                        return "HTTP 200 - OK";
                     }
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 } finally {
-                    if (!dbc.getConn().isClosed())
+                    if (!dbc.getConn().isClosed()) {
                         dbc.closeConn();
+                    }
                 }
             }
             response.status(500);
-            return "OWLCIS failed: HTTP 500 SERVER ERROR";       
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        
+
         /* Login Route */
         post("/login", (request, response) -> {
             String ret = "";
@@ -202,7 +256,7 @@ public class Main implements SparkApplication {
                 if (SignIn.isValidTempleEmailAddress(user.getEmail()) == true) {
                     try {
                         User newUser = SignIn.findUser(dbc.getConn(), user);
-                       
+
                         if (newUser != null) {
                             // found user
                             response.status(200);
@@ -411,12 +465,11 @@ public class Main implements SparkApplication {
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
         });
-        
-        
+
         get(API_LOC + "/testflow", (request, response) -> {
             ScheduleBuilder model = new ScheduleBuilder();
             Gson gson = new Gson();
-            return gson.toJson(model.getSchedule()); 
+            return gson.toJson(model.getSchedule());
         });
 
     }

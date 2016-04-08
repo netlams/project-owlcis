@@ -21,6 +21,7 @@ public class Schedule {
 
     //Global variables
     protected String courseID; //ID of course taken this semester
+    protected String courseTitle; //title of course taken this semester
     protected String semester; //semester in which course was taken
 
     /**
@@ -28,6 +29,15 @@ public class Schedule {
      */
     protected Schedule(String cid, String sem) {
         courseID = cid;
+        semester = sem;
+    }
+    
+    /**
+     * the constructor for the Schedule object
+     */
+    protected Schedule(String cid, String cn, String sem) {
+        courseID = cid;
+        courseTitle = cn;
         semester = sem;
     }
 
@@ -47,8 +57,23 @@ public class Schedule {
         this.semester = semester.toUpperCase();
     }
 
+    /**
+     * @return the courseTitle
+     */
+    public String getCourseTitle() {
+        return courseTitle;
+    }
+
+    /**
+     * @param courseTitle the courseTitle to set
+     */
+    public void setCourseTitle(String courseTitle) {
+        this.courseTitle = courseTitle;
+    }
+    
     @Override
     public String toString() {
         return "Schedule{" + "courseID=" + courseID + ", semester=" + semester + '}';
     }
+
 }
