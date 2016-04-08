@@ -452,11 +452,14 @@ public class Main implements SparkApplication {
             selected.setSelectedCourse(request.body());
             List list = selected.getAllReviews();
             response.status(200);
+            System.out.println("Dhruvin Steh Test");
+            System.out.println(gson.toJson(0));
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
         });
 
-         
+    }
+    
          
     }
-}
+
