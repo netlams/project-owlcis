@@ -1,21 +1,17 @@
 
-<div class="row">
-    <div class="col-md-4">						
-
+<div class="row" ng-controller="PromiseCtrl">
+    <div class="col-md-4">
         <h3 class="widget-title">Looking for reviews?</h3>
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="course-list">Courses:</label>
-                
-                <select id="course-list" class="form-control">
-                    <option value="">Select Course</option>
-                    <option value="cis 1068">CIS 1068</option>
-                    <option value="cis 2107">CIS 2107</option>
-                </select>
-            </div>
-            <p> </p>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
+        <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
+        <div class="form-group">
+            <label for="course-list">Courses:</label>
+            <select  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
+                <option value="">Select Course</option>
+                <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" >Search</button>
+    </form>
 
     </div>
     <div class="col-md-7">
@@ -36,8 +32,7 @@
         </div>
 
     </div>
-</div>
-<div class="row">
+
     <div class="col-md-4">
 
         <div class="panel panel-default">
@@ -45,62 +40,60 @@
                 <h6>Courses With Highest feedback:</h6>
             </div>
             <div class="panel-body">
-                <p>course one</p>
-                <p>course one</p>
-                <p>course one</p>
+                 
+                <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+            
+                
+                    
+                
             </div>
         </div>
 
     </div>
+  
+    
     <div class="col-md-7">
         <div class="panel panel-default" >
             <div class="panel-heading">Most Recent Feedback:</div>
             <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
                 <form role="form" class="form-horizontal">
-                    <fieldset >
-                        <div class="form-group">
-                            <label for="comments" class="control-label col-md-2">CS2344</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control" id="comments" rows="4"></textarea>
-                                <span id="helpBlock6" class="help-block">Advisor approval:
-                                    <i class="fa fa-thumbs-o-up fa-2x">10</i>
-                                    <i class="fa fa-thumbs-o-down fa-2x">2</i>
-                                </span>
-                                <span id="helpBlock"
-                                      class="help-block">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</span>
-                            </div>
+                      
+                <div class="list-group-item" >
+                    <div class="row" ng-repeat="x in example2">
+                        <div class="col-md-2" style="float: left; font-weight: 16px;">
+                            <br style="float:left;"> {{x.courseid}}
+                             <br style="float:left;"> Helpfulness: {{x.helpfulness}}
+                            <br style="float:left;"> Easiness: {{x.easiness}}
+                            <br style="float:left;"> Clarity: {{x.clarity}}
                         </div>
-                        <div class="form-group">
-                            <label for="comments1" class="control-label col-md-2">CS2344</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control" id="comments1" rows="4"></textarea>
-                                <span id="helpBlock5" class="help-block">Advisor approval:
-                                    <i class="fa fa-thumbs-o-up fa-2x">10</i>
-                                    <i class="fa fa-thumbs-o-down fa-2x">2</i>
-                                </span>
-                                <span id="helpBlock1"
-                                      class="help-block">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</span>
-                            </div>
+                        <div class="col-md-10">
+                            <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="comments2" class="control-label col-md-2">CS2344</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control" id="comments2" rows="4"></textarea>
-                                <span id="helpBlock4" class="help-block">Advisor approval:
-                                    <i class="fa fa-thumbs-o-up fa-2x">10</i>
-                                    <i class="fa fa-thumbs-o-down fa-2x">2</i>
-                                </span>
-                                <span id="helpBlock2"
-                                      class="help-block">Comment by user: xxxxxx xxxxxxxxg xxxxxxxe</span>
+                        <div class="postinfobot">
+                            <div class="likeblock pull-left">
+                                <a href="#" class="up"><i class="fa fa-thumbs-o-up"></i>10</a>
+                                <a href="#" class="down"><i class="fa fa-thumbs-o-down"></i>2</a>
                             </div>
+                            <div class="prev pull-left">
+                                <a href="#"><i class="fa fa-reply"></i></a>
+                            </div>
+                            <div class="posted pull-left">
+                                <i class="fa fa-clock-o"></i>
+                                Posted:
+                                {{x.f_name}} {{x.l_name}}
+                                {{x.time_stamp}}</div>
                         </div>
-                    </fieldset>
-                </form>
+                    </div>
+                </div>
+                    </form>
+            </div>
+                
             </div>
         </div>
 
     </div>
    
-</div>
 
  <a href="http://www.owlcis.me" style="float: right; font-weight: bolder; color: white; ">More Reviews</a>
+
+ 

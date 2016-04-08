@@ -30,8 +30,14 @@ public class ViewLastReviews {
     private Double helpfulness;
     private Double easiness;
     private Double clarity;
+    
+    private String semester;
+    private int thumbsup;
+    private int thumbsdown;
+    private int reviewid;
 
     public ViewLastReviews() {
+        this.reviewid=0;
         this.comment_text = "";
         this.time_stamp = "";
         this.user_type = "";
@@ -43,12 +49,16 @@ public class ViewLastReviews {
         this.easiness = 0.0;
         this.clarity = 0.0;
         this.selected_courseid = "";
+        this.semester= "";
+        this.thumbsdown= 0;
+        this.thumbsup= 0;
 
     }
 
-    public ViewLastReviews(String c, String t, String c_id, String f, String l,
-            double help, double e, double cl, String k) {
-        this.comment_text = c;
+    public ViewLastReviews(int r,String c, String t, String c_id, String f, String l,
+            double help, double e, double cl, String k, String s, int down, int up) {
+       this.reviewid=r;
+       this.comment_text = c;
         this.time_stamp = t;
         this.courseid = c_id;
         this.f_name = f;
@@ -57,6 +67,9 @@ public class ViewLastReviews {
         this.easiness = e;
         this.clarity = cl;
         this.selected_courseid = k;
+        this.semester= s;
+        this.thumbsdown= down;
+        this.thumbsup= up;
     }
 
     public String getSelectedCourse() {
@@ -76,8 +89,8 @@ public class ViewLastReviews {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT  cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, "
-                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id"
+                String sql = "SELECT  cr.review_id, cr.review_text, cr.time_stamp, cr.course_id, substring(u.f_name,1,1),substring(u.l_name,1,1), "
+                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_down, cr.thumbs_up"
                         + " FROM owlcis.course_review cr"
                         + " JOIN owlcis.user u ON u.user_id = cr.user_id"
                         +  "WHERE 1 ORDER BY cr.time_stamp DESC LIMIT 10";
@@ -88,15 +101,19 @@ public class ViewLastReviews {
 
                 // add to list
                 while (rs.next()) {
-                    list.add(new ViewLastReviews(rs.getString(1),
+                    list.add(new ViewLastReviews(rs.getInt(1),
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4),
                             rs.getString(5),
-                            rs.getDouble(6),
+                            rs.getString(6),
                             rs.getDouble(7),
                             rs.getDouble(8),
-                            rs.getString(9)));
+                            rs.getDouble(9),
+                            rs.getString(10),
+                    rs.getString(11),
+                    rs.getInt(12),
+                    rs.getInt(13)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -256,5 +273,38 @@ public class ViewLastReviews {
     public void setClarity(Double clarity) {
         this.clarity = clarity;
     }
+    
+    
+    public int getreviewID() {
+        return reviewid;
+    }
+
+    public void setreviewid(int reviewid ) {
+        this.reviewid = reviewid;
+
+    }
+    
+      /**
+     * @return the thumbsup
+     */
+    public int getthumbsup() {
+        return thumbsup;
+    }
+
+    public void setthumbsup(int thumbsup) {
+        this.thumbsup = thumbsup;
+    }
+    
+    /**
+     * @return the thumbsup
+     */
+    public int getthumbsdown() {
+        return thumbsdown;
+    }
+
+    public void setthumbsdown(int thumbsdown) {
+        this.thumbsdown = thumbsdown;
+    }
+
 
 }

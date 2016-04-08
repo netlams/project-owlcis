@@ -1,7 +1,6 @@
 (function () {
     var app = angular.module('authApp');
-
-    /* Gets the dept JSON list */
+/* Gets the dept JSON list */
     app.service('CourseList', function ($q, $http) {
         this.getCourseList = function () {
             var defer = $q.defer();
@@ -40,8 +39,10 @@
                             console.log("Sending this" + $scope.Dataform.selectedID);
                         });
             };
-
+            
+    
             
         }]);
+ 
 
 }());  
