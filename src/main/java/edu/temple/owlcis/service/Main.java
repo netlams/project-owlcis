@@ -73,16 +73,12 @@ public class Main implements SparkApplication {
         
         /* Increment Thumbs-up Count */
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
-            Gson gson = new Gson();
-            ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
-            System.out.println("Request body: " + request.body());
-            String rb = request.body().replaceAll("\\D+","");
-            int revid = toInt32(rb);
-            System.out.println("The review id is " + revid);
-            tr.setReviewID(revid);
+            String rb = request.body().replaceAll("\\D+",""); //extracts numbers from body to get review id in string
+            int revid = toInt32(rb); //integer form of review id
+            ThumbRatings tr = new ThumbRatings(revid);
+            
             Database dbc = new Database();
             
-            System.out.println("Test 1");
             if (dbc.getError().length() == 0) {
                 try {
                     if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
@@ -102,8 +98,10 @@ public class Main implements SparkApplication {
         
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
-            Gson gson = new Gson();
-            ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
+            String rb = request.body().replaceAll("\\D+",""); //extracts numbers from body to get review id in string
+            int revid = toInt32(rb); //integer form of review id
+            ThumbRatings tr = new ThumbRatings(revid);
+            
             Database dbc = new Database();
             
             if (dbc.getError().length() == 0) {
