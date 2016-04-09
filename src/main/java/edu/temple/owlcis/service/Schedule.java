@@ -27,7 +27,7 @@ public class Schedule {
     /**
      * the constructor for the Schedule object
      */
-    protected Schedule(String cid, String sem) {
+    public Schedule(String cid, String sem) {
         courseID = cid;
         semester = sem;
     }
@@ -35,7 +35,7 @@ public class Schedule {
     /**
      * the constructor for the Schedule object
      */
-    protected Schedule(String cid, String cn, String sem) {
+    public Schedule(String cid, String cn, String sem) {
         courseID = cid;
         courseTitle = cn;
         semester = sem;

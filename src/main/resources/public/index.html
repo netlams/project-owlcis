@@ -78,12 +78,14 @@
                             </li>
 
                             <li id="appLoginMsg">
-                                <p class="navbar-text" ng-hide="loginStatus">Sign in using your Temple University Email</p>
-                                <p class="navbar-text" ng-show="loginStatus">Welcome, {{fname}} [{{role}}]</p>
-                                <button type="button" class="btn btn-default" ng-show="loginStatus" onClick="signOut()">Sign out?</button>
+                                <p class="navbar-text" data-ng-hide="loginStatus">Sign in using your Temple University Email</p>
+                                <p class="navbar-text" data-ng-show="loginStatus">Welcome, {{fname}} [{{role}}]</p>
+                                <button type="button" class="btn btn-default" data-ng-show="loginStatus" onClick="signOut()">Sign out?</button>
                             </li>
                             <li>
-                                <div id="google-signin-btn" ng-hide="loginStatus"></div>
+                                <div id="google-signin-btn" data-toggle="tooltip" 
+                                     data-placement="bottom" title="Browser cookies must be enabled" 
+                                     data-ng-hide="loginStatus"></div>
                             </li>
                         </ul>
                     </div>

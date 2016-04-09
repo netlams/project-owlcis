@@ -88,6 +88,7 @@ public class Main implements SparkApplication {
                         if (profile.fetchProfile(dbc.getConn())) {
                             // found member
                             response.status(200);
+                            response.type("application/json");
                             return new Gson().toJson(profile.getMember());
                         } else {
                             // not valid member
@@ -152,6 +153,7 @@ public class Main implements SparkApplication {
                     try {
                         if (profile.fetchTakenCourses(dbc.getConn())) {
                             response.status(200);
+                            response.type("application/json");
                             return new Gson().toJson(profile.getTakenCourses());
                         }
                     } catch (Exception ex) {
@@ -168,22 +170,26 @@ public class Main implements SparkApplication {
         });
 
         /* Add Taken Courses Route */
-        post(API_LOC + "/addtakencourses", (request, response) -> {
+        post(API_LOC + "/profile/add", (request, response) -> {
             //User user = request.session().attribute("USER");
             //Member member = new Member(user);
+            System.out.println("body: " + request.body());
             Member member = new Member();
-            member.setId(45);
+            member.setId(43);
             Profile profile = new Profile(member);
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
                     Gson gson = new Gson();
                     Schedule schedule = gson.fromJson(request.body(), Schedule.class);
-                    System.out.println(schedule.toString());
                     if (profile.fetchTakenCourses(dbc.getConn()) //load taken courses from db into linked list
                             && profile.addTakenCourse(schedule, dbc.getConn())) { //attempt to add new taken course
                         response.status(201);
                         return "HTTP 201 - CREATED";
+                    }
+                    else {
+                        response.status(400);
+                        return "HTTP 400 - BAD REQUEST";
                     }
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
@@ -198,7 +204,7 @@ public class Main implements SparkApplication {
         });
 
         /* Delete Taken Courses Route */
-        post(API_LOC + "/deletetakencourses", (request, response) -> {
+        post(API_LOC + "/profile/delete", (request, response) -> {
             //User user = request.session().attribute("USER");
             //Member member = new Member(user);
             Member member = new Member();
@@ -470,6 +476,7 @@ public class Main implements SparkApplication {
 //            ScheduleBuilder model = new ScheduleBuilder();
 //            Gson gson = new Gson();
 //            return gson.toJson(model.getSchedule());
+            response.type("application/json");
             ScheduleBuilder model = new ScheduleBuilder();
             Gson gson = new Gson();
             return gson.toJson(model.getSchedule());

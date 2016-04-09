@@ -142,7 +142,7 @@ public class Profile {
 
                     //Execute query
                     stmt.executeUpdate();
-
+                    System.out.println("insertTakes executed.");
                     return true;
                 } catch (SQLException ex) {
                     //Handle errors
@@ -230,7 +230,8 @@ public class Profile {
                 /* Querying takes table ....................... */
                 sql = "SELECT takes.course_id, semester, course_title "
                         + "FROM takes INNER JOIN course "
-                        + "ON takes.course_id=course.course_id where mem_id=?";
+                        + "ON takes.course_id=course.course_id where mem_id=? "
+                        + "ORDER BY SUBSTR(semester FROM 3 FOR 4), semester DESC";
                 stmt = conn.prepareStatement(sql);
                 //Set param
                 stmt.setInt(1, this.getMember().getId());

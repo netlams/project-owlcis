@@ -18,6 +18,7 @@
                     {name: 'Master'},
                     {name: 'Ph.D'}],
                 err: null,
+                succ: null
             };
             // Fetch Profile info
             $http.get('/api/profile')
@@ -28,6 +29,8 @@
                                 $filter('date')($scope.profileData.gradDate, "MM/dd/yyyy");  // for type="date" binding
                     })
                     .error(function (response) {
+                        $scope.profileOptions.err = "Failed to get profile data. \n\
+                                        Make sure you are logged in.";
                         console.log(response);
                         alert("error");
                     });
@@ -49,26 +52,70 @@
         }]);
 
     /* Completed Courses Controller */
-    app.controller('completedCourseController', ['$scope', '$http', function ($scope, $http) {
+    app.controller('completedCourseController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
             // holder for list to delete
             $scope.deleteCourseList = [];
-            // Fetch Profile info
-            $http.get('/api/profile/courses')
-                    .success(function (response) {
-                        $scope.courses = response;
-                        console.log(response);
+            // Add Tab defaults
+            $scope.addTabFormData = {
+                year: parseInt($filter('date')(new Date(), 'yy-MM-dd').substring(0, 2)), // get the 2-digit year
+                season: null,
+                semester: null,
+                courseID: null,
+                err: null,
+                succ: null
+            };
+            $scope.fetchProfileCourse = function () {
+                // Fetch Profile info
+                $http.get('/api/profile/courses')
+                        .success(function (data) {
+                            $scope.courses = data;
+                        })
+                        .error(function (response) {
+                            console.log("Failed to get student course list" + response);
+                            $scope.viewTabFormData = {
+                                err: "Failed to get student course list"
+                            };
+                        });
+            };
+            $scope.fetchProfileCourse();
+            // Fetch Add tab's form data (course list for selection list)
+            $http.get('/api/courselist', {cache: 'true'})
+                    .success(function (data) {
+                        $scope.addTabFormOpt = {
+                            availCourse: data,
+                        };
                     })
                     .error(function (response) {
-                        console.log(response);
-                        alert("error");
+                        $scope.addTabFormOpt = {
+                            availCourse: null,
+                        };
+                        $scope.addTabFormData.err = "Failed to get course list";
+                        console.log("Failed to get course list" + response);
                     });
-            // dummy data
-//            $scope.courses = [{semester: 'Fall 2015', id: 'CIS 1001', name: 'Intro to Acad...'},
-//                {semester: 'Fall 2015', id: 'CIS 1056', name: 'Intro to Python...'},
-//                {semester: 'Fall 2015', id: 'CIS 1166', name: 'Math Concepts I'},
-//                {semester: 'Spring 2016', id: 'CIS 2166', name: 'Math Concepts II'},
-//                {semester: 'Spring 2016', id: 'CIS 2168', name: 'Data Structures'},
-//                {semester: 'Spring 2016', id: 'CIS 2107', name: 'Low-Level ...'}];
+            // Add tab's form submit
+            $scope.addCourse = function () {
+                $scope.addTabFormData.semester = $scope.addTabFormData.season + $scope.addTabFormData.year;
+                $http.post('/api/profile/add', $scope.addTabFormData)
+                        .then(function (response) {
+                            if (response.status == 201) {
+                                $scope.addTabFormData.succ = "Successfully added";
+                                $scope.addTabFormData.err = null;
+                                $scope.fetchProfileCourse();
+                            }
+                        }, function (response) {
+                            if (response.status == 400) {
+                                $scope.addTabFormData.err = "Course already exist";
+                                $scope.addTabFormData.succ = null;
+                            }
+                            else {
+                            $scope.addTabFormData.err = "Failed to add";
+                            $scope.addTabFormData.succ = null;
+                            console.log("Error in processing form. "
+                                    + response.data);
+                            }
+                        });
+            };
+
             // default tab choosen
             $scope.tab = 'view';
             // change tab to ...
