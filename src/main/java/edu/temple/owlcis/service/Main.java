@@ -467,6 +467,9 @@ public class Main implements SparkApplication {
         });
 
         get(API_LOC + "/testflow", (request, response) -> {
+//            ScheduleBuilder model = new ScheduleBuilder();
+//            Gson gson = new Gson();
+//            return gson.toJson(model.getSchedule());
             ScheduleBuilder model = new ScheduleBuilder();
             Gson gson = new Gson();
             return gson.toJson(model.getSchedule());
