@@ -50,13 +50,13 @@ public class ViewLastReviews {
         this.clarity = 0.0;
         this.selected_courseid = "";
         this.semester= "";
-        this.thumbsdown= 0;
         this.thumbsup= 0;
+        this.thumbsdown= 0;
 
     }
 
     public ViewLastReviews(int r,String c, String t, String c_id, String f, String l,
-            double help, double e, double cl, String k, String s, int down, int up) {
+            double help, double e, double cl, String k, String s, int up, int down) {
        this.reviewid=r;
        this.comment_text = c;
         this.time_stamp = t;
@@ -68,8 +68,9 @@ public class ViewLastReviews {
         this.clarity = cl;
         this.selected_courseid = k;
         this.semester= s;
-        this.thumbsdown= down;
         this.thumbsup= up;
+        this.thumbsdown= down;
+        
     }
 
     public String getSelectedCourse() {
@@ -90,7 +91,7 @@ public class ViewLastReviews {
             ResultSet rs = null;
             try {
                 String sql = "SELECT  cr.review_id, cr.review_text, cr.time_stamp, cr.course_id, substring(u.f_name,1,1),substring(u.l_name,1,1), "
-                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_down, cr.thumbs_up"
+                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_up, cr.thumbs_down"
                         + " FROM owlcis.course_review cr"
                         + " JOIN owlcis.user u ON u.user_id = cr.user_id"
                         +  "WHERE 1 ORDER BY cr.time_stamp DESC LIMIT 10";

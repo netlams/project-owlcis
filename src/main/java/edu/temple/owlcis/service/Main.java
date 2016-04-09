@@ -18,7 +18,9 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.Arrays;
-
+import static jdk.nashorn.internal.runtime.JSType.toInt32;
+import spark.Request;
+import spark.Response;
 /**
  * The Main class contains the init method for OWLCIS, executing the backend
  * logic of the app.
@@ -67,13 +69,14 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        /* Increment Thumbs-up Count */
-        post(API_LOC + "/incthumbsup", (request, response) -> {
-            Gson gson = new Gson();
-            ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
+         /* Increment Thumbs-up Count */
+        post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
+            String rb = request.body().replaceAll("\\D+",""); //extracts numbers from body to get review id in string
+            int revid = toInt32(rb); //integer form of review id
+            ThumbRatings tr = new ThumbRatings(revid);
+            
             Database dbc = new Database();
-            System.out.println("Test 1");
+            
             if (dbc.getError().length() == 0) {
                 try {
                     if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
@@ -93,8 +96,10 @@ public class Main implements SparkApplication {
         
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
-            Gson gson = new Gson();
-            ThumbRatings tr = gson.fromJson(request.body(), ThumbRatings.class);
+            String rb = request.body().replaceAll("\\D+",""); //extracts numbers from body to get review id in string
+            int revid = toInt32(rb); //integer form of review id
+            ThumbRatings tr = new ThumbRatings(revid);
+            
             Database dbc = new Database();
             
             if (dbc.getError().length() == 0) {
@@ -452,12 +457,49 @@ public class Main implements SparkApplication {
             selected.setSelectedCourse(request.body());
             List list = selected.getAllReviews();
             response.status(200);
-            System.out.println("Dhruvin Steh Test");
-            System.out.println(gson.toJson(0));
+            
+           System.out.println(gson.toJson(0));
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
         });
 
+        
+        
+        /*
+         * ViewCourseReviews GET Route
+         */
+        get(API_LOC + "/viewlastreviews", (request, response) -> {
+            try {
+                ViewLastReviews rev = new ViewLastReviews();
+                List list = rev.getLastReviews();
+                response.type("application/json");
+                response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
+    /*
+         * CourseCount GET Route
+         */
+        get(API_LOC + "/coursecount", (request, response) -> {
+            try {
+                List list = CourseCount.getCoursesCount();
+                response.type("application/json");
+                if (list.isEmpty()) {
+                    response.status(404);
+                } else {
+                    response.status(200);
+                }
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
     }
     
          

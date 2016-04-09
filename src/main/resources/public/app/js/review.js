@@ -43,9 +43,6 @@
                         });
             };
 
-            $scope.thisreview = 'This review';
-
-            
             $scope.json_object = {};
         
             $scope.myjson = {}
@@ -70,8 +67,7 @@
                         });
                 //console.log($scope.update_like_response);
               };
-            $scope.thisreview = 'This review';
-
+           
 
         }]);
 
