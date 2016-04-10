@@ -11,6 +11,8 @@
             return defer.promise;
         };
     });
+    
+ 
 
     /* Display JSON list */
     app.controller('PromiseCtrl', ['$scope', '$state', '$http', '$window', 'CourseList',
@@ -19,6 +21,16 @@
                 $scope.example2 = value.data;
             });
             $scope.Dataform = {};
+//            get coursecount data and store it locall  
+            $http.get('/api/coursecount')
+                    .success(function(data){
+                        var n = [];
+                        for (var i=0;i<data.length;i++){
+                            n.push=data[i].course_id;
+                        }
+                        console.log(n);
+                        $scope.countt=data;
+                    })
             // get dept list
             CourseList.getCourseList()
                     .then(function (data) {
