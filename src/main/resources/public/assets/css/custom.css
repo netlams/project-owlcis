@@ -932,7 +932,7 @@ a.down:hover {
 /*--- Extra small devices (less 767px) ---*/
 
 @media (max-width: 767px) {
-    
+
     /*--- index.html ---*/
     .container-fluid {
         padding: 0;
@@ -1135,7 +1135,7 @@ a.down:hover {
     .dropdown.avatar b.caret {
         color: #363838;
     }
-    
+
 }
 
 

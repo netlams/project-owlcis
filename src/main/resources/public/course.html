@@ -6,20 +6,20 @@
                 <div class="panel-heading">
                     <h2 class="panel-title section-heading no-margin">Course Feedback</h2>
                 </div>
-                
-       
+
+
                 <div class="panel-body" style=" color: black; font-size: 16px;">
                     <div class="form-horizontal">
                         <div class="form-group" ng-controller="PromiseCtrl">
 
                             <label class="col-md-2 control-label">Courses:</label>
                             <div class="col-md-10">
-                               <!-- <select  name="selectedID" id="selectedID" ng-change="select_course(this.value)" 
-                                         data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
-                                    <option value="">Select Course</option>
-                                    <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
-                                </select>                             
-                               -->
+                                <!-- <select  name="selectedID" id="selectedID" ng-change="select_course(this.value)" 
+                                          data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
+                                     <option value="">Select Course</option>
+                                     <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+                                 </select>                             
+                                -->
                                 <div class="col-md-10">                      
                                     <select  name="selectedID" id="selectedID" class="form-control" data-ng-model ="Dataform2.selectedID"  data-ng-required="true">
                                         <option value="">Select Course</option>
@@ -29,13 +29,13 @@
                             </div>
 
                         </div>
-                                                
+
                         <div class="form-group">
                             <label class="col-md-2 control-label">Semester</label>
                             <div class="col-md-10">
                                 <input type="text" class="form-control" ng-model="semester" placeholder="Enter in Following format: ex. SP16">
                             </div>
-                            
+
                         </div> 
                         <div class="form-group">
                             <label class="col-md-2 control-label" >Comment</label>
@@ -100,11 +100,11 @@
                         <div class="form-horizontal text-center">								
                             <input type="submit" class="btn btn-primary" ng-click="send_fields()" value="Submit">
                         </div>		
-                        
+
                         <pre>
                         
-</pre>
-                        
+                        </pre>
+
                     </div>
                 </div>
             </div>

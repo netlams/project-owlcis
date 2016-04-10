@@ -16,24 +16,19 @@ import java.util.List;
  * @author Ricky
  */
 public class Courselist {
-   
 
-
-  
-   
     private String course_id;
-   
+
     public Courselist() {
-       
-        this.course_id= "";
-       
+
+        this.course_id = "";
+
     }
 
     public Courselist(String s) {
-        
-        
-        this.course_id= s;
-        
+
+        this.course_id = s;
+
     }
 
     public static List getAllCourses() throws SQLException {
@@ -104,9 +99,4 @@ public class Courselist {
         this.course_id = course_id;
     }
 
-   
-    
-
 }
-
-

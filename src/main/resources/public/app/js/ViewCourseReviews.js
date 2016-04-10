@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('authApp');
-/* Gets the dept JSON list */
+    /* Gets the dept JSON list */
     app.service('CourseList', function ($q, $http) {
         this.getCourseList = function () {
             var defer = $q.defer();
@@ -11,8 +11,8 @@
             return defer.promise;
         };
     });
-    
- 
+
+
 
     /* Display JSON list */
     app.controller('PromiseCtrl', ['$scope', '$state', '$http', '$window', 'CourseList',
@@ -20,25 +20,25 @@
             $http.get('/api/viewreviews').then(function (value) {
                 $scope.example2 = value.data;
             });
-            var check=false;
+            var check = false;
             $scope.Dataform = {};
             //here we ll function
-            $scope.selectClicked =function(){
-                check=true;
+            $scope.selectClicked = function () {
+                check = true;
             }
-            $http.get('/api/viewlastreviews').success(function(data){
+            $http.get('/api/viewlastreviews').success(function (data) {
                 console.log(data);
-                $scope.initialdataset=data;
+                $scope.initialdataset = data;
             })
-            $scope.initialData=function(){
-                
-                
+            $scope.initialData = function () {
+
+
                 return check;
             }
 //            get coursecount data and store it locall  
             $http.get('/api/coursecount')
-                    .success(function(data){
-                        $scope.countt=data;
+                    .success(function (data) {
+                        $scope.countt = data;
                     })
             // get dept list
             CourseList.getCourseList()
@@ -60,10 +60,10 @@
                             console.log("Sending this" + $scope.Dataform.selectedID);
                         });
             };
-            
-    
-            
+
+
+
         }]);
- 
+
 
 }());  

@@ -45,8 +45,8 @@
                 $scope.tab = tab;
             };
             // process the form submission
-            $scope.processForm = function() {
-                alert("Removing these courses: " + $scope.deleteCourseList );
+            $scope.processForm = function () {
+                alert("Removing these courses: " + $scope.deleteCourseList);
                 console.log($scope.deleteCourseList);
             };
         }]);

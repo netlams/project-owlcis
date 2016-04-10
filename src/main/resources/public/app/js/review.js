@@ -12,8 +12,8 @@
             return defer.promise;
         };
     });
-    
-    
+
+
 
     /* Display JSON list */
     app.controller('review', ['$scope', '$state', '$http', '$window', 'CourseList',
@@ -31,7 +31,7 @@
                             err: null
                         };
                     });
-             $scope.countlikes = 0;
+            $scope.countlikes = 0;
             // process the form
             $scope.Formprocess = function () {
 
@@ -39,37 +39,36 @@
                         .then(function (response) {
                             $scope.example2 = response.data;
                             $scope.thumbsup = $scope.example2[0].thumbsup;
-                          
+
                         }, function (response) {
                             console.log("Sending this" + $scope.Dataform.selectedID);
                         });
             };
 
             $scope.json_object = {};
-        
+
             $scope.myjson = {}
             $scope.like = function () {
-                $scope.thumbsup++;  
+                $scope.thumbsup++;
                 $scope.json_object = {
-                                        'reviewid': $scope.example2[0].reviewid,
-                                        'thumbsUp': $scope.thumbsup,
-                                        
+                    'reviewid': $scope.example2[0].reviewid,
+                    'thumbsUp': $scope.thumbsup,
                 };
-                
-            $scope.myjson = $scope.json_object;
+
+                $scope.myjson = $scope.json_object;
 //                console.log($scope.example2[0]);
 //                console.log($scope.json_object);
-                
-               $http.post('/api/incthumbsup', $scope.json_object)
+
+                $http.post('/api/incthumbsup', $scope.json_object)
                         .then(function (response) {
                             $scope.update_like_response = response.data;
                         }, function (response) {
-                           console.log("Sending this to db thumbs up:" ,
-                           $scope.thumbsup, $scope.example2[0].reviewid );
+                            console.log("Sending this to db thumbs up:",
+                                    $scope.thumbsup, $scope.example2[0].reviewid);
                         });
                 //console.log($scope.update_like_response);
-              };
-           
+            };
+
 
         }]);
 

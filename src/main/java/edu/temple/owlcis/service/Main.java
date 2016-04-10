@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 2/25/2016
+ * CIS4398 Projects Spring 2016 2/25/2016
  */
 package edu.temple.owlcis.service;
 
@@ -21,6 +19,7 @@ import java.util.Arrays;
 import static jdk.nashorn.internal.runtime.JSType.toInt32;
 import spark.Request;
 import spark.Response;
+
 /**
  * The Main class contains the init method for OWLCIS, executing the backend
  * logic of the app.
@@ -69,16 +68,16 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-         /* Increment Thumbs-up Count */
+        /* Increment Thumbs-up Count */
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
-            String rb = request.body().replaceAll("\\D+",""); //extracts numbers from body to get review id in string
+            String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
             int revid = toInt32(rb); //integer form of review id
             System.out.println(rb);
-             System.out.println(revid);
+            System.out.println(revid);
             ThumbRatings tr = new ThumbRatings(revid);
-            
+
             Database dbc = new Database();
-            
+
             if (dbc.getError().length() == 0) {
                 try {
                     if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
@@ -94,16 +93,15 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        
+
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
-            String rb = request.body().replaceAll("\\D+",""); //extracts numbers from body to get review id in string
+            String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
             int revid = toInt32(rb); //integer form of review id
             ThumbRatings tr = new ThumbRatings(revid);
-            
+
             Database dbc = new Database();
-            
+
             if (dbc.getError().length() == 0) {
                 try {
                     if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
@@ -119,7 +117,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-       /* Update Profile Route */
+        /* Update Profile Route */
         post(API_LOC + "/updateprofile", (request, response) -> {
             Gson gson = new Gson();
             Profile testProfile = gson.fromJson(request.body(), Profile.class);
@@ -137,8 +135,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-                        
+
         /* Get Profile Taken Courses Route */
         get(API_LOC + "/profilecourse", (request, response) -> {
             User user = request.session().attribute("USER");
@@ -154,15 +151,15 @@ public class Main implements SparkApplication {
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 } finally {
-                    if (!dbc.getConn().isClosed())
+                    if (!dbc.getConn().isClosed()) {
                         dbc.closeConn();
+                    }
                 }
             }
             response.status(500);
-            return "OWLCIS failed: HTTP 500 SERVER ERROR";            
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-                
-        
+
         /* Add Taken Courses Route */
         post(API_LOC + "/addtakencourses", (request, response) -> {
             //User user = request.session().attribute("USER");
@@ -184,16 +181,15 @@ public class Main implements SparkApplication {
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 } finally {
-                    if (!dbc.getConn().isClosed())
+                    if (!dbc.getConn().isClosed()) {
                         dbc.closeConn();
+                    }
                 }
             }
             response.status(500);
-            return "OWLCIS failed: HTTP 500 SERVER ERROR"; 
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        
-        
+
         /* Delete Taken Courses Route */
         post(API_LOC + "/deletetakencourses", (request, response) -> {
             //User user = request.session().attribute("USER");
@@ -214,15 +210,15 @@ public class Main implements SparkApplication {
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 } finally {
-                    if (!dbc.getConn().isClosed())
+                    if (!dbc.getConn().isClosed()) {
                         dbc.closeConn();
+                    }
                 }
             }
             response.status(500);
-            return "OWLCIS failed: HTTP 500 SERVER ERROR";       
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
-        
+
         /* Login Route */
         post("/login", (request, response) -> {
             String ret = "";
@@ -253,7 +249,7 @@ public class Main implements SparkApplication {
                 if (SignIn.isValidTempleEmailAddress(user.getEmail()) == true) {
                     try {
                         User newUser = SignIn.findUser(dbc.getConn(), user);
-                       
+
                         if (newUser != null) {
                             // found user
                             response.status(200);
@@ -459,14 +455,12 @@ public class Main implements SparkApplication {
             selected.setSelectedCourse(request.body());
             List list = selected.getAllReviews();
             response.status(200);
-            
-           System.out.println(gson.toJson(0));
+
+            System.out.println(gson.toJson(0));
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
         });
 
-        
-        
         /*
          * ViewCourseReviews GET Route
          */
@@ -483,7 +477,7 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
-    /*
+        /*
          * CourseCount GET Route
          */
         get(API_LOC + "/coursecount", (request, response) -> {
@@ -503,7 +497,5 @@ public class Main implements SparkApplication {
             }
         });
     }
-    
-         
-    }
 
+}

@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 3/16/2016
+ * CIS4398 Projects Spring 2016 3/16/2016
  */
 package edu.temple.owlcis.service;
 
@@ -36,7 +34,7 @@ public class ViewReviews {
     private int reviewid;
 
     public ViewReviews() {
-        this.reviewid=0;
+        this.reviewid = 0;
         this.comment_text = "";
         this.time_stamp = "";
         this.user_type = "";
@@ -48,16 +46,16 @@ public class ViewReviews {
         this.easiness = 0.0;
         this.clarity = 0.0;
         this.selected_courseid = "";
-        this.semester= "";
-        this.thumbsdown= 0;
-        this.thumbsup= 0;
+        this.semester = "";
+        this.thumbsdown = 0;
+        this.thumbsup = 0;
 
     }
 
-    public ViewReviews(int r,String c, String t, String c_id, String f, String l,
+    public ViewReviews(int r, String c, String t, String c_id, String f, String l,
             double help, double e, double cl, String k, String s, int down, int up) {
-       this.reviewid=r;
-       this.comment_text = c;
+        this.reviewid = r;
+        this.comment_text = c;
         this.time_stamp = t;
         this.courseid = c_id;
         this.f_name = f;
@@ -66,20 +64,20 @@ public class ViewReviews {
         this.easiness = e;
         this.clarity = cl;
         this.selected_courseid = k;
-        this.semester= s;
-        this.thumbsdown= down;
-        this.thumbsup= up;
+        this.semester = s;
+        this.thumbsdown = down;
+        this.thumbsup = up;
     }
 
     public int getreviewID() {
         return reviewid;
     }
 
-    public void setreviewid(int reviewid ) {
+    public void setreviewid(int reviewid) {
         this.reviewid = reviewid;
 
     }
-    
+
     public String getSelectedCourse() {
         return selected_courseid;
     }
@@ -88,7 +86,7 @@ public class ViewReviews {
         this.selected_courseid = selected;
 
     }
-    
+
     public String getSemester() {
         return semester;
     }
@@ -97,7 +95,6 @@ public class ViewReviews {
         this.semester = semester;
 
     }
-
 
     public List getAllReviews() throws SQLException {
         Database dbc = new Database();
@@ -130,9 +127,9 @@ public class ViewReviews {
                             rs.getDouble(8),
                             rs.getDouble(9),
                             rs.getString(10),
-                    rs.getString(11),
-                    rs.getInt(12),
-                    rs.getInt(13)));
+                            rs.getString(11),
+                            rs.getInt(12),
+                            rs.getInt(13)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -292,8 +289,8 @@ public class ViewReviews {
     public void setClarity(Double clarity) {
         this.clarity = clarity;
     }
-    
-      /**
+
+    /**
      * @return the thumbsup
      */
     public int getthumbsup() {
@@ -303,7 +300,7 @@ public class ViewReviews {
     public void setthumbsup(int thumbsup) {
         this.thumbsup = thumbsup;
     }
-    
+
     /**
      * @return the thumbsup
      */
@@ -315,8 +312,6 @@ public class ViewReviews {
         this.thumbsdown = thumbsdown;
     }
 
-    
-    
     public List getLastReviews() throws SQLException {
         Database dbc = new Database();
         if (dbc.getError().length() == 0) {
@@ -329,7 +324,7 @@ public class ViewReviews {
                         + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_up, cr.thumbs_down"
                         + " FROM owlcis.course_review cr"
                         + " JOIN owlcis.user u ON u.user_id = cr.user_id"
-                        +  " ORDER BY cr.time_stamp DESC LIMIT 10";
+                        + " ORDER BY cr.time_stamp DESC LIMIT 10";
 
                 stmt = dbc.getConn().createStatement();
                 rs = stmt.executeQuery(sql);
@@ -337,7 +332,7 @@ public class ViewReviews {
 
                 // add to list
                 while (rs.next()) {
-                    
+
                     list.add(new ViewReviews(rs.getInt(1),
                             rs.getString(2),
                             rs.getString(3),
@@ -348,9 +343,9 @@ public class ViewReviews {
                             rs.getDouble(8),
                             rs.getDouble(9),
                             rs.getString(10),
-                    rs.getString(11),
-                    rs.getInt(12),
-                    rs.getInt(13)));
+                            rs.getString(11),
+                            rs.getInt(12),
+                            rs.getInt(13)));
                 }
                 System.out.println(list);
             } catch (SQLException ex) {

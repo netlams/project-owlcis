@@ -1,19 +1,17 @@
 /**
- * CIS4398 Projects 
- * Spring 2016 
- * 2/25/2016
+ * CIS4398 Projects Spring 2016 2/25/2016
  */
 package edu.temple.owlcis.service;
 
 /**
- * The purpose of the ScheduleBuilder class is to provide
- * users with the ability to build a course schedule to save for personal
- * reference. The schedule will store the semesters and the desired courses for
- * each semester. The class provides methods to add and delete courses from a
- * schedule. Methods are also included to save the schedule or remove it from
- * the database. Finally, a method is included that allows users to generate a
- * flowchart from a previously built schedule.
- * 
+ * The purpose of the ScheduleBuilder class is to provide users with the ability
+ * to build a course schedule to save for personal reference. The schedule will
+ * store the semesters and the desired courses for each semester. The class
+ * provides methods to add and delete courses from a schedule. Methods are also
+ * included to save the schedule or remove it from the database. Finally, a
+ * method is included that allows users to generate a flowchart from a
+ * previously built schedule.
+ *
  * @author Rachel Tritsch
  */
 public class ScheduleBuilder {

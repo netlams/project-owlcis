@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 3/17/2016
+ * CIS4398 Projects Spring 2016 3/17/2016
  */
 package edu.temple.owlcis.service;
 
@@ -11,10 +9,11 @@ import java.sql.SQLException;
 
 /**
  * This class is for the course reviews feature.
+ *
  * @author Rachel Tritsch
  */
 public class CourseReview {
-    
+
     //Global variables
     private int userID;
     private String courseID;
@@ -26,8 +25,7 @@ public class CourseReview {
     private boolean hasRecElective;
     private String recElectiveID;
     private String electiveSemester;
-    
-    
+
     //Constructor that sets all variables to empty
     public CourseReview() {
         userID = 0;
@@ -45,8 +43,8 @@ public class CourseReview {
     @Override
     public String toString() {
         return "CourseReview{" + "userID=" + userID + ", courseID=" + courseID + ", reviewText=" + reviewText + ", semester=" + semester + ", helpfulness=" + helpfulness + ", easiness=" + easiness + ", clarity=" + clarity + ", hasRecElective=" + hasRecElective + '}';
-    } 
-    
+    }
+
     public String getRecElectiveID() {
         return recElectiveID;
     }
@@ -62,9 +60,9 @@ public class CourseReview {
     public void setElectiveSemester(String electiveSemester) {
         this.electiveSemester = electiveSemester;
     }
-    
+
     /**
-     * 
+     *
      * @return ID of user associated with this course review
      */
     public int getUserID() {
@@ -73,14 +71,15 @@ public class CourseReview {
 
     /**
      * Sets ID of user associated with this course review
-     * @param userID 
+     *
+     * @param userID
      */
     public void setUserID(int userID) {
         this.userID = userID;
     }
 
     /**
-     * 
+     *
      * @return ID of course associated with this course review
      */
     public String getCourseID() {
@@ -89,6 +88,7 @@ public class CourseReview {
 
     /**
      * Sets ID of course associated with this course review
+     *
      * @param courseID
      */
     public void setCourseID(String courseID) {
@@ -96,7 +96,7 @@ public class CourseReview {
     }
 
     /**
-     * 
+     *
      * @return review text of this review
      */
     public String getReviewText() {
@@ -105,6 +105,7 @@ public class CourseReview {
 
     /**
      * Sets review text
+     *
      * @param reviewText
      */
     public void setReviewText(String reviewText) {
@@ -112,7 +113,7 @@ public class CourseReview {
     }
 
     /**
-     * 
+     *
      * @return semester the course was taken
      */
     public String getSemester() {
@@ -121,14 +122,15 @@ public class CourseReview {
 
     /**
      * Sets semester the course was taken
-     * @param semester 
+     *
+     * @param semester
      */
     public void setSemester(String semester) {
         this.semester = semester;
     }
 
     /**
-     * 
+     *
      * @return helpfulness count (between 1 and 5)
      */
     public int getHelpfulness() {
@@ -137,14 +139,15 @@ public class CourseReview {
 
     /**
      * Sets helpfulness (between 1 and 5)
-     * @param helpfulness 
+     *
+     * @param helpfulness
      */
     public void setHelpfulness(int helpfulness) {
         this.helpfulness = helpfulness;
     }
 
     /**
-     * 
+     *
      * @return easiness count (between 1 and 5)
      */
     public int getEasiness() {
@@ -153,14 +156,15 @@ public class CourseReview {
 
     /**
      * Sets easiness (between 1 and 5)
-     * @param easiness 
+     *
+     * @param easiness
      */
     public void setEasiness(int easiness) {
         this.easiness = easiness;
     }
 
     /**
-     * 
+     *
      * @return clarity count (between 1 and 5)
      */
     public int getClarity() {
@@ -169,14 +173,15 @@ public class CourseReview {
 
     /**
      * Sets clarity (between 1 and 5)
-     * @param clarity 
+     *
+     * @param clarity
      */
     public void setClarity(int clarity) {
         this.clarity = clarity;
     }
 
     /**
-     * 
+     *
      * @return whether the course review has a recommended elective
      */
     public boolean hasRecElective() {
@@ -185,12 +190,13 @@ public class CourseReview {
 
     /**
      * Sets whether the review has a recommended elective
-     * @param hasRecElective 
+     *
+     * @param hasRecElective
      */
     public void setHasRecElective(boolean hasRecElective) {
         this.hasRecElective = hasRecElective;
     }
-     
+
     public boolean insertReview(Connection conn) throws SQLException {
         PreparedStatement stmt = null;
 
@@ -202,7 +208,7 @@ public class CourseReview {
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 stmt = conn.prepareStatement(sql);
-                
+
                 //Set parameters
                 stmt.setInt(1, userID);
                 stmt.setString(2, courseID);
@@ -213,18 +219,17 @@ public class CourseReview {
                 stmt.setString(7, reviewText);
                 stmt.setInt(8, 0);
                 stmt.setInt(9, 0);
-                
+
                 //Execute query
                 stmt.executeUpdate();
                 System.out.println("insertReview query executed.");
-                
+
                 //If review has a recommended elective, insert into rec_elective
-                if (hasRecElective) 
-                {
+                if (hasRecElective) {
                     sql = "INSERT INTO rec_elective (review_id, course_id, semester) "
                             + "VALUES ((SELECT review_id FROM course_review "
                             + "WHERE user_id = ? AND course_id = ?), ?, ?)";
-                    
+
                     stmt = conn.prepareStatement(sql);
 
                     //Set parameters
@@ -232,7 +237,7 @@ public class CourseReview {
                     stmt.setString(2, courseID);
                     stmt.setString(3, recElectiveID);
                     stmt.setString(4, electiveSemester);
-                    
+
                     //Execute query
                     stmt.executeUpdate();
                     System.out.println("insertRecElective query executed.");
@@ -243,23 +248,25 @@ public class CourseReview {
                 System.out.println("SQLException: " + ex.getMessage());
                 System.out.println("SQLState: " + ex.getSQLState());
                 System.out.println("VendorError: " + ex.getErrorCode());
-                throw new SQLException(ex);                
+                throw new SQLException(ex);
             } finally {
                 if (stmt != null) {
                     try {
                         stmt.close();
-                    } catch (SQLException sqlEx) {} //ignore
+                    } catch (SQLException sqlEx) {
+                    } //ignore
                 }
                 if (!conn.isClosed()) {
                     try {
                         conn.close();
-                    } catch (SQLException sqlEx) {} //ignore
+                    } catch (SQLException sqlEx) {
+                    } //ignore
                 }
-                
+
             }
-            
+
         }
         return false;
     }
-    
+
 }

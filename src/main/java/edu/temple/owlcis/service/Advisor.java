@@ -1,19 +1,18 @@
 /**
- * CIS4398 Projects 
- * Spring 2016 
- * 2/25/2016
+ * CIS4398 Projects Spring 2016 2/25/2016
  */
 package edu.temple.owlcis.service;
 
 /**
  * Advisor class is used for any user that is a Temple University CST advisor.
  * This is a subtype of User class and have additional data field: deptId. Based
- * on this type's privileges, it overrides some access methods by setting them 
+ * on this type's privileges, it overrides some access methods by setting them
  * to true: canWriteForumPost, and canCommentReview.
  *
  * @author Dau
  */
 public class Advisor extends User {
+
     /**
      * The Advisor's department Id
      */
@@ -56,6 +55,7 @@ public class Advisor extends User {
 
     /**
      * Gets the deptId
+     *
      * @return the deptId
      */
     public int getDeptId() {
@@ -64,15 +64,16 @@ public class Advisor extends User {
 
     /**
      * Sets the deptId
+     *
      * @param deptId the deptId to set
      */
     public void setDeptId(int deptId) {
         this.deptId = deptId;
     }
-    
+
     /**
      * Gets string representation of object
-     * 
+     *
      * @return string representation
      */
     @Override

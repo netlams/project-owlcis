@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 2/25/2016
+ * CIS4398 Projects Spring 2016 2/25/2016
  */
 package edu.temple.owlcis.service;
 
@@ -35,6 +33,7 @@ public class Member extends User {
      * The Member's degree type
      */
     protected String degreeType;
+
     /**
      * Default Constructor for Member
      */
@@ -54,6 +53,7 @@ public class Member extends User {
         this.setFname(user.getFname());
         this.setLname(user.getLname());
     }
+
     /**
      * Parameterized Constructor for Member object
      *
@@ -77,7 +77,7 @@ public class Member extends User {
         this.setGradDate(gd);
         this.setDegreeType(dt);
     }
-    
+
     /**
      * Parameterized Constructor for Member object
      *
@@ -168,7 +168,7 @@ public class Member extends User {
     public void setGradDate(String gradDate) {
         this.gradDate = gradDate;
     }
-    
+
     /**
      * Gets the degreeType
      *
@@ -195,8 +195,8 @@ public class Member extends User {
     @Override
     public String toString() {
         return super.toString() + " Major: " + this.getMajor()
-                + " studentOrAlumni: " + this.getStudentOrAlumni() 
-                + " GradDate: " + this.getGradDate() 
+                + " studentOrAlumni: " + this.getStudentOrAlumni()
+                + " GradDate: " + this.getGradDate()
                 + " DegreeType: " + this.getDegreeType();
     }
 }
