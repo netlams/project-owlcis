@@ -20,15 +20,24 @@
             $http.get('/api/viewreviews').then(function (value) {
                 $scope.example2 = value.data;
             });
+            var check=false;
             $scope.Dataform = {};
+            //here we ll function
+            $scope.selectClicked =function(){
+                check=true;
+            }
+            $http.get('/api/viewlastreviews').success(function(data){
+                console.log(data);
+                $scope.initialdataset=data;
+            })
+            $scope.initialData=function(){
+                
+                
+                return check;
+            }
 //            get coursecount data and store it locall  
             $http.get('/api/coursecount')
                     .success(function(data){
-                        var n = [];
-                        for (var i=0;i<data.length;i++){
-                            n.push=data[i].course_id;
-                        }
-                        console.log(n);
                         $scope.countt=data;
                     })
             // get dept list
