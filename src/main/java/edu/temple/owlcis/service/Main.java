@@ -143,11 +143,14 @@ public class Main implements SparkApplication {
 
         /* Get Profile Taken Courses Route */
         get(API_LOC + "/profile/courses", (request, response) -> {
-            User user = request.session().attribute("USER"); 
+            User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -171,31 +174,33 @@ public class Main implements SparkApplication {
 
         /* Add Taken Courses Route */
         post(API_LOC + "/profile/add", (request, response) -> {
-            //User user = request.session().attribute("USER");
-            //Member member = new Member(user);
-            System.out.println("body: " + request.body());
-            Member member = new Member();
-            member.setId(43);
-            Profile profile = new Profile(member);
-            Database dbc = new Database();
-            if (dbc.getError().length() == 0) {
-                try {
-                    Gson gson = new Gson();
-                    Schedule schedule = gson.fromJson(request.body(), Schedule.class);
-                    if (profile.fetchTakenCourses(dbc.getConn()) //load taken courses from db into linked list
-                            && profile.addTakenCourse(schedule, dbc.getConn())) { //attempt to add new taken course
-                        response.status(201);
-                        return "HTTP 201 - CREATED";
-                    }
-                    else {
-                        response.status(400);
-                        return "HTTP 400 - BAD REQUEST";
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                } finally {
-                    if (!dbc.getConn().isClosed()) {
-                        dbc.closeConn();
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                Member member = new Member(user);
+                Profile profile = new Profile(member);
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        if (profile.fetchTakenCourses(dbc.getConn()) //load taken courses from db into linked list
+                                && profile.addTakenCourse(schedule, dbc.getConn())) { //attempt to add new taken course
+                            response.status(201);
+                            return "HTTP 201 - CREATED";
+                        } else {
+                            response.status(400);
+                            return "HTTP 400 - BAD REQUEST";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
                     }
                 }
             }
@@ -207,8 +212,9 @@ public class Main implements SparkApplication {
         post(API_LOC + "/profile/delete", (request, response) -> {
             //User user = request.session().attribute("USER");
             //Member member = new Member(user);
+            System.out.println("BODY " + request.body());
             Member member = new Member();
-            member.setId(45);
+            member.setId(43);
             Profile profile = new Profile(member);
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {

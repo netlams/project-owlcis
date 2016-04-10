@@ -114,10 +114,10 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <p class="alert alert-success fade in col-sm-12 text-center" data-ng-show="addTabFormData.succ">{{addTabFormData.succ}}
-                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                         </p>
                                         <p class="alert alert-danger fade in col-sm-12 text-center" data-ng-show="addTabFormData.err">{{addTabFormData.err}}
-                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                         </p>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-3">
@@ -143,10 +143,23 @@
                                 </div>
                             </form>
                             <!--Only Show this when in Del Tab-->
-                            <form data-ng-show="tab == 'del'" data-ng-submit="processForm()">
+                            <form data-ng-show="tab == 'del'" data-ng-submit="deleteCourse()">
+                                <!--Shows the course to delete-->
+                                <div class="course-labels col-xs-12 text-center">
+                                    <span class="label label-primary course-label" data-ng-repeat="item in deleteCourseList track by $index">{{item.courseID}}/{{item.semester}}</span>
+                                </div>
+                                <div class="col-xs-12 text-center">
+                                    <p class="alert alert-success fade in col-sm-12 text-center" data-ng-show="delTabFormData.succ">{{delTabFormData.succ}}
+                                        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    </p>
+                                    <p class="alert alert-danger fade in col-sm-12 text-center" data-ng-show="delTabFormData.err">{{delTabFormData.err}}
+                                        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    </p>
+                                    <input type="submit" class="btn btn-danger" value="Delete Selected Courses"/>
+                                    <input type="button" class="btn btn-default" value="Reset" data-ng-click="resetDelete()"/>
+                                </div>
                                 <table class="table table-striped course-listing">
                                     <thead>
-                                        <tr><th><input type="submit" class="btn btn-danger" value="Delete Selected Courses"/></th></tr>
                                         <tr>
                                             <th>Semester</th>
                                             <th>CRN - Course Name</th>
@@ -157,11 +170,9 @@
                                             <td>{{key}}</td>
                                             <td>
                                                 <div class="list-group">
-                                                    <button type="button" class="list-group-item" data-ng-repeat="course in value">
-                                                        <label for="{{course.courseID}}" data-ng-click="deleteCourseList.push(course.courseID)">
-                                                            {{course.courseID}} <br/> {{course.courseTitle}}
-                                                        </label>
-                                                        <input type="checkbox" id="{{course.courseID}}" name="{{course.courseID}}" value="{{course.val}}" class="pull-right">
+                                                    <button type="button" class="list-group-item animate-courselist-if" data-ng-repeat="course in value" 
+                                                            data-ng-click="addToDeleteList(course.courseID, key)" data-ng-if="!deleteListCheckMap.get(course.courseID)">
+                                                        {{course.courseID}} <br/> {{course.courseTitle}}
                                                     </button>
                                                 </div>
                                             </td>

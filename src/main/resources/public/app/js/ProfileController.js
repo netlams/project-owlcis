@@ -32,7 +32,6 @@
                         $scope.profileOptions.err = "Failed to get profile data. \n\
                                         Make sure you are logged in.";
                         console.log(response);
-                        alert("error");
                     });
             // On submit
             $scope.processProfileForm = function () {
@@ -46,15 +45,27 @@
                                         Make sure you are logged in.";
                             console.log("Error in processing form. "
                                     + response.data);
-                            alert("error");
                         });
             };
         }]);
 
     /* Completed Courses Controller */
     app.controller('completedCourseController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
+            // default tab choosen
+            $scope.tab = 'view';
+            // change tab to ...
+            $scope.changeTab = function (tab) {
+                $scope.tab = tab;
+            };
             // holder for list to delete
             $scope.deleteCourseList = [];
+            // Map to mark course as 'about to be deleted'
+            $scope.deleteListCheckMap = new Map();
+            // Delete Tab defaults
+            $scope.delTabFormData = {
+                err: null,
+                succ: null
+            };
             // Add Tab defaults
             $scope.addTabFormData = {
                 year: parseInt($filter('date')(new Date(), 'yy-MM-dd').substring(0, 2)), // get the 2-digit year
@@ -77,7 +88,7 @@
                             };
                         });
             };
-            $scope.fetchProfileCourse();
+            $scope.fetchProfileCourse(); // fetch at page load
             // Fetch Add tab's form data (course list for selection list)
             $http.get('/api/courselist', {cache: 'true'})
                     .success(function (data) {
@@ -98,34 +109,63 @@
                 $http.post('/api/profile/add', $scope.addTabFormData)
                         .then(function (response) {
                             if (response.status == 201) {
-                                $scope.addTabFormData.succ = "Successfully added";
                                 $scope.addTabFormData.err = null;
+                                $scope.addTabFormData.succ = "Successfully added "
+                                        + $scope.addTabFormData.courseID;
                                 $scope.fetchProfileCourse();
                             }
                         }, function (response) {
                             if (response.status == 400) {
-                                $scope.addTabFormData.err = "Course already exist";
                                 $scope.addTabFormData.succ = null;
+                                $scope.addTabFormData.err = "Course already exist";
                             }
                             else {
-                            $scope.addTabFormData.err = "Failed to add";
-                            $scope.addTabFormData.succ = null;
-                            console.log("Error in processing form. "
-                                    + response.data);
+                                $scope.addTabFormData.err = "Failed to add";
+                                $scope.addTabFormData.succ = null;
+                                console.log("Error in processing form. "
+                                        + response.data);
                             }
                         });
             };
+            // Delete Tab's form submit
+            $scope.deleteCourse = function () {
+                var completed = false;
+                for (var i = 0; i < $scope.deleteCourseList.length; i++) {
+                    $http.post('/api/profile/delete', $scope.deleteCourseList[i])
+                            .then(function (response) {
+                                if (response.status == 200) {
+                                    $scope.delTabFormData.err = null;
+                                    $scope.delTabFormData.succ = "Successfully deleted from your history";
+                                    completed = true;
+                                    console.log("c in post: " + i + " " + completed);
+                                }
+                            }, function (response) {
+                                $scope.delTabFormData.succ = null;
+                                $scope.delTabFormData.err = "Could not delete. Make sure you are logged in.";
+                                console.log("Error in processing form. "
+                                        + response.data);
+                            });
+                }
 
-            // default tab choosen
-            $scope.tab = 'view';
-            // change tab to ...
-            $scope.changeTab = function (tab) {
-                $scope.tab = tab;
+                var timer = setInterval(function () {
+                    console.log("c: " + completed);
+                    if (completed) {
+                        $scope.fetchProfileCourse();
+                        $scope.resetDelete();
+                        clearInterval(timer);
+                    } 
+                }, 2000);
+                // give about 3 seconds to finish delete req
             };
-            // process the form submission
-            $scope.processForm = function () {
-                alert("Removing these courses: " + $scope.deleteCourseList);
-                console.log($scope.deleteCourseList);
+            // temporary add courses to list, before submitting request
+            $scope.addToDeleteList = function (c, s) {
+                $scope.deleteCourseList.push({courseID: c, semester: s});
+                $scope.deleteListCheckMap.set(c, true)
+            };
+            // reset delete list
+            $scope.resetDelete = function () {
+                $scope.deleteListCheckMap = new Map();
+                $scope.deleteCourseList = [];
             };
         }]);
 
