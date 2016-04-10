@@ -12,6 +12,8 @@
             return defer.promise;
         };
     });
+    
+    
 
     /* Display JSON list */
     app.controller('review', ['$scope', '$state', '$http', '$window', 'CourseList',

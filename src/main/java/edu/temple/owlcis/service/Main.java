@@ -73,6 +73,8 @@ public class Main implements SparkApplication {
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
             String rb = request.body().replaceAll("\\D+",""); //extracts numbers from body to get review id in string
             int revid = toInt32(rb); //integer form of review id
+            System.out.println(rb);
+             System.out.println(revid);
             ThumbRatings tr = new ThumbRatings(revid);
             
             Database dbc = new Database();
@@ -470,7 +472,7 @@ public class Main implements SparkApplication {
          */
         get(API_LOC + "/viewlastreviews", (request, response) -> {
             try {
-                ViewLastReviews rev = new ViewLastReviews();
+                ViewReviews rev = new ViewReviews();
                 List list = rev.getLastReviews();
                 response.type("application/json");
                 response.status(200);

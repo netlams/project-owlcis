@@ -20,5 +20,11 @@
 
     angular.module('authApp').controller('firstController', firstController);
     
+app.controller('CourseCount', function($scope, $http) {
+    $http.get('/api/coursecount')
+    .then(function(response) {
+        $scope.coursesCount = response.data;
+    });
+});
 
 }());

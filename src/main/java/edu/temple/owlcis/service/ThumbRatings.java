@@ -38,6 +38,7 @@ public class ThumbRatings {
 
     
     
+    
     /**
      * Sets the current thumbs-up count for this review to the value from the db.
      * @param conn the db connection
@@ -158,6 +159,7 @@ public class ThumbRatings {
                 //Execute query
                 stmt.execute();
                 System.out.println("IncThumbsUp query executed.");
+                this.thumbsUp++;
                 return true;
                 
             } catch (SQLException ex) {
