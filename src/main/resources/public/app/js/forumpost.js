@@ -4,23 +4,23 @@
  * and open the template in the editor.
  */
 
-(function() {
+(function () {
 
-    var forumpost = function($scope,$state,DBService) {
+    var forumpost = function ($scope, $state, DBService) {
 
-    	console.log("forum post called.");
+        console.log("forum post called.");
 
-    	DBService.getDemo().then(function(success) {
+        DBService.getDemo().then(function (success) {
 
-    		console.log("success in service")
+            console.log("success in service")
 
-    	}, function(error) {
+        }, function (error) {
 
-    	});
+        });
 
     };
 
-    forumpost.$inject = ['$scope','$state','DBService'];
+    forumpost.$inject = ['$scope', '$state', 'DBService'];
 
     angular.module('authApp').controller('forumpost', forumpost);
 

@@ -1,19 +1,18 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 2/25/2016
+ * CIS4398 Projects Spring 2016 2/25/2016
  */
 package edu.temple.owlcis.service;
 
 /**
  * User serves as the base class for all User role subtypes (Member, Advisor,
- * and Moderator). The subtypes inherits all required properties and overrides any
- * appropriate methods. Common properties include fname, lname, id, and email.
- * Common methods include access checkers for subtype privileges.
+ * and Moderator). The subtypes inherits all required properties and overrides
+ * any appropriate methods. Common properties include fname, lname, id, and
+ * email. Common methods include access checkers for subtype privileges.
  *
  * @author Dau
  */
 public class User {
+
     /**
      * Constants
      */
@@ -234,7 +233,7 @@ public class User {
      * @return the id
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -281,22 +280,22 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-    
+
     /**
      * Gets string representation of object
-     * 
+     *
      * @return string representation
      */
     @Override
     public String toString() {
-        return "First Name: " + this.getFname() + " Last Name: " 
-                + this.getLname() + " Email: " + this.getEmail() 
+        return "First Name: " + this.getFname() + " Last Name: "
+                + this.getLname() + " Email: " + this.getEmail()
                 + " Role: " + this.getRole();
     }
-    
+
     /**
      * Converts short role name to long name
-     * 
+     *
      * @param type the short role name
      * @return long role name
      */
@@ -318,9 +317,10 @@ public class User {
         }
         return roleName;
     }
-    
+
     /**
      * Converts long role name to short name
+     *
      * @param roleName the long name
      * @return the short name
      */

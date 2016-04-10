@@ -1,21 +1,21 @@
 
-(function() {
+(function () {
 
-    var fourthController = function($scope,$state,DBService) {
+    var fourthController = function ($scope, $state, DBService) {
 
         console.log("fourth controller called.");
 
-        DBService.getDemo().then(function(success) {
+        DBService.getDemo().then(function (success) {
 
-    		console.log("success in service")
+            console.log("success in service")
 
-    	}, function(error) {
+        }, function (error) {
 
-    	});
+        });
 
     };
 
-    fourthController.$inject = ['$scope','$state','DBService'];
+    fourthController.$inject = ['$scope', '$state', 'DBService'];
 
     angular.module('authApp').controller('fourthController', fourthController);
 

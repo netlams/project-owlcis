@@ -13,25 +13,18 @@ import java.util.List;
 
 /**
  *
- * @author Ricky
+ * @author sheth
  */
-public class Courselist {
+public class CourseCount {
 
     private String course_id;
 
-    public Courselist() {
+    public CourseCount() {
 
         this.course_id = "";
-
     }
 
-    public Courselist(String s) {
-
-        this.course_id = s;
-
-    }
-
-    public static List getAllCourses() throws SQLException {
+    public static List getCoursesCount() throws SQLException {
         Database dbc = new Database();
         if (dbc.getError().length() == 0) {
             // no errors
@@ -39,15 +32,19 @@ public class Courselist {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT course_id FROM course ORDER BY course_id";
+                String sql = "SELECT  course_id from course_review\n"
+                        + "group by course_id\n"
+                        + "order by count(course_id) DESC LIMIT 5;";
                 stmt = dbc.getConn().createStatement();
                 // execute query
                 rs = stmt.executeQuery(sql);
-                System.out.println("getAllDept Query executed.");
+
+                System.out.println("course count Query executed.");
 
                 // add to list
                 while (rs.next()) {
                     list.add(new Courselist(rs.getString(1)));
+
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -56,10 +53,7 @@ public class Courselist {
                 System.out.println("VendorError: " + ex.getErrorCode());
                 throw new SQLException(ex);
             } finally {
-                // it is a good idea to release
-                // resources in a finally{} block
-                // in reverse-order of their creation
-                // if they are no-longer needed
+
                 if (rs != null) {
                     try {
                         rs.close();
@@ -98,5 +92,4 @@ public class Courselist {
     public void setName(String course_id) {
         this.course_id = course_id;
     }
-
 }

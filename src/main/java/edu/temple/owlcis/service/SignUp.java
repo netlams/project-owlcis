@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 2/25/2016
+ * CIS4398 Projects Spring 2016 2/25/2016
  */
 package edu.temple.owlcis.service;
 
@@ -50,7 +48,7 @@ public class SignUp {
                         try {
                             Member newM = (Member) user;
                             sql = "INSERT INTO member (mem_id, is_curr_student, major, grad_date, degree_type) VALUES ("
-                                    + "(SELECT user_id FROM user WHERE email = ? ), ?, ?, ?, ?)"; 
+                                    + "(SELECT user_id FROM user WHERE email = ? ), ?, ?, ?, ?)";
                             stmt = conn.prepareStatement(sql);
                             // set the params one-by-one
                             stmt.setString(1, newM.getEmail());
@@ -88,7 +86,7 @@ public class SignUp {
                 // execute query
                 stmt.executeUpdate();
                 System.out.println("addNewUser type Query executed.");
-                
+
                 return "Added New User";
             } catch (SQLException ex) {
                 // handle any errors
@@ -124,7 +122,7 @@ public class SignUp {
         // failure
         return null;
     }
-    
+
     /**
      * Add new user to database
      *
@@ -158,7 +156,7 @@ public class SignUp {
                         try {
                             Member newM = (Member) user;
                             sql = "INSERT INTO member (mem_id, is_curr_student, major, grad_date, degree_type) VALUES ("
-                                    + "(SELECT user_id FROM user WHERE email = ? ), ?, ?, ?, ?)"; 
+                                    + "(SELECT user_id FROM user WHERE email = ? ), ?, ?, ?, ?)";
                             stmt = conn.prepareStatement(sql);
                             // set the params one-by-one
                             stmt.setString(1, newM.getEmail());
@@ -196,7 +194,7 @@ public class SignUp {
                 // execute query
                 stmt.executeUpdate();
                 System.out.println("addNewUser type Query executed.");
-                
+
                 return SignIn.findUser(conn, user);
             } catch (SQLException ex) {
                 // handle any errors

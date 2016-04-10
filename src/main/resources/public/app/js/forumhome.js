@@ -6,23 +6,23 @@
 
 
 
-(function() {
+(function () {
 
-    var forumhome = function($scope,$state,DBService) {
+    var forumhome = function ($scope, $state, DBService) {
 
-    	console.log("forum controller called.");
+        console.log("forum controller called.");
 
-    	DBService.getDemo().then(function(success) {
+        DBService.getDemo().then(function (success) {
 
-    		console.log("success in service")
+            console.log("success in service")
 
-    	}, function(error) {
+        }, function (error) {
 
-    	});
+        });
 
     };
 
-    forumhome.$inject = ['$scope','$state','DBService'];
+    forumhome.$inject = ['$scope', '$state', 'DBService'];
 
     angular.module('authApp').controller('forumhome', forumhome);
 

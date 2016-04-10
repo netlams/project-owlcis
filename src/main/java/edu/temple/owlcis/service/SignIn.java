@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 2/25/2016
+ * CIS4398 Projects Spring 2016 2/25/2016
  */
 package edu.temple.owlcis.service;
 
@@ -17,14 +15,14 @@ import java.sql.ResultSet;
  * @author Mounya, Dau
  */
 public class SignIn {
-    
+
     /**
-     * Find user role based on user information 
-     * 
+     * Find user role based on user information
+     *
      * @param conn
      * @param user
      * @return user role
-     * @throws SQLException 
+     * @throws SQLException
      */
     public static String findUserRole(Connection conn, User user) throws SQLException {
         String email = user.getEmail();
@@ -90,14 +88,14 @@ public class SignIn {
         // failure
         return null;
     }
-    
+
     /**
      * Find and return user row in database
-     * 
+     *
      * @param conn
      * @param user
      * @return User the found user row
-     * @throws SQLException 
+     * @throws SQLException
      */
     public static User findUser(Connection conn, User user) throws SQLException {
         String email = user.getEmail();
@@ -165,10 +163,10 @@ public class SignIn {
         // failure
         return null;
     }
-    
+
     /**
      * Check if email is from Temple
-     * 
+     *
      * @param email
      * @return true if Temple email; otherwise false
      */
