@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * the database. Finally, a method is included that allows users to generate a
  * flowchart from a previously built schedule.
  *
- * @author Rachel Tritsch
+ * @author Rachel Tritsch, Dau
  */
 public class ScheduleBuilder {
 
@@ -151,6 +151,22 @@ public class ScheduleBuilder {
         courseList.add("CIS 1068");
         courseList.add("MATH 1022");
         courseList.add("HIST 1001"); // irrelevant course
+        
+        // *** 04/09
+        HashMap<String, Schedule> studentScheduleMap = new HashMap<>();
+        ArrayList<Schedule> scheduleFromDB = new ArrayList<>();
+        scheduleFromDB.add(new Schedule("CIS 1001", "FA15"));
+        scheduleFromDB.add(new Schedule("CIS 2308", "SP16"));
+        scheduleFromDB.add(new Schedule("CIS 2107", "SP16"));
+        scheduleFromDB.add(new Schedule("CIS 1166", "FA15"));
+        scheduleFromDB.add(new Schedule("CIS 1068", "FA15"));
+        scheduleFromDB.add(new Schedule("MATH 1022", "FA15"));
+        scheduleFromDB.add(new Schedule("HIST 1001", "SP16"));
+        for (int i=0; i < scheduleFromDB.size(); i++) {
+            studentScheduleMap.put(scheduleFromDB.get(i).getCourseID(), 
+                    new Schedule(scheduleFromDB.get(i).getCourseID(), scheduleFromDB.get(i).getSemester()));
+        }
+        System.out.println("Map of student schedule: " + studentScheduleMap);
         // ******** ^done sample course list
 
         // ******** comparsion start
@@ -167,7 +183,7 @@ public class ScheduleBuilder {
                 .filter(c -> !matchedDegreeCourseList.contains(c))
                 .collect(Collectors.toCollection(LinkedList::new));
         //map of student schedule to be made into FLOWCHART!!
-        TreeMap<String, List<String>> flowchart = new TreeMap<>();
+        TreeMap<String, List<Schedule>> flowchart = new TreeMap<>();
         System.out.println("matched courses: " + matchedDegreeCourseList);
         System.out.println("remaining courses: " + remainingDegreeCourseList);
 
@@ -177,11 +193,11 @@ public class ScheduleBuilder {
         while (needPass || !matchedDegreeCourseList.isEmpty()) {
             List<String> newPass = matchedDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
-            List<String> allowedList = new LinkedList<>();
+            List<Schedule> allowedList = new LinkedList<>();
             for (String course : newPass) {
                 System.out.println("NICE BOY " + course + ", req: " + csbsDegree.get(course).toString());
                 if (csbsDegree.get(course).isEmpty()) {
-                    allowedList.add(course); //allowed to student schedule
+                    allowedList.add(studentScheduleMap.get(course)); //allowed to student schedule
                     completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
                     matchedDegreeCourseList.remove(course);//no longer needed to review this next pass, so take out
                 } else {
@@ -189,7 +205,7 @@ public class ScheduleBuilder {
                         if (completedList.containsKey(prereq)) { //does student's history meet prereq?
                             int takenSemester = completedList.get(prereq); // when did student took this? (for non-concurrent requirement)
                             if (takenSemester < semesterCnt) { //if taken at an older/earlier semester 
-                                allowedList.add(course);//meets the prerequirsite, so allowed to student schedule
+                                allowedList.add(studentScheduleMap.get(course));//meets the prerequirsite, so allowed to student schedule
                                 completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
                                 matchedDegreeCourseList.remove(course);//no longer needed to review this
                             }
@@ -198,7 +214,7 @@ public class ScheduleBuilder {
                 }
             }
             needPass = (newPass.size() == matchedDegreeCourseList.size()) ? false : true;
-            flowchart.put(semesterCnt.toString(), allowedList);
+//            flowchart.put(semesterCnt.toString(), allowedList);
             System.out.println("\n FINISHED PASS #" + semesterCnt + ", need pass? " + needPass);
             System.out.println("->" + allowedList);
             if (needPass) {
@@ -213,11 +229,11 @@ public class ScheduleBuilder {
         while (needPass || !remainingDegreeCourseList.isEmpty()) {
             List<String> newPass = remainingDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
-            List<String> allowedList = new LinkedList<>();
+            List<Schedule> allowedList = new LinkedList<>();
             for (String course : newPass) {
                 System.out.println("NICE BOY " + course + ", req: " + csbsDegree.get(course).toString());
                 if (csbsDegree.get(course).isEmpty()) {
-                    allowedList.add(course); //allowed to student schedule
+                    allowedList.add(new Schedule(course)); //allowed to student schedule
                     completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
                     remainingDegreeCourseList.remove(course);//no longer needed to review this next pass, so take out
                 } else if (csbsDegree.get(course).size() == 1) {
@@ -225,7 +241,7 @@ public class ScheduleBuilder {
                     if (completedList.containsKey(prereq)) { //does student's history meet prereq?
                         int takenSemester = completedList.get(prereq); // when did student took this? (for non-concurrent requirement)
                         if (takenSemester < semesterCnt) { //if taken at an older/earlier semester 
-                            allowedList.add(course);//meets the prerequirsite, so allowed to student schedule
+                            allowedList.add(new Schedule(course));//meets the prerequirsite, so allowed to student schedule
                             completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
                             remainingDegreeCourseList.remove(course);//no longer needed to review this
                         }
@@ -243,7 +259,7 @@ public class ScheduleBuilder {
                         }
                     }
                     if (flag) {
-                        allowedList.add(course);//meets the prerequirsite, so allowed to student schedule
+                        allowedList.add(new Schedule(course));//meets the prerequirsite, so allowed to student schedule
                         completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
                         remainingDegreeCourseList.remove(course);//no longer needed to review this
                     }

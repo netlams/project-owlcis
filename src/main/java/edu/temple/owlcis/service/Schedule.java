@@ -23,11 +23,30 @@ public class Schedule {
     protected String courseID; //ID of course taken this semester
     protected String courseTitle; //title of course taken this semester
     protected String semester; //semester in which course was taken
-
+    
+    /**
+     * the constructor for the Schedule object
+     */
+    public Schedule() {
+        courseID = "";
+        courseTitle = "";
+        semester = "";
+    }
+    
+    /**
+     * the constructor for the Schedule object
+     */
+    public Schedule(String cid) {
+        this();
+        courseID = cid;
+        semester = "";
+    }
+    
     /**
      * the constructor for the Schedule object
      */
     public Schedule(String cid, String sem) {
+        this();
         courseID = cid;
         semester = sem;
     }
@@ -36,6 +55,7 @@ public class Schedule {
      * the constructor for the Schedule object
      */
     public Schedule(String cid, String cn, String sem) {
+        this();
         courseID = cid;
         courseTitle = cn;
         semester = sem;
