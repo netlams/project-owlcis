@@ -69,6 +69,31 @@
                         });
                 //console.log($scope.update_like_response);
             };
+            
+             $scope.json_object_down = {};
+
+            $scope.myjson2 = {}
+            $scope.dislike = function (reviewid,thumbsdown_) {
+               // $scope.thumbsdown++;
+               thumbsdown_++;
+                $scope.json_object_down = {
+                    'reviewid': reviewid,
+                    'thumbsDown': thumbsdown_,
+                };
+
+            $scope.myjson2 = $scope.json_object_down;
+            console.log($scope.json_object_down);
+
+                $http.post('/api/incthumbsdown', $scope.json_object_down)
+                        .then(function (response) {
+                            $scope.update_dislike_response = response.data;
+                            console.log($scope.update_dislike_response);
+                        }, function (response) {
+                            console.log("Sending this to db thumbs down:",
+                                    $scope.thumbsdown, $scope.example2[0].reviewid);
+                        });
+                console.log($scope.update_dislike_response);
+            };
 
 
         }]);

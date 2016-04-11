@@ -18,10 +18,10 @@ public class ThumbRatings {
     //before the course review is removed from the db
 
     /* Constructor sets values to dummy values */
-    public ThumbRatings(int rid, int thumbsup) {
+    public ThumbRatings(int rid, int thumbsup, int thumbsdown) {
         this.reviewID = rid;
         this.thumbsUp = thumbsup;
-        this.thumbsDown = 0;
+        this.thumbsDown = thumbsdown;
     }
 
     public int getReviewID() {
@@ -150,11 +150,7 @@ public class ThumbRatings {
             try {
                sql = "UPDATE course_review SET thumbs_up = ? WHERE review_id = ? ";
               //  sql = "UPDATE course_review SET thumbs_up =  20 WHERE review_id = 58 ";
-                /* 
-                "UPDATE course_review SET thumbs_up = "+this.thumbsUp+"WHERE review_id = "+this.reviewID 
-
-                print sql afeter set Int 
-                */
+                
                 
                 stmt = conn.prepareStatement(sql);
 

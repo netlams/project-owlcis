@@ -82,7 +82,7 @@ public class Main implements SparkApplication {
 
 
             
-            ThumbRatings tr = new ThumbRatings(revid,up);
+            ThumbRatings tr = new ThumbRatings(revid,up,0);
 
           Database dbc = new Database();
 
@@ -107,7 +107,7 @@ public class Main implements SparkApplication {
             String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
             int revid = toInt32(rb); //integer form of review id
            
-            ThumbRatings tr = new ThumbRatings(revid,20);
+            ThumbRatings tr = new ThumbRatings(revid,0, 0);
 
             Database dbc = new Database();
 
