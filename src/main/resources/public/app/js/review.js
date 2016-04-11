@@ -48,20 +48,21 @@
             $scope.json_object = {};
 
             $scope.myjson = {}
-            $scope.like = function () {
-                $scope.thumbsup++;
+            $scope.like = function (reviewid,thumbsup_) {
+               // $scope.thumbsup++;
+               thumbsup_++;
                 $scope.json_object = {
-                    'reviewid': $scope.example2[0].reviewid,
-                    'thumbsUp': $scope.thumbsup,
+                    'reviewid': reviewid,
+                    'thumbsUp': thumbsup_,
                 };
 
-                $scope.myjson = $scope.json_object;
-//                console.log($scope.example2[0]);
-//                console.log($scope.json_object);
+            $scope.myjson = $scope.json_object;
+            console.log($scope.json_object);
 
                 $http.post('/api/incthumbsup', $scope.json_object)
                         .then(function (response) {
                             $scope.update_like_response = response.data;
+                            console.log($scope.update_like_response);
                         }, function (response) {
                             console.log("Sending this to db thumbs up:",
                                     $scope.thumbsup, $scope.example2[0].reviewid);

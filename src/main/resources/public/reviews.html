@@ -36,11 +36,12 @@
                         <div class="postinfobot">
                             <div class="likeblock pull-left">
                                 <a href="#" class="up">
-                                    <i class="fa fa-thumbs-o-up" ng-click="like()">
+                                    <i class="fa fa-thumbs-o-up" ng-click="like(x.reviewid,x.thumbsup)">
                                         DB: {{x.thumbsup}}
+                                         
                                     </i></a>
-
-                                {{myjson}}
+                                    {{json_object}}
+                               
 
                                 <a href="#" class="down"><i class="fa fa-thumbs-o-down">
 

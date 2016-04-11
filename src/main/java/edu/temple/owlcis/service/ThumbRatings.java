@@ -18,9 +18,9 @@ public class ThumbRatings {
     //before the course review is removed from the db
 
     /* Constructor sets values to dummy values */
-    public ThumbRatings(int rid) {
+    public ThumbRatings(int rid, int thumbsup) {
         this.reviewID = rid;
-        this.thumbsUp = 0;
+        this.thumbsUp = thumbsup;
         this.thumbsDown = 0;
     }
 
@@ -55,6 +55,7 @@ public class ThumbRatings {
 
                 //Set parameters
                 stmt.setInt(1, this.reviewID);
+                stmt.setInt(1, this.thumbsUp);
 
                 //Execute query
                 rs = stmt.executeQuery();
@@ -147,20 +148,28 @@ public class ThumbRatings {
 
         if (conn != null) {
             try {
-                sql = "UPDATE course_review "
-                        + "SET thumbs_up = ? "
-                        + "WHERE review_id = ? ";
+               sql = "UPDATE course_review SET thumbs_up = ? WHERE review_id = ? ";
+              //  sql = "UPDATE course_review SET thumbs_up =  20 WHERE review_id = 58 ";
+                /* 
+                "UPDATE course_review SET thumbs_up = "+this.thumbsUp+"WHERE review_id = "+this.reviewID 
 
+                print sql afeter set Int 
+                */
+                
                 stmt = conn.prepareStatement(sql);
 
                 //Set parameters
-                stmt.setInt(1, this.thumbsUp + 1);
+                stmt.setInt(1, this.thumbsUp);
                 stmt.setInt(2, this.reviewID);
 
                 //Execute query
                 stmt.execute();
+               System.out.println("Sql "+"UPDATE course_review SET thumbs_up = "+this.thumbsUp+" WHERE review_id = "+this.reviewID );
+                System.out.println("Thumbs up"+ this.thumbsUp);
+                 System.out.println("Review IDi"+ this.reviewID);
+                 
                 System.out.println("IncThumbsUp query executed.");
-                this.thumbsUp++;
+                //this.thumbsUp++;
                 return true;
 
             } catch (SQLException ex) {

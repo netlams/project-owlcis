@@ -72,11 +72,19 @@ public class Main implements SparkApplication {
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
             String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
             int revid = toInt32(rb); //integer form of review id
-            System.out.println(rb);
-            System.out.println(revid);
-            ThumbRatings tr = new ThumbRatings(revid);
+            //System.out.println(rb);
+           // System.out.println(rb.length());
+            int mylenth = rb.length();
+           int up = toInt32(rb.substring(mylenth-1));
+            //int reviewid = toInt32(rb.substring(0,mylenth-1));
+            //System.out.println("UP :"+up);
+            //System.out.println("RV :"+reviewid);
 
-            Database dbc = new Database();
+
+            
+            ThumbRatings tr = new ThumbRatings(revid,up);
+
+          Database dbc = new Database();
 
             if (dbc.getError().length() == 0) {
                 try {
@@ -98,7 +106,8 @@ public class Main implements SparkApplication {
         post(API_LOC + "/incthumbsdown", (request, response) -> {
             String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
             int revid = toInt32(rb); //integer form of review id
-            ThumbRatings tr = new ThumbRatings(revid);
+           
+            ThumbRatings tr = new ThumbRatings(revid,20);
 
             Database dbc = new Database();
 
