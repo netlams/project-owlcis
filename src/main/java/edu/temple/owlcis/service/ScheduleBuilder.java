@@ -57,7 +57,7 @@ public class ScheduleBuilder {
      * @return true if the course was successfully added to the schedule; false
      * if it was not added
      */
-    private boolean addCourse(String courseID) {
+    public boolean addCourse(String courseID) {
         return true;
     }
 
@@ -70,7 +70,7 @@ public class ScheduleBuilder {
      * @return true if the course was successfully deleted from the schedule;
      * false if it was not deleted
      */
-    private boolean deleteCourse(String courseID) {
+    public boolean deleteCourse(String courseID) {
         return true;
     }
 
@@ -81,7 +81,7 @@ public class ScheduleBuilder {
      * @return true if schedule was successfully inserted into database; false
      * if schedule was not inserted
      */
-    private boolean insertIntoDB() {
+    public boolean insertIntoDB() {
         //NOTE: the creation date and time will be determined here
         return true;
     }
@@ -95,7 +95,7 @@ public class ScheduleBuilder {
      * @return true if schedule was successfully removed from database; false if
      * schedule was not removed
      */
-    private boolean removeFromDB() {
+    public boolean removeFromDB() {
         return true;
     }
 
@@ -104,25 +104,20 @@ public class ScheduleBuilder {
      * Post-conditions: a flowchart is generated and displayed on the webpage
      * for the user
      *
-     * @return true if flowchart was successfully generated; false if flowchart
+     * @return Map if flowchart was successfully generated; false if flowchart
      * was not generated
      */
-    private boolean generateFlowchart() {
-        return true;
-    }
-
-    public Map getSchedule() {
+    public List generateFlowchart() {
         /**
          * DUMMY TEST
          */
         // ********* csbsDegree requirements
-        Map<String, List<String>> csbsDegree = new TreeMap<>();
+        Map<String, List<String>> csbsDegree = new HashMap<>();
         //set up
         //prereq
         List<String> math1022 = new ArrayList<>();
         math1022.add("MATH 1022");
         //map set up (REQUIREMENTS)
-        csbsDegree.put("CIS 1001", Collections.emptyList());
         csbsDegree.put("CIS 1068", math1022);
         csbsDegree.put("CIS 1166", math1022);
         csbsDegree.put("CIS 2033", Arrays.asList("CIS 1068", "MATH 1041"));
@@ -137,6 +132,8 @@ public class ScheduleBuilder {
         csbsDegree.put("MATH 1022", Collections.emptyList());
         csbsDegree.put("MATH 1041", math1022);
         csbsDegree.put("MATH 1042", Arrays.asList("MATH 1041"));
+        csbsDegree.put("CIS 1001", Collections.emptyList());
+
         System.out.println("degree: " + csbsDegree);
         // ******** ^done for csbsDegree req
 
@@ -151,8 +148,8 @@ public class ScheduleBuilder {
         courseList.add("CIS 1068");
         courseList.add("MATH 1022");
         courseList.add("HIST 1001"); // irrelevant course
-        
-        // *** 04/09
+
+        // *** 04/09 - A real student schedule costs of schedules (cid and semstr)
         HashMap<String, Schedule> studentScheduleMap = new HashMap<>();
         ArrayList<Schedule> scheduleFromDB = new ArrayList<>();
         scheduleFromDB.add(new Schedule("CIS 1001", "FA15"));
@@ -162,8 +159,8 @@ public class ScheduleBuilder {
         scheduleFromDB.add(new Schedule("CIS 1068", "FA15"));
         scheduleFromDB.add(new Schedule("MATH 1022", "FA15"));
         scheduleFromDB.add(new Schedule("HIST 1001", "SP16"));
-        for (int i=0; i < scheduleFromDB.size(); i++) {
-            studentScheduleMap.put(scheduleFromDB.get(i).getCourseID(), 
+        for (int i = 0; i < scheduleFromDB.size(); i++) {
+            studentScheduleMap.put(scheduleFromDB.get(i).getCourseID(),
                     new Schedule(scheduleFromDB.get(i).getCourseID(), scheduleFromDB.get(i).getSemester()));
         }
         System.out.println("Map of student schedule: " + studentScheduleMap);
@@ -188,14 +185,13 @@ public class ScheduleBuilder {
         System.out.println("remaining courses: " + remainingDegreeCourseList);
 
         Integer semesterCnt = 1;
-        boolean needPass = true;
-//        for (int x = 0; x <= matchedDegreeCourseList.size(); x++) { // loop this based on the number courses in matched list
-        while (needPass || !matchedDegreeCourseList.isEmpty()) {
+        boolean needPass = true; // controls the number of pass (if !needPass, then cancel while loop)
+        while (needPass || !matchedDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
             List<String> newPass = matchedDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
             List<Schedule> allowedList = new LinkedList<>();
             for (String course : newPass) {
-                System.out.println("NICE BOY " + course + ", req: " + csbsDegree.get(course).toString());
+                System.out.println("Comparing " + course + ", req: " + csbsDegree.get(course).toString());
                 if (csbsDegree.get(course).isEmpty()) {
                     allowedList.add(studentScheduleMap.get(course)); //allowed to student schedule
                     completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
@@ -225,8 +221,7 @@ public class ScheduleBuilder {
 
         needPass = true;
         // remaining req
-//        for (int x = 0; x <= remainingDegreeCourseList.size()+1; x++) { // loop this based on the number courses in matched list
-        while (needPass || !remainingDegreeCourseList.isEmpty()) {
+        while (needPass || !remainingDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
             List<String> newPass = remainingDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
             List<Schedule> allowedList = new LinkedList<>();
@@ -279,7 +274,9 @@ public class ScheduleBuilder {
         System.out.println("remainders: " + matchedDegreeCourseList);
         // ******** ^comparsion end
 
-        return flowchart;
+        List<List> returnList = new LinkedList<List>(flowchart.values());
+
+        return returnList;
 
         /**
          * ^ DUMMY TEST
@@ -313,6 +310,11 @@ public class ScheduleBuilder {
 //        flow.setHeader(list);
 ////        flow.setSemesterList(tree);
 //        return flow;
+    }
+
+    public List getSchedule() {
+
+        return null;
     }
 
 }
