@@ -8,7 +8,9 @@
 }
 
 /* Angular animation */
-#profile-completed-course .ng-hide-remove      { animation:0.5s fadeInUp ease; }
+#profile-completed-course .ng-hide-remove { animation:0.8s fadeInUp ease; }
+.animate-courselist-if.ng-leave { animation:0.5s bounceOut ease; }
+.animate-courselist-if.ng-enter { animation:0.5s zoomIn ease; }
 
 /* Loading animation */
 #cssload-loader {
@@ -182,6 +184,18 @@ label.star:before {
 
 .form-inline .form-group select {
     width: 200px;
+}
+
+.course-labels {
+    overflow-x: auto;
+    margin-bottom: 0.5em;
+}
+
+.course-label {
+    margin-right: 0.1em;
+    margin-left: 0.1em;
+    font-size: 12px;
+    background-color: #1abc9c;
 }
 
 footer {

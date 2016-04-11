@@ -17,6 +17,10 @@ var initClient = function () {
     });
 };
 
+$(function () {
+  $('#google-signin-btn').tooltip()
+})
+
 /* Start Google Auth */
 //initClient();
 

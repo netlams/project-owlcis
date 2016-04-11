@@ -68,6 +68,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
+
         /* Increment Thumbs-up Count */
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
             String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
@@ -101,7 +102,6 @@ public class Main implements SparkApplication {
             ThumbRatings tr = new ThumbRatings(revid);
 
             Database dbc = new Database();
-
             if (dbc.getError().length() == 0) {
                 try {
                     if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
@@ -117,19 +117,76 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        /* Update Profile Route */
-        post(API_LOC + "/updateprofile", (request, response) -> {
-            Gson gson = new Gson();
-            Profile testProfile = gson.fromJson(request.body(), Profile.class);
-            Database dbc = new Database();
-            if (dbc.getError().length() == 0) {
-                try {
-                    if (testProfile.updateProfile(dbc.getConn())) {
-                        response.status(201);
-                        return "HTTP 201 - CREATED";
+
+        /**
+         * Get Member Profile Route
+         */
+        get(API_LOC + "/profile", (request, response) -> {
+            // get session
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                // setting up member to fetch
+                Member member = new Member();
+                member.setId(user.getId());
+                Profile profile = new Profile(member);
+                Database dbc = new Database();
+                // Database connection OK
+                if (dbc.getError().length() == 0) {
+                    try {
+                        if (profile.fetchProfile(dbc.getConn())) {
+                            // found member
+                            response.status(200);
+                            response.type("application/json");
+                            return new Gson().toJson(profile.getMember());
+                        } else {
+                            // not valid member
+                            response.status(400);
+                            return "HTTP 400 - Bad Request";
+                        }
+                    } catch (Exception ex) {
+                        response.status(500);
+                        System.out.println("Error: " + ex.getMessage());
+                        return "HTTP 500 - Internal Server Error";
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
                     }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(401);
+            return "HTTP 401 - Unauthorized";
+        });
+
+        /* Update Profile Route */
+        post(API_LOC + "/profile", (request, response) -> {
+            // get session
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                // get post data
+                Gson gson = new Gson();
+                Member member = gson.fromJson(request.body(), Member.class);
+                member.setId(user.getId());
+                Profile testProfile = new Profile(member);
+                Database dbc = new Database();
+                // Database connection OK
+                if (dbc.getError().length() == 0) {
+                    try {
+                        if (testProfile.updateProfile(dbc.getConn())) {
+                            response.status(200);
+                            return "HTTP 200 - OK";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    }
                 }
             }
             response.status(500);
@@ -137,22 +194,29 @@ public class Main implements SparkApplication {
         });
 
         /* Get Profile Taken Courses Route */
-        get(API_LOC + "/profilecourse", (request, response) -> {
+        get(API_LOC + "/profile/courses", (request, response) -> {
             User user = request.session().attribute("USER");
-            Member member = new Member(user);
-            Profile profile = new Profile(member);
-            Database dbc = new Database();
-            if (dbc.getError().length() == 0) {
-                try {
-                    if (profile.fetchTakenCourses(dbc.getConn())) {
-                        Gson gson = new Gson();
-                        return gson.toJson(profile.getTakenCourses());
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                } finally {
-                    if (!dbc.getConn().isClosed()) {
-                        dbc.closeConn();
+            // check if there's a logged-in session
+            if (user != null) {
+                Member member = new Member(user);
+                Profile profile = new Profile(member);
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        if (profile.fetchTakenCourses(dbc.getConn())) {
+                            response.status(200);
+                            response.type("application/json");
+                            return new Gson().toJson(profile.getTakenCourses());
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
                     }
                 }
             }
@@ -161,28 +225,34 @@ public class Main implements SparkApplication {
         });
 
         /* Add Taken Courses Route */
-        post(API_LOC + "/addtakencourses", (request, response) -> {
-            //User user = request.session().attribute("USER");
-            //Member member = new Member(user);
-            Member member = new Member();
-            member.setId(45);
-            Profile profile = new Profile(member);
-            Database dbc = new Database();
-            if (dbc.getError().length() == 0) {
-                try {
-                    Gson gson = new Gson();
-                    Schedule schedule = gson.fromJson(request.body(), Schedule.class);
-                    System.out.println(schedule.toString());
-                    if (profile.fetchTakenCourses(dbc.getConn()) //load taken courses from db into linked list
-                            && profile.addTakenCourse(schedule, dbc.getConn())) { //attempt to add new taken course
-                        response.status(201);
-                        return "HTTP 201 - CREATED";
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                } finally {
-                    if (!dbc.getConn().isClosed()) {
-                        dbc.closeConn();
+        post(API_LOC + "/profile/add", (request, response) -> {
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                Member member = new Member(user);
+                Profile profile = new Profile(member);
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        if (profile.fetchTakenCourses(dbc.getConn()) //load taken courses from db into linked list
+                                && profile.addTakenCourse(schedule, dbc.getConn())) { //attempt to add new taken course
+                            response.status(201);
+                            return "HTTP 201 - CREATED";
+                        } else {
+                            response.status(400);
+                            return "HTTP 400 - BAD REQUEST";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
                     }
                 }
             }
@@ -191,27 +261,31 @@ public class Main implements SparkApplication {
         });
 
         /* Delete Taken Courses Route */
-        post(API_LOC + "/deletetakencourses", (request, response) -> {
-            //User user = request.session().attribute("USER");
-            //Member member = new Member(user);
-            Member member = new Member();
-            member.setId(45);
-            Profile profile = new Profile(member);
-            Database dbc = new Database();
-            if (dbc.getError().length() == 0) {
-                try {
-                    Gson gson = new Gson();
-                    Schedule schedule = gson.fromJson(request.body(), Schedule.class);
-                    System.out.println(schedule.toString());
-                    if (profile.removeTakenCourse(schedule, dbc.getConn())) {
-                        response.status(201);
-                        return "HTTP 201 - CREATED";
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                } finally {
-                    if (!dbc.getConn().isClosed()) {
-                        dbc.closeConn();
+        post(API_LOC + "/profile/delete", (request, response) -> {
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                Member member = new Member(user);
+                Profile profile = new Profile(member);
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        System.out.println(schedule.toString());
+                        if (profile.removeTakenCourse(schedule, dbc.getConn())) {
+                            response.status(200);
+                            return "HTTP 200 - OK";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
                     }
                 }
             }
@@ -461,6 +535,15 @@ public class Main implements SparkApplication {
             return gson.toJson(list);
         });
 
+        /**
+         * for flowchart
+         */
+        get(API_LOC + "/testflow", (request, response) -> {
+            ScheduleBuilder model = new ScheduleBuilder();
+            response.type("application/json");
+            return new Gson().toJson(model.generateFlowchart());
+        });
+
         /*
          * ViewCourseReviews GET Route
          */
@@ -477,6 +560,7 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
+
         /*
          * CourseCount GET Route
          */
@@ -497,5 +581,4 @@ public class Main implements SparkApplication {
             }
         });
     }
-
 }
