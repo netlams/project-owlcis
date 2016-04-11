@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>MAP MY CLASSES</title>
+        <style>
+            body {
+                font-family: Verdana, Helvetica, Arial, sans-serif;
+            }
+            .header-col text {
+                fill-opacity: 1;
+                font: 300 16px Verdana, Helvetica, Arial, sans-serif;
+                fill: black;
+            }
+            .course text {
+                fill: white;
+                font-size: 12px;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <script>
+
+            // ************** Generate the flowchart diagram  *****************
+            var margin = {top: 20, right: 100, bottom: 20, left: 100},
+            width = (window.innerWidth || document.body.clientWidth) - margin.right - margin.left,
+                    height = (window.innerHeight || document.body.clientHeight) - margin.top - margin.bottom;
+            var purpColor = '#993366',
+                    lightGrayColor = '#B7C8E2',
+                    yellowColor = '#FFA928',
+                    redColor = '#993300',
+                    blueColor = '#336699';
+            if (height > 800)
+                height = 800;
+//            var i = 0;
+
+//            var tree = d3.layout.tree()
+//                    .size([height, width]);
+//
+//            var diagonal = d3.svg.diagonal()
+//                    .projection(function (d) {
+//                        return [d.y, d.x];
+//                    });
+
+            /* svg set up */
+            var svg = d3.select("body").append("svg")
+                    .attr("width", width + margin.right + margin.left)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr('id', 'flowchart')
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            function renderHeader(data) {
+                /* header position set up */
+                var headerDimen = {w: 100, h: 50},
+                headerXApart = 110,
+                        headerTextXApart = headerDimen.w / 2,
+                        headerTextYApart = headerDimen.h / 2 + 5,
+                        courseYApart = 80;
+                var fallCnt = 1, springCnt = 1;
+
+                /* data position and header prep */
+                data.forEach(function (d, i) {
+                    d.i = i + 1;
+                    d.title = ((i % 2) == 0) ? "Fall " + romanize(fallCnt++) : "Spring " + romanize(springCnt++); // Fall or Spring
+                    d.x = i * headerXApart; // padding between each semester header
+
+                    var semester = svg.append('g').attr('id', '#semester' + d.i).selectAll('semester' + d.i).data(d);
+                    semester.attr('transform', "translate(" + margin.left + "," + margin.top + ")");
+                    // enter data            
+                    semester.enter().append('g').attr('class', 'course');
+                    // draw course box
+                    semester.append('rect')
+                            .attr('x', function (da) {
+                                return d.x;
+                            })
+                            .attr('y', function (da, ia) {
+                                return (ia + 1) * courseYApart;
+                            })
+                            .attr('width', headerDimen.w)
+                            .attr('height', headerDimen.h)
+                            .attr('fill', function (da) {
+                                var math = new RegExp("MATH");
+                                var cis = new RegExp("CIS");
+                                var eng = new RegExp("ENG");
+                                if (cis.test(da.courseID.toUpperCase()))
+                                    return purpColor;
+                                else if (math.test(da.courseID.toUpperCase()))
+                                    return yellowColor;
+                                else if (eng.test(da.courseID.toUpperCase()))
+                                    return redColor;
+                                else
+                                    return blueColor;
+                            });
+                    // draw header titles
+                    semester.append('text')
+                            .attr('x', function (da) {
+                                return d.x + headerTextXApart;
+                            })
+                            .attr('y', function (da, ia) {
+                                return ((ia + 1) * courseYApart) + headerTextYApart;
+                            })
+                            .attr('text-anchor', "middle")
+                            .text(function (da) {
+                                return da.courseID;
+                            })
+                            .append('tspan')
+                            .attr('x', function (da) {
+                                return d.x + headerTextXApart;
+                            })
+                            .attr('dy', '15')
+                            .text(function (da) {
+                                console.log(da);
+                                if (da.semester.length > 1)
+                                    return da.semester;
+                                else
+                                    return "";
+                            })
+                            .style('fill', '#EEE');
+
+                });
+
+                /* bind data */
+                var header = svg.selectAll('.header-col').data(data);
+
+                /* enter data */
+                header.attr('transform', "translate(" + margin.left + "," + margin.top + ")")
+                        .enter().append('g').attr('class', 'header-col');
+                // draw header boxes
+                header.append('rect')
+                        .attr('x', function (d) {
+                            return d.x;
+                        })
+                        .attr('y', 0)
+                        .attr('width', headerDimen.w)
+                        .attr('height', headerDimen.h)
+                        .attr('fill', lightGrayColor);
+                // draw header titles
+                header.append('text')
+                        .attr('x', function (d) {
+                            return d.x + headerTextXApart
+                        })
+                        .attr('y', function (d) {
+                            return headerTextYApart;
+                        })
+                        .attr('text-anchor', "middle")
+                        .text(function (d) {
+                            return d.title;
+                        });
+                // draw divider lines
+                header.append('line')
+                        .attr('x1', function (d) {
+                            return d.x;
+                        })
+                        .attr('y1', 0)
+                        .attr('x2', function (d) {
+                            return d.x;
+                        })
+                        .attr('y2', height)
+                        .style({stroke: "#B7C8E2", "stroke-width": "1px"});
+            }
+
+            function update(source) {
+
+                // Compute the new tree layout.
+                var nodes = tree.nodes(root).reverse(),
+                        links = tree.links(nodes);
+
+                // Normalize for fixed-depth.
+                nodes.forEach(function (d) {
+                    d.y = d.depth * 180;
+                });
+
+                // Declare the nodesâ€¦
+                var node = svg.selectAll("g.node")
+                        .data(nodes, function (d) {
+                            return d.id || (d.id = ++i);
+                        });
+
+                // Enter the nodes.
+                var nodeEnter = node.enter().append("g")
+                        .attr("class", "node")
+                        .attr("transform", function (d) {
+                            return "translate(" + d.y + "," + d.x + ")";
+                        });
+
+                nodeEnter.append("circle")
+                        .attr("r", 10)
+                        .style("fill", "#fff");
+
+                nodeEnter.append("text")
+                        .attr("x", function (d) {
+                            return d.children || d._children ? -13 : 13;
+                        })
+                        .attr("dy", ".35em")
+                        .attr("text-anchor", function (d) {
+                            return d.children || d._children ? "end" : "start";
+                        })
+                        .text(function (d) {
+                            return d.name;
+                        })
+                        .style("fill-opacity", 1);
+            }
+
+            function romanize(num) {
+                if (!+num)
+                    return NaN;
+                var digits = String(+num).split(""),
+                        key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
+                            "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
+                            "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
+                        roman = "",
+                        i = 3;
+                while (i--)
+                    roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+                return Array(+digits.join("") + 1).join("M") + roman;
+            }
+
+
+            d3.json('/api/testflow', function (error, treeData) {
+                //        console.log(treeData.semesterList[0]);
+
+                //        root = treeData.semesterList[0];
+
+                //        update(root);
+                renderHeader(treeData);
+            });
+        </script>
+    </body>
+</html>
