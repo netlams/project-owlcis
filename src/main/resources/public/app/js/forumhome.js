@@ -5,24 +5,36 @@
  */
 
 
+(function () {
 
-(function() {
 
-    var forumhome = function($scope,$state,DBService) {
+    var forumhome = function ($scope, $state, DBService, $http, $window) {
 
-    	console.log("forum controller called.");
+        $scope.forum_s;
+        $http.get('/api/fs').then(function (value) {
+            $scope.forum = value.data;
+        });
 
-    	DBService.getDemo().then(function(success) {
+        $http.get('/api/forum').then(function (value) {
+            $scope.forumQues = value.data;
+        });
 
-    		console.log("success in service")
+        $scope.forumsearch = function () {
+            $http.post('/api/fs', $scope.forum_s.search)
+                    .then(function (response) {
+                        //window.alert("hello");
+                        //console.log(response.data);
+                        //console.log($scope.forum_s.search);
+                        $scope.forum = response.data;
+                    }, function (response) {
+                        console.log("Sending this  " + $scope.forum_s.search);
+                    });
 
-    	}, function(error) {
-
-    	});
+        };
 
     };
 
-    forumhome.$inject = ['$scope','$state','DBService'];
+    forumhome.$inject = ['$scope', '$state', 'DBService', '$http', '$window'];
 
     angular.module('authApp').controller('forumhome', forumhome);
 

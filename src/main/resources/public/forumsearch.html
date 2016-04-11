@@ -18,9 +18,10 @@ and open the template in the editor.
                         
                         <div class="col-lg-4 search hidden-xs hidden-sm col-md-3">
                             <div class="wrap">
-                                <form action="#" method="post" class="form">
+                                <!-- action="#" method="post" -->
+                                <form  class="form" data-ng-submit="Formprocess()">
                                     <div class="pull-left txt">
-                                        <input type="text" class="form-control" placeholder="Search Topics"></div>
+                                        <input type="text" class="form-control" name="s" id="s" data-ng-model ="Dataform.s" placeholder="Search Topics"></div>
                                     <div class="pull-right">
                                         <button class="btn btn-default" type="button">
                                             <i class="fa fa-search"></i></button></div>
@@ -30,7 +31,7 @@ and open the template in the editor.
                         </div>
                         <div class="col-lg-4 col-xs-12 col-sm-5 col-md-4 avt">
                             <div class="stnt pull-left">                            
-                                <form action="forumpost.html" method="post" class="form">
+                                <form action="index.html#/post" method="post" class="form">
                                     <button class="btn btn-primary">Start New Topic</button>
                                 </form>
                             </div>
@@ -61,7 +62,7 @@ and open the template in the editor.
                         <div class="col-lg-8 col-md-8">
 
                             <!-- POST -->
-                            <div class="post beforepagination">
+                            <div class="post beforepagination" >
                                 <div class="topwrap">
                                     <div class="userinfo pull-left">
                                         <div class="avatar">
@@ -71,6 +72,7 @@ and open the template in the editor.
 
                                        
                                     </div>
+                                    <!-- display data -->
                                     <div class="posttext pull-left">
                                         <h2>Questions???</h2>
                                         <p>Answers::::::::;; </p>

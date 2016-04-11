@@ -6,21 +6,21 @@
 
 (function() {
 
-    var forumsearch = function($scope,$state,DBService) {
+    var forumsearch = function($scope,$state,DBService,$http,$window) {
 
     	console.log("forum search called.");
 
-    	DBService.getDemo().then(function(success) {
+    	DBService.getDemo().then(function(response) {
 
     		console.log("success in service")
-
+           
     	}, function(error) {
 
     	});
 
     };
 
-    forumsearch.$inject = ['$scope','$state','DBService'];
+    forumsearch.$inject = ['$scope','$state','DBService','$http','$window'];
 
     angular.module('authApp').controller('forumsearch', forumsearch);
 
