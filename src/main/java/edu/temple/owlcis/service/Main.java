@@ -414,6 +414,7 @@ public class Main implements SparkApplication {
             try {
                 ViewReviews rev = new ViewReviews();
                 List list = rev.getAllReviews();
+                //List list = Forum_search.getAllForum_search();
                 response.type("application/json");
                 response.status(200);
 
@@ -422,6 +423,71 @@ public class Main implements SparkApplication {
                 response.status(500);
                 return "Error " + ex.getMessage();
             }
+        });
+
+        /*
+         * Forum_search GET Route
+         */
+        get(API_LOC + "/fs", (request, response) -> {
+            try {
+                Forum_search forum = new Forum_search();
+                List list = forum.getAllForum_search();
+                response.type("application/json");
+                response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
+
+        /*
+         * Forum_search GET Route
+         */
+        get(API_LOC + "/forum", (request, response) -> {
+            try {
+                User user = request.session().attribute("USER");
+                Forum_search f = new Forum_search();
+                List list = f.getAllForum_searchid(user.getId());
+                response.type("application/json");
+                response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
+
+        /**
+         * Forum_post Route
+         */
+        post(API_LOC + "/fv", (request, response) -> {
+
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            User user = request.session().attribute("USER");
+            Forum_post post = new Forum_post();
+            post.setUserId(user.getId());
+            post.setUserEnteredQues(request.body());
+           // post.setUserId();
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+
+                    if (post.insertAllForum_post(dbc.getConn())) {
+                        //response.status(200);
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
         /**
@@ -496,6 +562,23 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
+
+        /**
+         * post forum Route
+         */
+        post(API_LOC + "/fs", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting" + request.body());
+            Forum_search s = new Forum_search();
+            s.setUserEnteredQues(request.body());
+            //setSelectedCourse(request.body());
+            List list = s.getAllForum_search();
+            response.status(200);
+            System.out.println(gson.toJson(list));
+            return gson.toJson(list);
+        });
+
     }
 
 }

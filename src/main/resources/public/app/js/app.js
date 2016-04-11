@@ -53,4 +53,3 @@ authApp.config(function ($stateProvider, $urlRouterProvider) {
         controller: 'review'
     });
 });
-
