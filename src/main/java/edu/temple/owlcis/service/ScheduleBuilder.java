@@ -200,7 +200,7 @@ public class ScheduleBuilder {
                     for (String prereq : csbsDegree.get(course)) { // get the prerequisites for this course
                         if (completedList.containsKey(prereq)) { //does student's history meet prereq?
                             int takenSemester = completedList.get(prereq); // when did student took this? (for non-concurrent requirement)
-                            if (takenSemester < semesterCnt) { //if taken at an older/earlier semester 
+                            if (takenSemester < semesterCnt) { //if taken at an older/earlier semester
                                 allowedList.add(studentScheduleMap.get(course));//meets the prerequirsite, so allowed to student schedule
                                 completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
                                 matchedDegreeCourseList.remove(course);//no longer needed to review this
@@ -235,7 +235,7 @@ public class ScheduleBuilder {
                     String prereq = csbsDegree.get(course).get(0);  // get the prerequisites for this course
                     if (completedList.containsKey(prereq)) { //does student's history meet prereq?
                         int takenSemester = completedList.get(prereq); // when did student took this? (for non-concurrent requirement)
-                        if (takenSemester < semesterCnt) { //if taken at an older/earlier semester 
+                        if (takenSemester < semesterCnt) { //if taken at an older/earlier semester
                             allowedList.add(new Schedule(course));//meets the prerequirsite, so allowed to student schedule
                             completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
                             remainingDegreeCourseList.remove(course);//no longer needed to review this

@@ -4,23 +4,23 @@
  * and open the template in the editor.
  */
 
-(function() {
+(function () {
 
-    var forumsearch = function($scope,$state,DBService) {
+    var forumsearch = function ($scope, $state, DBService) {
 
-    	console.log("forum search called.");
+        console.log("forum search called.");
 
-    	DBService.getDemo().then(function(success) {
+        DBService.getDemo().then(function (success) {
 
-    		console.log("success in service")
+            console.log("success in service")
 
-    	}, function(error) {
+        }, function (error) {
 
-    	});
+        });
 
     };
 
-    forumsearch.$inject = ['$scope','$state','DBService'];
+    forumsearch.$inject = ['$scope', '$state', 'DBService'];
 
     angular.module('authApp').controller('forumsearch', forumsearch);
 

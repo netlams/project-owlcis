@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects 
- * Spring 2016 
- * 2/25/2016
+ * CIS4398 Projects Spring 2016 2/25/2016
  */
 package edu.temple.owlcis.service;
 

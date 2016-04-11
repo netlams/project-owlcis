@@ -137,7 +137,6 @@
                                     $scope.delTabFormData.err = null;
                                     $scope.delTabFormData.succ = "Successfully deleted from your history";
                                     completed = true;
-                                    console.log("c in post: " + i + " " + completed);
                                 }
                             }, function (response) {
                                 $scope.delTabFormData.succ = null;
@@ -148,19 +147,19 @@
                 }
 
                 var timer = setInterval(function () {
-                    console.log("c: " + completed);
                     if (completed) {
+                        $scope.courses = [];
                         $scope.fetchProfileCourse();
                         $scope.resetDelete();
                         clearInterval(timer);
-                    } 
+                    }
                 }, 2000);
                 // give about 3 seconds to finish delete req
             };
             // temporary add courses to list, before submitting request
             $scope.addToDeleteList = function (c, s) {
                 $scope.deleteCourseList.push({courseID: c, semester: s});
-                $scope.deleteListCheckMap.set(c, true)
+                $scope.deleteListCheckMap.set(c, s)
             };
             // reset delete list
             $scope.resetDelete = function () {

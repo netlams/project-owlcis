@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 3/17/2016
+ * CIS4398 Projects Spring 2016 3/17/2016
  */
 package edu.temple.owlcis.service;
 
@@ -49,8 +47,8 @@ public class SignInAndSignUpTest {
 
     /**
      * Case 1 - isValidTempleEmailAddress should return true for Temple emails.
-     * Input: Valid Temple email in the form “tua12345@temple.edu”
-     * Expected Results: true
+     * Input: Valid Temple email in the form “tua12345@temple.edu” Expected
+     * Results: true
      */
     @Test
     public void shouldReturnTrueForTempleEmails() {
@@ -59,9 +57,9 @@ public class SignInAndSignUpTest {
     }
 
     /**
-     * Case 2 - isValidTempleEmailAddress should return false for non-Temple emails.
-     * Input: Valid email in the form “newton@gmail.com”
-     * Expected Results: false
+     * Case 2 - isValidTempleEmailAddress should return false for non-Temple
+     * emails. Input: Valid email in the form “newton@gmail.com” Expected
+     * Results: false
      */
     @Test
     public void shouldReturnFalseForTempleEmails() {
@@ -71,8 +69,8 @@ public class SignInAndSignUpTest {
 
     /**
      * Case 3 - findUserRole should return a role name for existing users.
-     * Input: Existing user in the user table
-     * Expected Results: a string either “member”, “advisor”, or “moderator”
+     * Input: Existing user in the user table Expected Results: a string either
+     * “member”, “advisor”, or “moderator”
      */
     @Test
     public void shouldReturnRoleNameForExistingUsers() {
@@ -104,8 +102,7 @@ public class SignInAndSignUpTest {
 
     /**
      * Case 4 - findUserRole should return null for non-existing or new users.
-     * Input: Non-existing user in the user table
-     * Expected Results: Return null
+     * Input: Non-existing user in the user table Expected Results: Return null
      */
     @Test
     public void shouldReturnNullForBadUsers() {
@@ -131,9 +128,9 @@ public class SignInAndSignUpTest {
     }
 
     /**
-     * Case 5 - addNewUser should not accept invalid user role types.
-     * Input: User object with role property set to “user”
-     * Expected Results: IllegalArgumentException
+     * Case 5 - addNewUser should not accept invalid user role types. Input:
+     * User object with role property set to “user” Expected Results:
+     * IllegalArgumentException
      */
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotAcceptInvalidRoleTypes() throws IllegalArgumentException, SQLException {
@@ -145,9 +142,8 @@ public class SignInAndSignUpTest {
     }
 
     /**
-     * Case 6 - addNewUser should not accept User with first name, last name, role, or
-     * email set as null.
-     * Input: User object with email set as null
+     * Case 6 - addNewUser should not accept User with first name, last name,
+     * role, or email set as null. Input: User object with email set as null
      * Expected Results: Exception
      */
     @Test(expected = Exception.class)
@@ -160,11 +156,10 @@ public class SignInAndSignUpTest {
 
         String resp = SignUp.addNewUser(dbc.getConn(), user);
     }
-    
+
     /**
-     * Case 7 -	New Database object should have open connection.
-     * Input: New Database object
-     * Expected Result: Connection is open
+     * Case 7 -	New Database object should have open connection. Input: New
+     * Database object Expected Result: Connection is open
      */
     @Test
     public void shouldReturnNewOpenConnection() throws SQLException {
@@ -174,9 +169,8 @@ public class SignInAndSignUpTest {
     }
 
     /**
-     * Case 8 -	getConn should always return open connection.
-     * Input: Database object with closed connection
-     * Expected Result: Connect is open
+     * Case 8 -	getConn should always return open connection. Input: Database
+     * object with closed connection Expected Result: Connect is open
      */
     @Test
     public void shouldReturnOpenConnectionAlways() throws SQLException {

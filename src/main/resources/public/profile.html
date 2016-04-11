@@ -171,7 +171,7 @@
                                             <td>
                                                 <div class="list-group">
                                                     <button type="button" class="list-group-item animate-courselist-if" data-ng-repeat="course in value" 
-                                                            data-ng-click="addToDeleteList(course.courseID, key)" data-ng-if="!deleteListCheckMap.get(course.courseID)">
+                                                            data-ng-click="addToDeleteList(course.courseID, key)" data-ng-if="!(deleteListCheckMap.get(course.courseID)==key)">
                                                         {{course.courseID}} <br/> {{course.courseTitle}}
                                                     </button>
                                                 </div>

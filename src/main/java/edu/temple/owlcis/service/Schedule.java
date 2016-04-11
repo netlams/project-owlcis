@@ -23,7 +23,7 @@ public class Schedule {
     protected String courseID; //ID of course taken this semester
     protected String courseTitle; //title of course taken this semester
     protected String semester; //semester in which course was taken
-    
+
     /**
      * the constructor for the Schedule object
      */
@@ -32,7 +32,7 @@ public class Schedule {
         courseTitle = "";
         semester = "";
     }
-    
+
     /**
      * the constructor for the Schedule object
      */
@@ -41,7 +41,7 @@ public class Schedule {
         courseID = cid;
         semester = "";
     }
-    
+
     /**
      * the constructor for the Schedule object
      */
@@ -50,7 +50,7 @@ public class Schedule {
         courseID = cid;
         semester = sem;
     }
-    
+
     /**
      * the constructor for the Schedule object
      */
@@ -90,7 +90,7 @@ public class Schedule {
     public void setCourseTitle(String courseTitle) {
         this.courseTitle = courseTitle;
     }
-    
+
     @Override
     public String toString() {
         return "Schedule{" + "courseID=" + courseID + ", semester=" + semester + '}';

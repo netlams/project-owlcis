@@ -1,7 +1,5 @@
 /**
- * CIS4398 Projects
- * Spring 2016
- * 3/23/2016
+ * CIS4398 Projects Spring 2016 3/23/2016
  */
 package edu.temple.owlcis.service;
 
@@ -42,7 +40,6 @@ public class Profile {
 
     /**
      * Fetch member data from database and set into data member 'member'
-     *
      * @param conn db connection
      * @return true if successful, false if error occurred
      * @throws java.sql.SQLException

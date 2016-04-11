@@ -1,20 +1,20 @@
 
-(function() {
+(function () {
 
-    var secondController = function($scope,$state,DBService) {
+    var secondController = function ($scope, $state, DBService) {
 
-    	console.log("second controller called.");
+        console.log("second controller called.");
 
-    	DBService.getDemo().then(function(success) {
+        DBService.getDemo().then(function (success) {
 
-    		console.log("success in service")
+            console.log("success in service")
 
-    	}, function(error) {
+        }, function (error) {
 
-    	});
+        });
     };
 
-    secondController.$inject = ['$scope','$state','DBService'];
+    secondController.$inject = ['$scope', '$state', 'DBService'];
 
     angular.module('authApp').controller('secondController', secondController);
 
