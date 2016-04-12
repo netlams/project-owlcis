@@ -539,9 +539,45 @@ public class Main implements SparkApplication {
          * for flowchart
          */
         get(API_LOC + "/testflow", (request, response) -> {
-            ScheduleBuilder model = new ScheduleBuilder();
-            response.type("application/json");
-            return new Gson().toJson(model.generateFlowchart());
+            // get session
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                // refresh session
+                request.session(true);
+                request.session().attribute("USER", user);
+                // setting up member to fetch
+                Member member = new Member();
+                member.setId(user.getId());
+                Profile profile = new Profile(member);
+                Database dbc = new Database();
+                // Database connection OK
+                if (dbc.getError().length() == 0) {
+                    try {
+                        if (profile.fetchProfile(dbc.getConn())) {
+                            // found member
+                            ScheduleBuilder model = new ScheduleBuilder(profile.getMember());
+                            response.status(200);
+                            response.type("application/json");
+                            return new Gson().toJson(model.generateFlowchart());
+                        } else {
+                            // not valid member
+                            response.status(400);
+                            return "HTTP 400 - Bad Request";
+                        }
+                    } catch (Exception ex) {
+                        response.status(500);
+                        System.out.println("Error: " + ex.getMessage());
+                        return "HTTP 500 - Internal Server Error";
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
+                    }
+                }
+            }
+            response.status(401);
+            return "HTTP 401 - Unauthorized";
         });
 
         /*

@@ -27,7 +27,7 @@
         <script>
 
             // ************** Generate the flowchart diagram  *****************
-            var margin = {top: 20, right: 100, bottom: 20, left: 100},
+            var margin = {top: 50, right: 100, bottom: 20, left: 100},
             width = (window.innerWidth || document.body.clientWidth) - margin.right - margin.left,
                     height = (window.innerHeight || document.body.clientHeight) - margin.top - margin.bottom;
             var purpColor = '#993366',
@@ -35,17 +35,17 @@
                     yellowColor = '#FFA928',
                     redColor = '#993300',
                     blueColor = '#336699';
+
+            // set max height
             if (height > 800)
                 height = 800;
-//            var i = 0;
-
-//            var tree = d3.layout.tree()
-//                    .size([height, width]);
-//
-//            var diagonal = d3.svg.diagonal()
-//                    .projection(function (d) {
-//                        return [d.y, d.x];
-//                    });
+            else if (height < 500)
+                height = 500;
+            // set min width
+            if (width < 600) {
+                width = 900;
+                margin.right = margin.left = 20;
+            }
 
             /* svg set up */
             var svg = d3.select("body").append("svg")
@@ -55,17 +55,56 @@
                     .attr('id', 'flowchart')
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            function renderHeader(data) {
+            /**
+             *  function to render flowchart 
+             */
+            function render(data) {
                 /* header position set up */
                 var headerDimen = {w: 100, h: 50},
                 headerXApart = 110,
                         headerTextXApart = headerDimen.w / 2,
                         headerTextYApart = headerDimen.h / 2 + 5,
-                        courseYApart = 80;
+                        courseYApart = 80,
+                        endPadding = headerXApart - headerDimen.w;
                 var fallCnt = 1, springCnt = 1;
 
+                /* draw title */
+                var titleColor = '#4778BE';
+                var title = svg.append('g')
+                        .attr('id', '#title')
+                        .attr("transform", "translate(0," + -margin.top + ")");
+                // draw title box
+                title.append('rect')
+                        .attr('x', 0)
+                        .attr('y', 0)
+                        .attr('width', (data.list.length * headerXApart) - endPadding) // cut off 10px padding on end
+                        .attr('height', margin.top)
+                        .attr('fill', titleColor)
+                        .style({stroke: lightGrayColor, "stroke-width": "2px"});
+                // draw header titles
+                title.append('text')
+                        .attr('x', ((data.list.length * headerXApart) - endPadding) / 2)
+                        .attr('y', headerDimen.h - headerDimen.h / 2.5)
+                        .attr('text-anchor', "middle")
+                        .text(function (d) {
+                            return "Tailored by OWLCIS for "
+                                    + data.member.fname.capitalizeFirstLetter() + " "
+                                    + data.member.lname.capitalizeFirstLetter()
+                                    + " | Flowchart Sequence For " + data.member.degreeType
+                                    + " in " + data.member.major;
+                        })
+                        .style('fill', '#EEE');
+                // draw owlcis logo image
+                title.append('image')
+                        .attr('xlink:href', 'owlcislogo.png')
+                        .attr('x', 50)
+                        .attr('y', 0)
+                        .attr('height', '50px')
+                        .attr('width', '80px');
+
+
                 /* data position and header prep */
-                data.forEach(function (d, i) {
+                data.list.forEach(function (d, i) {
                     d.i = i + 1;
                     d.title = ((i % 2) == 0) ? "Fall " + romanize(fallCnt++) : "Spring " + romanize(springCnt++); // Fall or Spring
                     d.x = i * headerXApart; // padding between each semester header
@@ -126,7 +165,7 @@
                 });
 
                 /* bind data */
-                var header = svg.selectAll('.header-col').data(data);
+                var header = svg.selectAll('.header-col').data(data.list);
 
                 /* enter data */
                 header.attr('transform', "translate(" + margin.left + "," + margin.top + ")")
@@ -162,51 +201,32 @@
                             return d.x;
                         })
                         .attr('y2', height)
-                        .style({stroke: "#B7C8E2", "stroke-width": "1px"});
+                        .style({stroke: lightGrayColor, "stroke-width": "1px"});
+                header.append('line')
+                        .attr('x1', function (d) {
+                            return d.x + headerDimen.w;
+                        })
+                        .attr('y1', 0)
+                        .attr('x2', function (d) {
+                            return d.x + headerDimen.w;
+                        })
+                        .attr('y2', height)
+                        .style({stroke: lightGrayColor, "stroke-width": "1px"});
+                header.append('line')
+                        .attr('x1', function (d) {
+                            return d.x;
+                        })
+                        .attr('y1', height)
+                        .attr('x2', function (d) {
+                            return d.x + headerDimen.w;
+                        })
+                        .attr('y2', height)
+                        .style({stroke: lightGrayColor, "stroke-width": "1px"});
             }
-
-            function update(source) {
-
-                // Compute the new tree layout.
-                var nodes = tree.nodes(root).reverse(),
-                        links = tree.links(nodes);
-
-                // Normalize for fixed-depth.
-                nodes.forEach(function (d) {
-                    d.y = d.depth * 180;
-                });
-
-                // Declare the nodesâ€¦
-                var node = svg.selectAll("g.node")
-                        .data(nodes, function (d) {
-                            return d.id || (d.id = ++i);
-                        });
-
-                // Enter the nodes.
-                var nodeEnter = node.enter().append("g")
-                        .attr("class", "node")
-                        .attr("transform", function (d) {
-                            return "translate(" + d.y + "," + d.x + ")";
-                        });
-
-                nodeEnter.append("circle")
-                        .attr("r", 10)
-                        .style("fill", "#fff");
-
-                nodeEnter.append("text")
-                        .attr("x", function (d) {
-                            return d.children || d._children ? -13 : 13;
-                        })
-                        .attr("dy", ".35em")
-                        .attr("text-anchor", function (d) {
-                            return d.children || d._children ? "end" : "start";
-                        })
-                        .text(function (d) {
-                            return d.name;
-                        })
-                        .style("fill-opacity", 1);
-            }
-
+            
+            /**
+             * function to romaize the number (roman numerals)
+             */
             function romanize(num) {
                 if (!+num)
                     return NaN;
@@ -220,15 +240,22 @@
                     roman = (key[+digits.pop() + (i * 10)] || "") + roman;
                 return Array(+digits.join("") + 1).join("M") + roman;
             }
-
-
-            d3.json('/api/testflow', function (error, treeData) {
-                //        console.log(treeData.semesterList[0]);
-
-                //        root = treeData.semesterList[0];
-
-                //        update(root);
-                renderHeader(treeData);
+            
+            /**
+             * function to capitalize first letter of a string word
+             */
+            String.prototype.capitalizeFirstLetter = function () {
+                return this.charAt(0).toUpperCase() + this.slice(1);
+            }
+            
+            /* http request to retrieve data */
+            d3.json('/api/testflow', function (error, data) {
+                if (error) { 
+                    alert("not logged in");
+                    return console.warn(error); 
+                }
+                render(data);
+                console.log(data.member);
             });
         </script>
     </body>

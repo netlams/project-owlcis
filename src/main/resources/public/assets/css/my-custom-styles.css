@@ -186,6 +186,7 @@ label.star:before {
     width: 200px;
 }
 
+/* profile page */
 .course-labels {
     overflow-x: auto;
     margin-bottom: 0.5em;
@@ -196,6 +197,16 @@ label.star:before {
     margin-left: 0.1em;
     font-size: 12px;
     background-color: #1abc9c;
+}
+
+/* schedule page */
+.text-major-degree {
+    font-size: 24px;
+    color: #ec971f;
+    background: -webkit-linear-gradient(#ddd, #ec971f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 footer {
