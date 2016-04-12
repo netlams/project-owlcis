@@ -16,6 +16,8 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import static jdk.nashorn.internal.runtime.JSType.toInt32;
 import spark.Request;
 import spark.Response;
@@ -68,7 +70,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        /* Increment Thumbs-up Count */
+        /* Increment Thumbs-up Count
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
             String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
             int revid = toInt32(rb); //integer form of review id
@@ -101,13 +103,44 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-
+        */
+        /* Increment Thumbs-up Count */
+        post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
+            Pattern p = Pattern.compile("\\d+");
+            Matcher m = p.matcher(request.body());
+            int revid = -1;
+            /* String rb = request.body();
+             int mylenth = rb.length();
+           int up = toInt32(rb.substring(mylenth-1));
+            */
+            if (m.find()) {
+                revid = toInt32(m.group());
+                System.out.println("review id: " + revid);
+            }
+            ThumbRatings tr = new ThumbRatings(revid,0,0);
+            Database dbc = new Database();
+            
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
+                        if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
+                            response.status(201);
+                            return "HTTP 201 - CREATED";
+                        }
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
             String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
             int revid = toInt32(rb); //integer form of review id
            
-            ThumbRatings tr = new ThumbRatings(revid,0, 0);
+            ThumbRatings tr = new ThumbRatings(revid,0,0);
 
             Database dbc = new Database();
 

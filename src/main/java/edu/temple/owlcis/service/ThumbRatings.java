@@ -150,7 +150,11 @@ public class ThumbRatings {
             try {
                sql = "UPDATE course_review SET thumbs_up = ? WHERE review_id = ? ";
               //  sql = "UPDATE course_review SET thumbs_up =  20 WHERE review_id = 58 ";
-                
+                /* 
+                "UPDATE course_review SET thumbs_up = "+this.thumbsUp+"WHERE review_id = "+this.reviewID 
+
+                print sql afeter set Int 
+                */
                 
                 stmt = conn.prepareStatement(sql);
 
