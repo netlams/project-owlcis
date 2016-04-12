@@ -39,10 +39,10 @@ authApp.config(function ($stateProvider, $urlRouterProvider) {
         url: '/post',
         templateUrl: 'forumpost.html',
         controller: 'forumpost'
-    }).state('search', {
-        url: '/search',
-        templateUrl: 'forumsearch.html',
-        controller: 'forumsearch'
+    }).state('comments', {
+        url: '/comments',
+        templateUrl: 'forumcomments.html',
+        controller: 'forumcomments'
     }).state('profile', {
         url: '/profile',
         templateUrl: 'profile.html',
@@ -53,4 +53,3 @@ authApp.config(function ($stateProvider, $urlRouterProvider) {
         controller: 'review'
     });
 });
-
