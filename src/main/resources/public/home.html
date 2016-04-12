@@ -1,4 +1,3 @@
-
 <div class="row" ng-controller="PromiseCtrl">
     <div class="col-md-4">
         <h3 class="widget-title">Looking for reviews?</h3>
@@ -27,7 +26,7 @@
         </div>
         <div class="col-md-2">
             <div class="images">
-                <img src="assets/img/logo/serc.jpg" alt="image" width="125px" height="200px">
+                <img src="assets/img/logo/serc.jpg" alt="image" width="205px" height="175px">
             </div>
         </div>
 
@@ -41,23 +40,18 @@
 
             </div>
             <div class="panel-body">
-                {{countt[0].course_id}},
-                {{countt[1].course_id}},
-                {{countt[2].course_id}},
-                {{countt[3].course_id}},
-                {{countt[4].course_id}},
-
-
-
-
-
+                <br>{{countt[0].course_id}}
+                <br>{{countt[1].course_id}}
+                <br>{{countt[2].course_id}}
+                <br>{{countt[3].course_id}}
+                <br>{{countt[4].course_id}}
             </div>
         </div>
 
     </div>
 
 
-    <div class="col-md-7">
+    <div class="col-md-8">
         <div class="panel panel-default" >
             <div class="panel-heading">Most Recent Feedback:</div>
             <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
@@ -70,43 +64,23 @@
                             <!--that display all the data-->
                             <div class="col-md-2" style="float: left; font-weight: 16px;">
                                 <br style="float:left;"> {{x.courseid}}
-                                <br style="float:left;"> Helpfulness: {{x.helpfulness}}
-                                <br style="float:left;"> Easiness: {{x.easiness}}
-                                <br style="float:left;"> Clarity: {{x.clarity}}
+                                <!--<br style="float:left;"> {{x.reviewid}}-->
+                                <br style="float:left;"> Helpfulness:{{x.helpfulness}}
+                                <br style="float:left;"> Easiness:{{x.easiness}}
+                                <br style="float:left;"> Clarity:{{x.clarity}}
                             </div>
                             <div class="col-md-10">
                                 <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
                             </div>
                             <div class="postinfobot">
                                 <div class="likeblock pull-left">
-                                    <a href="#" class="up"><i class="fa fa-thumbs-o-up"></i>10</a>
-                                    <a href="#" class="down"><i class="fa fa-thumbs-o-down"></i>2</a>
-                                </div>
-                                <div class="prev pull-left">
-                                    <a href="#"><i class="fa fa-reply"></i></a>
-                                </div>
-                                <div class="posted pull-left">
-                                    <i class="fa fa-clock-o"></i>
-                                    Posted:
-                                    {{x.f_name}} {{x.l_name}}
-                                    {{x.time_stamp}}</div>
-                            </div>
+                                    <a href="#" class="up">
+                                        <i class="fa fa-thumbs-o-up">
+                                            {{x.thumbsup}}
+                                        </i></a>
+                                    <a href="#" class="down"><i class="fa fa-thumbs-o-down">
 
-                        </div> 
-                        <div class="row" ng-repeat="x in example2">
-                            <div class="col-md-2" style="float: left; font-weight: 16px;">
-                                <br style="float:left;"> {{x.courseid}}
-                                <br style="float:left;"> Helpfulness: {{x.helpfulness}}
-                                <br style="float:left;"> Easiness: {{x.easiness}}
-                                <br style="float:left;"> Clarity: {{x.clarity}}
-                            </div>
-                            <div class="col-md-10">
-                                <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
-                            </div>
-                            <div class="postinfobot">
-                                <div class="likeblock pull-left">
-                                    <a href="#" class="up"><i class="fa fa-thumbs-o-up"></i>10</a>
-                                    <a href="#" class="down"><i class="fa fa-thumbs-o-down"></i>2</a>
+                                        </i>{{x.thumbsdown}}</a>
                                 </div>
                                 <div class="prev pull-left">
                                     <a href="#"><i class="fa fa-reply"></i></a>
@@ -118,15 +92,47 @@
                                     {{x.time_stamp}}</div>
                             </div>
                         </div>
+
                     </div>
-                </form>
+                    <div class="row" ng-repeat="x in example2">
+                        <div class="col-md-2" style="float: left; font-weight: 16px;">
+                            <br style="float:left;"> {{x.courseid}}
+                            <br style="float:left;"> Helpfulness: {{x.helpfulness}}
+                            <br style="float:left;"> Easiness: {{x.easiness}}
+                            <br style="float:left;"> Clarity: {{x.clarity}}
+                        </div>
+                        <div class="col-md-10">
+                            <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
+                        </div>
+                        <div class="postinfobot">
+                            <div class="likeblock pull-left">
+                                <a href="#" class="up">
+                                    <i class="fa fa-thumbs-o-up">
+                                        {{x.thumbsup}}
+                                    </i></a>
+                                <a href="#" class="down"><i class="fa fa-thumbs-o-down">
+
+                                    </i>{{x.thumbsdown}}</a>
+                            </div>
+                            <div class="prev pull-left">
+                                <a href="#"><i class="fa fa-reply"></i></a>
+                            </div>
+                            <div class="posted pull-left">
+                                <i class="fa fa-clock-o"></i>
+                                Posted:
+                                {{x.f_name}} {{x.l_name}}
+                                {{x.time_stamp}}</div>
+                        </div>
+                    </div>
             </div>
 
         </div>
-    </div>
 
+    </div>
 </div>
 
+<div class="btn-group" role="group" style="float: right; font-weight: bolder; color: white; ">
+    <button class="btn btn-primary" onclick="http://www.owlcis.me/schedule" >More Reviews</button>
+</div>
 
-<a href="http://www.owlcis.me" style="float: right; font-weight: bolder; color: white; ">More Reviews</a>
 
