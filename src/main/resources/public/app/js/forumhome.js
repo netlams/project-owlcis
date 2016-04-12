@@ -13,10 +13,12 @@
         $scope.forum_s;
         $http.get('/api/fs').then(function (value) {
             $scope.forum = value.data;
+            console.log(value)
         });
 
         $http.get('/api/forum').then(function (value) {
             $scope.forumQues = value.data;
+            console.log(value)
         });
 
         $scope.forumsearch = function () {

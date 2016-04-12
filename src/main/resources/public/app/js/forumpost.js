@@ -8,45 +8,24 @@
 
     var forumpost = function($scope,$state,DBService,$http,$window) {
 
-        console.log("forum post called.");
+        $scope.forum_s;
+        $http.get('/api/fs').then(function (value) {
+            $scope.forum = value.data;
+        });
 
-    	DBService.getDemo().then(function(response) {
-
-    		//console.log("success in service")
-                //window.alert(response.data);
-                  $scope.Dataform;
-            // get dept list
-            /*
-            CourseList.getCourseList()
-                    .then(function (data) {
-                        $scope.Dataform = {
-                            selectedID: null,
-                            course_ID: data,
-                            err: null
-                        };
-                    });
-*/
-            // process the form
+       $http.get('/api/forum').then(function (value) {
+            $scope.forumQues = value.data;
+        });
+        
             $scope.Formprocess = function () {
 
                 $http.post('/api/fv', $scope.Dataform.f)
                         .then(function (response) {
-                            //window.alert("hello");
-                            //console.log(response.data);
-
-                            //$scope.example2 = response.data;
+                            $window.location.href = '/#/forum';
                         }, function (response) {
                             console.log("Sending this  " + $scope.Dataform.f);
                         });
             };
-
-
-
-
-
-        }, function(error) {
-
-    	});
     };
 
     forumpost.$inject = ['$scope','$state','DBService','$http','$window'];
