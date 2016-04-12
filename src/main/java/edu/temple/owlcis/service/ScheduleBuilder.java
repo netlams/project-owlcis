@@ -5,7 +5,6 @@
  */
 package edu.temple.owlcis.service;
 
-import java.awt.Choice;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,9 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -32,20 +29,19 @@ import java.util.stream.Collectors;
 public class ScheduleBuilder {
 
     //Global variables
-    private String username; //the username of the student who created the schedule (e.g., tue11223@temple.edu)
-    private String creationDateTime; //the time and date at which the schedule was created
+    private Member member; //the username of the student who created the schedule (e.g., tue11223@temple.edu)
 
     public ScheduleBuilder() {
-        ;
+        this.member = new Member();
     }
 
     /**
      * the constructor for the ScheduleBuilder object
      *
-     * @param un the student's username
+     * @param m the member
      */
-    public ScheduleBuilder(String un) {
-        username = un;
+    public ScheduleBuilder(Member m) {
+        this.member = m;
     }
 
     /**
@@ -104,10 +100,10 @@ public class ScheduleBuilder {
      * Post-conditions: a flowchart is generated and displayed on the webpage
      * for the user
      *
-     * @return Map if flowchart was successfully generated; false if flowchart
+     * @return StudentFlowchart if flowchart was successfully generated; false if flowchart
      * was not generated
      */
-    public List generateFlowchart() {
+    public StudentFlowchart generateFlowchart() {
         /**
          * DUMMY TEST
          */
@@ -141,6 +137,8 @@ public class ScheduleBuilder {
         ArrayList<String> courseList = new ArrayList<>();
         Map<String, Integer> completedList = new TreeMap<>();
 //        completedList.put("MATH 1022", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
+//        completedList.put("MATH 1022", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
+//        completedList.put("CIS 1001", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
         courseList.add("CIS 1001");
         courseList.add("CIS 2308");
         courseList.add("CIS 2107");
@@ -273,10 +271,11 @@ public class ScheduleBuilder {
 //        System.out.println("allowedList: " + allowedList);
         System.out.println("remainders: " + matchedDegreeCourseList);
         // ******** ^comparsion end
-
+        
         List<List> returnList = new LinkedList<List>(flowchart.values());
-
-        return returnList;
+        StudentFlowchart flow = new StudentFlowchart(returnList, this.member);
+        return flow;
+//        return returnList;
 
         /**
          * ^ DUMMY TEST
