@@ -21,7 +21,7 @@
                 succ: null
             };
             // Fetch Profile info
-            $http.get('/api/profile')
+            $http.get('./api/profile')
                     .success(function (response) {
                         $scope.profileData = response;
                         $scope.profileData.name = $scope.profileData.fname + " " + $scope.profileData.lname;
@@ -35,7 +35,7 @@
                     });
             // On submit
             $scope.processProfileForm = function () {
-                $http.post('/api/profile', $scope.profileData)
+                $http.post('./api/profile', $scope.profileData)
                         .then(function (response) {
                             if (response.status == 200) {
                                 $scope.profileOptions.succ = 'Successfully updated';
@@ -77,7 +77,7 @@
             };
             $scope.fetchProfileCourse = function () {
                 // Fetch Profile info
-                $http.get('/api/profile/courses')
+                $http.get('./api/profile/courses')
                         .success(function (data) {
                             $scope.courses = data;
                         })
@@ -90,7 +90,7 @@
             };
             $scope.fetchProfileCourse(); // fetch at page load
             // Fetch Add tab's form data (course list for selection list)
-            $http.get('/api/courselist', {cache: 'true'})
+            $http.get('./api/courselist', {cache: 'true'})
                     .success(function (data) {
                         $scope.addTabFormOpt = {
                             availCourse: data,
@@ -106,7 +106,7 @@
             // Add tab's form submit
             $scope.addCourse = function () {
                 $scope.addTabFormData.semester = $scope.addTabFormData.season + $scope.addTabFormData.year;
-                $http.post('/api/profile/add', $scope.addTabFormData)
+                $http.post('./api/profile/add', $scope.addTabFormData)
                         .then(function (response) {
                             if (response.status == 201) {
                                 $scope.addTabFormData.err = null;

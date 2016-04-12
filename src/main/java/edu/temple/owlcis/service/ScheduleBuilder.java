@@ -5,6 +5,7 @@
  */
 package edu.temple.owlcis.service;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,9 +31,40 @@ public class ScheduleBuilder {
 
     //Global variables
     private Member member; //the username of the student who created the schedule (e.g., tue11223@temple.edu)
-
+    private Profile profile;
+    
+    /**
+     * Default constructor
+     */
     public ScheduleBuilder() {
         this.member = new Member();
+        this.profile = new Profile();
+    }
+
+    /**
+     * the constructor for the ScheduleBuilder object.
+     * takes user from sesssion and cast to member
+     *
+     * @param u the user
+     */
+    public ScheduleBuilder(User u) throws Exception, NullPointerException {
+        this();
+        this.member.setId(u.getId());
+        profile = new Profile(this.member);
+        Database dbc = new Database();
+        // Database connection OK
+        if (dbc.getError().length() == 0) {
+            try {
+                if (!profile.fetchProfile(dbc.getConn()))
+                    throw new NullPointerException();
+            } catch (Exception ex) {
+                throw new Exception();
+            } finally {
+                if (!dbc.getConn().isClosed()) {
+                    dbc.closeConn();
+                }
+            }
+        }
     }
 
     /**
@@ -100,7 +132,8 @@ public class ScheduleBuilder {
      * Post-conditions: a flowchart is generated and displayed on the webpage
      * for the user
      *
-     * @return StudentFlowchart if flowchart was successfully generated; false if flowchart
+     * @return StudentFlowchart if flowchart was successfully generated; false
+     * if flowchart
      * was not generated
      */
     public StudentFlowchart generateFlowchart() {
@@ -271,7 +304,7 @@ public class ScheduleBuilder {
 //        System.out.println("allowedList: " + allowedList);
         System.out.println("remainders: " + matchedDegreeCourseList);
         // ******** ^comparsion end
-        
+
         List<List> returnList = new LinkedList<List>(flowchart.values());
         StudentFlowchart flow = new StudentFlowchart(returnList, this.member);
         return flow;

@@ -31,7 +31,7 @@ public class Main implements SparkApplication {
     /**
      * A constant string to containing the backend system URL
      */
-    public static final String API_LOC = "/api";
+    public static final String API_LOC = "api";
 
     /**
      * Executes the backend logic of the app
@@ -126,9 +126,6 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 // setting up member to fetch
                 Member member = new Member();
                 member.setId(user.getId());
@@ -168,9 +165,6 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 // get post data
                 Gson gson = new Gson();
                 Member member = gson.fromJson(request.body(), Member.class);
@@ -200,9 +194,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -231,9 +222,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -267,9 +255,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -546,7 +531,7 @@ public class Main implements SparkApplication {
             Forum_post post = new Forum_post();
             post.setUserId(user.getId());
             post.setUserEnteredQues(request.body());
-           // post.setUserId();
+            // post.setUserId();
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
@@ -609,37 +594,20 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
-                // setting up member to fetch
-                Member member = new Member();
-                member.setId(user.getId());
-                Profile profile = new Profile(member);
-                Database dbc = new Database();
-                // Database connection OK
-                if (dbc.getError().length() == 0) {
-                    try {
-                        if (profile.fetchProfile(dbc.getConn())) {
-                            // found member
-                            ScheduleBuilder model = new ScheduleBuilder(profile.getMember());
-                            response.status(200);
-                            response.type("application/json");
-                            return new Gson().toJson(model.generateFlowchart());
-                        } else {
-                            // not valid member
-                            response.status(400);
-                            return "HTTP 400 - Bad Request";
-                        }
-                    } catch (Exception ex) {
-                        response.status(500);
-                        System.out.println("Error: " + ex.getMessage());
-                        return "HTTP 500 - Internal Server Error";
-                    } finally {
-                        if (!dbc.getConn().isClosed()) {
-                            dbc.closeConn();
-                        }
-                    }
+                try {
+                    ScheduleBuilder model = new ScheduleBuilder(user);
+                    response.status(200);
+                    response.type("application/json");
+                    return new Gson().toJson(model.generateFlowchart());
+                } catch (NullPointerException ex) {
+                    // not valid member
+                    response.status(400);
+                    System.out.println("Error: " + ex.getMessage());
+                    return "HTTP 400 - Bad Request";
+                } catch (Exception ex) {
+                    response.status(500);
+                    System.out.println("Error: " + ex.getMessage());
+                    return "HTTP 500 - Internal Server Error";
                 }
             }
             response.status(401);

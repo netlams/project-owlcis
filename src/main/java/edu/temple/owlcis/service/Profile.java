@@ -20,11 +20,20 @@ public class Profile {
     //Global variables
     private Member member;
     private LinkedList<Schedule> takenCourses;
+    
+    /**
+     * Constructor
+     */
+    public Profile() {
+        this.member = new Member();
+        this.takenCourses = new LinkedList<>();
+    }
 
     /**
      * Constructor that sets all variables to empty
      */
     public Profile(Member mem) {
+        this();
         member = mem;
         takenCourses = new LinkedList<>();
     }

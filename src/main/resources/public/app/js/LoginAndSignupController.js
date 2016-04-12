@@ -19,7 +19,7 @@
     app.service('DeptService', function ($q, $http) {
         this.getDeptList = function () {
             var defer = $q.defer();
-            $http.get('/api/depts', {cache: 'true'})
+            $http.get('./api/depts', {cache: 'true'})
                     .success(function (data) {
                         defer.resolve(data);
                     });
@@ -74,7 +74,7 @@
 
             // process the form
             $scope.processForm = function () {
-                $http.post('/signup', $scope.formData)
+                $http.post('./signup', $scope.formData)
                         .then(function (response) {
                             console.log("Signup status: " + response.status);
                             console.log(response.data);
