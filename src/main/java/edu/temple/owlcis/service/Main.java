@@ -538,6 +538,46 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
-    }
+        
+        /*
+         * Comment Reviews GET Route
+         */
+        get(API_LOC + "/commentreview", (request, response) -> {
+            try {
+                CommentReview rev = new CommentReview();
+                List list = rev.getAllComment();
+                response.type("application/json");
+                response.status(200);
 
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
+        
+        /**
+         * Post Comment in review
+         */
+        post(API_LOC + "/postcomment", (request, response) -> {
+            Gson gson = new Gson();
+            User user = request.session().attribute("USER");
+            CommentReview testComment = gson.fromJson(request.body(), CommentReview.class);
+            testComment.setUserID(user.getId());
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (testComment.insertComment(dbc.getConn())) {
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+    }
+    
 }
