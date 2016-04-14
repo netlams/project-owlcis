@@ -100,12 +100,13 @@ public class Main implements SparkApplication {
             
             if (dbc.getError().length() == 0) {
                 try {
-                    if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
-                        if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
+                    /*if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
+                      */
+                    if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
                             response.status(201);
                             return "HTTP 201 - CREATED";
                         }
-                    }
+                    
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
@@ -124,39 +125,41 @@ public class Main implements SparkApplication {
            Matcher m = p.matcher(reviewd);
             if (m.find()) {
                 revid = toInt32(m.group());
-                System.out.println("review id: " + revid);
+                //System.out.println("review id: " + revid);
+            }
+            
+            int upid = 0;
+            String  up= request.body().substring(request.body().indexOf(',')+1, request.body().lastIndexOf(','));
+             System.out.println("Thumbs Up in Main "+ up);
+             Matcher t = p.matcher(up);
+            if (t.find()){
+                upid = toInt32(t.group());
+                System.out.println("thumbs up in matcher "+ upid);
             }
             
             int downid = 0;
-            String  down= request.body().substring(request.body().indexOf(',')+1, request.body().length()-1);
-             System.out.println("Thumbs Down in Main"+ down);
-             Matcher t = p.matcher(down);
-            if (t.find()){
-                downid = toInt32(t.group());
+             String down = request.body().substring(request.body().lastIndexOf(',')+1, request.body().length()-1);
+             System.out.println("Thumsbs down in main"+ down);
+             Matcher u = p.matcher(down);
+            if (u.find()){
+                downid = toInt32(u.group());
                 System.out.println("thumbs down in matcher"+ downid);
             }
-            /*
-            int upid = 0;
-             String up = request.body().substring(request.body().indexOf(',')+1, request.body().length()-1);
-             System.out.println("Thumsbs up"+ up);
-             Matcher u = p.matcher(up);
-            if (u.find()){
-                upid = toInt32(u.group());
-                System.out.println("thumbs up in matcher"+ upid);
-            }
-            */
-            ThumbRatings tr = new ThumbRatings(revid,downid,0);
+            
+            ThumbRatings tr = new ThumbRatings(revid,upid,downid);
 
             Database dbc = new Database();
 
             if (dbc.getError().length() == 0) {
                 try {
-                    if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
-                        if (tr.incThumbsDown(dbc.getConn())) { //attempt to call method to inc thumbs-up
+                    /*if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
+                      */  
+                    if (tr.incThumbsDown(dbc.getConn())) { //attempt to call method to inc thumbs-up
                             response.status(201);
+                   
                             return "HTTP 201 - CREATED";
                         }
-                    }
+                    
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }

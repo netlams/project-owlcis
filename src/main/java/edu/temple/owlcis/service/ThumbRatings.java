@@ -21,7 +21,9 @@ public class ThumbRatings {
     public ThumbRatings(int rid, int thumbsup, int thumbsdown) {
         this.reviewID = rid;
         this.thumbsUp = thumbsup;
+        System.out.print("Thumbs up in CONS "+ this.thumbsUp);
         this.thumbsDown = thumbsdown;
+        System.out.print("Thumbs down in CONS "+ this.thumbsDown);
     }
 
     public int getReviewID() {
@@ -207,11 +209,14 @@ public class ThumbRatings {
         String sql;
 
         if (conn != null) {
+            System.out.print("thumbs up in down"+ this.thumbsUp);
+            System.out.print("thumbs Down in down"+ this.thumbsDown);
             try {
                 //Check if incrementing thumbs-down count will make it 10 more than thumbs-up count
                 //thumbs-up count. If this is true, remove the course review from the database.
                 //Else, just increment the thumbs-down count.
-                if ((this.thumbsDown + 1) == (this.thumbsUp + THUMBS_DIFF)) {
+                if ((this.thumbsDown + 1) >= (this.thumbsUp + THUMBS_DIFF)) {
+                    System.out.println("Test for Delete");
                     //remove the course review from db
                     sql = "DELETE FROM course_review "
                             + "WHERE review_id = ?";

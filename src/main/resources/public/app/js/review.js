@@ -73,11 +73,12 @@
              $scope.json_object_down = {};
 
             $scope.myjson2 = {}
-            $scope.dislike = function (reviewid,thumbsdown_) {
+            $scope.dislike = function (reviewid,thumbsup_,thumbsdown_) {
                // $scope.thumbsdown++;
                thumbsdown_++;
                 $scope.json_object_down = {
                     'reviewid': reviewid,
+                    'thumbsUp': thumbsup_,
                     'thumbsDown': thumbsdown_,
                     
                 };
@@ -91,7 +92,7 @@
                             console.log($scope.update_dislike_response);
                         }, function (response) {
                             console.log("Sending this to db thumbs down:",
-                                    $scope.thumbsdown, $scope.example2[0].reviewid);
+                                    $scope.thumbsdown, $scope.thumbsup, $scope.example2[0].reviewid);
                         });
                 //console.log($scope.update_dislike_response);
             };
