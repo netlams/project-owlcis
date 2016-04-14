@@ -37,20 +37,19 @@
                             <div class="likeblock pull-left">
                                 <a href="#" class="up">
                                     <i class="fa fa-thumbs-o-up" ng-click="like(x.reviewid,x.thumbsup)">
-                                        DB: {{x.thumbsup}}
+                                        {{x.thumbsup}}
                                          
                                     </i></a>
-                                    Like: {{json_object}}
+                                    <!--Like: {{json_object}} -->
                                
                             </div>
-                            </div>
-                      <div class="postinfobot">
+                      
                             <div class="likeblock pull-left">
                                 <a href="#" class="down">
                                     <i class="fa fa-thumbs-o-down" ng-click="dislike(x.reviewid,x.thumbsdown)">
 
-                                    </i>DB: {{x.thumbsdown}}</a>
-                                    Dislike:{{json_object_down}}
+                                    </i>{{x.thumbsdown}}</a>
+                                    <!--Dislike:{{json_object_down}} -->
                                     
                             </div>
                             <div class="prev pull-left">
@@ -61,7 +60,7 @@
                                 Posted:
                                 {{x.f_name}} {{x.l_name}}
                                 {{x.time_stamp}}</div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>

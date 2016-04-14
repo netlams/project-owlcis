@@ -79,6 +79,7 @@
                 $scope.json_object_down = {
                     'reviewid': reviewid,
                     'thumbsDown': thumbsdown_,
+                    
                 };
 
             $scope.myjson2 = $scope.json_object_down;
@@ -92,7 +93,7 @@
                             console.log("Sending this to db thumbs down:",
                                     $scope.thumbsdown, $scope.example2[0].reviewid);
                         });
-                console.log($scope.update_dislike_response);
+                //console.log($scope.update_dislike_response);
             };
 
 

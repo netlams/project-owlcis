@@ -70,40 +70,6 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        /* Increment Thumbs-up Count
-        post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
-            String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
-            int revid = toInt32(rb); //integer form of review id
-            //System.out.println(rb);
-           // System.out.println(rb.length());
-            int mylenth = rb.length();
-           int up = toInt32(rb.substring(mylenth-1));
-            //int reviewid = toInt32(rb.substring(0,mylenth-1));
-            //System.out.println("UP :"+up);
-            //System.out.println("RV :"+reviewid);
-
-
-            
-            ThumbRatings tr = new ThumbRatings(revid,up,0);
-
-          Database dbc = new Database();
-
-            if (dbc.getError().length() == 0) {
-                try {
-                    if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
-                        if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
-                            response.status(201);
-                            return "HTTP 201 - CREATED";
-                        }
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                }
-            }
-            response.status(500);
-            return "OWLCIS failed: HTTP 500 SERVER ERROR";
-        });
-        */
         /* Increment Thumbs-up Count */
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
             Pattern p = Pattern.compile("\\d+");
@@ -149,10 +115,37 @@ public class Main implements SparkApplication {
         });
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
-            String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
-            int revid = toInt32(rb); //integer form of review id
-           
-            ThumbRatings tr = new ThumbRatings(revid,0,0);
+            Pattern p = Pattern.compile("\\d+");
+            //Matcher m = p.matcher(request.body());
+            System.out.println("Body: "+ request.body());
+            String  reviewd= request.body().substring(1, request.body().indexOf(','));
+            System.out.print("Review id in main"+ reviewd);
+           int revid = -1;
+           Matcher m = p.matcher(reviewd);
+            if (m.find()) {
+                revid = toInt32(m.group());
+                System.out.println("review id: " + revid);
+            }
+            
+            int downid = 0;
+            String  down= request.body().substring(request.body().indexOf(',')+1, request.body().length()-1);
+             System.out.println("Thumbs Down in Main"+ down);
+             Matcher t = p.matcher(down);
+            if (t.find()){
+                downid = toInt32(t.group());
+                System.out.println("thumbs down in matcher"+ downid);
+            }
+            /*
+            int upid = 0;
+             String up = request.body().substring(request.body().indexOf(',')+1, request.body().length()-1);
+             System.out.println("Thumsbs up"+ up);
+             Matcher u = p.matcher(up);
+            if (u.find()){
+                upid = toInt32(u.group());
+                System.out.println("thumbs up in matcher"+ upid);
+            }
+            */
+            ThumbRatings tr = new ThumbRatings(revid,downid,0);
 
             Database dbc = new Database();
 
