@@ -107,8 +107,15 @@ public class Main implements SparkApplication {
         /* Increment Thumbs-up Count */
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
             Pattern p = Pattern.compile("\\d+");
-            Matcher m = p.matcher(request.body());
+            //Matcher m = p.matcher(request.body());
+            System.out.println("Body: "+ request.body());
+            String  reviewd= request.body().substring(1, request.body().indexOf(','));
+            System.out.print("Review id in main"+ reviewd);
+            Matcher m = p.matcher(reviewd);
             int revid = -1;
+            int upid = 0;
+             String  up= request.body().substring(request.body().indexOf(',')+1, request.body().length()-1);
+             System.out.println("Thumsbs up"+ up);
             /* String rb = request.body();
              int mylenth = rb.length();
            int up = toInt32(rb.substring(mylenth-1));
@@ -117,7 +124,12 @@ public class Main implements SparkApplication {
                 revid = toInt32(m.group());
                 System.out.println("review id: " + revid);
             }
-            ThumbRatings tr = new ThumbRatings(revid,0,0);
+            Matcher t = p.matcher(up);
+            if (t.find()){
+                upid = toInt32(t.group());
+                System.out.println("thumbs up in matcher"+ upid);
+            }
+            ThumbRatings tr = new ThumbRatings(revid,upid,0);
             Database dbc = new Database();
             
             if (dbc.getError().length() == 0) {
