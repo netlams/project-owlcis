@@ -234,10 +234,11 @@ public class Profile {
         if (conn != null) {
             try {
                 /* Querying takes table ....................... */
-                sql = "SELECT takes.course_id, semester, course_title "
+                sql = "SELECT takes.course_id, takes.semester, course_title "
                         + "FROM takes INNER JOIN course "
                         + "ON takes.course_id=course.course_id where mem_id=? "
-                        + "ORDER BY SUBSTR(semester FROM 3 FOR 4), semester DESC";
+                        + "ORDER BY SUBSTR(takes.semester FROM 3 FOR 4), "
+                        + "takes.semester DESC";
                 stmt = conn.prepareStatement(sql);
                 //Set param
                 stmt.setInt(1, this.getMember().getId());

@@ -3,6 +3,8 @@
     <head>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
         <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="//cdn.rawgit.com/MrRio/jsPDF/master/dist/jspdf.min.js"></script> 
+        <script type="text/javascript" src="//cdn.rawgit.com/niklasvh/html2canvas/0.5.0-alpha2/dist/html2canvas.min.js"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>MAP MY CLASSES</title>
@@ -23,7 +25,7 @@
         </style>
     </head>
     <body>
-
+        <button id="create_pdf">Create PDF</button>
         <script>
 
             // ************** Generate the flowchart diagram  *****************
@@ -96,7 +98,7 @@
                         .style('fill', '#EEE');
                 // draw owlcis logo image
                 title.append('image')
-                        .attr('xlink:href', 'owlcislogo.png')
+                        .attr('xlink:href', './assets/img/google/owlcislogo.png')
                         .attr('x', 50)
                         .attr('y', 0)
                         .attr('height', '50px')
@@ -223,7 +225,7 @@
                         .attr('y2', height)
                         .style({stroke: lightGrayColor, "stroke-width": "1px"});
             }
-            
+
             /**
              * function to romaize the number (roman numerals)
              */
@@ -240,23 +242,55 @@
                     roman = (key[+digits.pop() + (i * 10)] || "") + roman;
                 return Array(+digits.join("") + 1).join("M") + roman;
             }
-            
+
             /**
              * function to capitalize first letter of a string word
              */
             String.prototype.capitalizeFirstLetter = function () {
                 return this.charAt(0).toUpperCase() + this.slice(1);
             }
-            
+
             /* http request to retrieve data */
             d3.json('./api/testflow', function (error, data) {
-                if (error) { 
+                if (error) {
                     alert("not logged in");
-                    return console.warn(error); 
+                    return console.warn(error);
                 }
                 render(data);
                 console.log(data.member);
             });
+
+
+            var form = $('svg'),
+                    cache_width = form.width(),
+                    a4 = [595.28, 841.89];  // for a4 size paper width and height
+
+            $('#create_pdf').on('click', function () {
+                $('body').scrollTop(0);
+                createPDF();
+            });
+//create pdf
+            function createPDF() {
+                getCanvas().then(function (canvas) {
+                    var img = canvas.toDataURL("image/png"),
+                            doc = new jsPDF({
+                                unit: 'px',
+                                format: 'a4'
+                            });
+                    doc.addImage(img, 'JPEG', 20, 20);
+                    doc.save('techumber-html-to-pdf.pdf');
+                    form.width(cache_width);
+                });
+            }
+
+// create canvas object
+            function getCanvas() {
+                form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
+                return html2canvas(form, {
+                    imageTimeout: 2000,
+                    removeContainer: true
+                });
+            }
         </script>
     </body>
 </html>

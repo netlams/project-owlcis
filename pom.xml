@@ -99,4 +99,6 @@
             </plugin>
         </plugins>
     </build>
+    <description>OWLCIS web app project for CIS4398 Spring 2016. 
+Team members: Rachel Tritsch, Dau Lam, Dhruvin Sheth, Mounya Puppala, Jeff Heckman</description>
 </project>

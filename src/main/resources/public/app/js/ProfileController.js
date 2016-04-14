@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('authApp');
-
+   
     /* Profile Controller */
     app.controller('profileController', ['$scope', '$http', '$filter',
         function ($scope, $http, $filter) {
@@ -82,7 +82,7 @@
                             $scope.courses = data;
                         })
                         .error(function (response) {
-                            console.log("Failed to get student course list" + response);
+                            console.log("Failed to get student course list " + response);
                             $scope.viewTabFormData = {
                                 err: "Failed to get student course list"
                             };

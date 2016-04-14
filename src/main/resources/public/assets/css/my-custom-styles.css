@@ -200,8 +200,27 @@ label.star:before {
 }
 
 /* schedule page */
+#page-schedule {
+    color: black;
+}
+
+#page-schedule .text-primary {
+    color: #1abc9c;
+}
+
+.schedule-table ul {
+    color: black;
+    list-style-type: none;
+    float: left;
+    padding-left: 1em;
+}
+
+.schedule-table ul li {
+    display: inline;
+}
+
 .text-major-degree {
-    font-size: 24px;
+    font-size: 18px;
     color: #ec971f;
     background: -webkit-linear-gradient(#ddd, #ec971f);
     -webkit-background-clip: text;

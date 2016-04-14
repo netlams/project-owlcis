@@ -58,7 +58,6 @@
             $scope.loginStatus = $scope.checkLogin();
         }]);
     /* Signup Controller */
-
     app.controller('signupController', ['$scope', '$state', '$http', '$window', 'DeptService', 'CookieService',
         function ($scope, $state, $http, $window, DeptService, CookieService) {
             $scope.foundEmail = CookieService.getCookie('EMAIL');
@@ -79,8 +78,6 @@
                             console.log("Signup status: " + response.status);
                             console.log(response.data);
                             if (response.status == 203) {
-//                                alert("Successfully Added");
-//                                $window.location.href = '/';
                                 $scope.formData.succ = 'Successfully signed up. Redirecting you in 3 seconds ...';
                                 setTimeout(function () {
                                     $window.location.href = '/';
