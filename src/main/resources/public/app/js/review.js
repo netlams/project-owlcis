@@ -43,8 +43,18 @@ var app = angular.module('authApp');
                                         comment:cmnt,
                                         
                                     };
+                        
                                     console.log(data);
                                     //var request = $http.post('/api/postcomment',); 
+                                      $http.post('/api/postcommnet', $data)
+                        .then(function (response) {
+                            $scope.example2 = response.data;
+                            console.log($scope.json_object);
+                            console.log($scope.example2);
+                        }, function (response) {
+                            console.log($scope.json_object);
+
+                        });
                                     $(".sweet-cancel").click(); 
                                     };
                                 });
