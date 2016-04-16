@@ -36,8 +36,9 @@
                         <div class="postinfobot">
                             <div class="likeblock pull-left">
                                 <a href="#" class="up">
-                                    <i class="fa fa-thumbs-o-up" ng-click="like(x.reviewid,x.thumbsup)">
-                                        {{x.thumbsup}}
+                                    <i  class="fa fa-thumbs-o-up" ng-init="thumbupcount = x.thumbsup" ng-click="like(x.reviewid,x.thumbsup);
+                                        thumbupcount=thumbupcount+1">
+                                        {{thumbupcount}}
                                          
                                     </i></a>
                                     <!--Like: {{json_object}} -->
@@ -46,9 +47,11 @@
                       
                             <div class="likeblock pull-left">
                                 <a href="#" class="down">
-                                    <i class="fa fa-thumbs-o-down" ng-click="dislike(x.reviewid,x.thumbsup,x.thumbsdown)">
-
-                                    </i>{{x.thumbsdown}}</a>
+                                    <i class="fa fa-thumbs-o-down" 
+                                       ng-click="dislike(x.reviewid,x.thumbsup,x.thumbsdown);
+                                      ">
+                                            {{x.thumbsdown}}
+                                    </i></a>
                                     <!--Dislike:{{json_object_down}} -->
                                     
                             </div>

@@ -97,9 +97,13 @@ var app = angular.module('authApp');
                         };
                         $scope.json_object = {};
                         $scope.myjson = {}
+                        
+                        
                 $scope.like = function (reviewid, thumbsup_) {
                 // $scope.thumbsup++;
                 thumbsup_++;
+ 
+                
                         $scope.json_object = {
                         'reviewid': reviewid,
                          'thumbsUp': thumbsup_,
