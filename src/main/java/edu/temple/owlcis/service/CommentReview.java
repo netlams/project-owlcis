@@ -249,7 +249,7 @@ public boolean insertComment(Connection conn) throws SQLException {
 
         if (conn != null) {
             try {
-                String sql = "INSERT INTO course_review_comment (user_id, review_id, comment_text) VALUES (?,  ?)";
+                String sql = "INSERT INTO course_review_comment (user_id, review_id, comment_text) VALUES (1,?,?)";
 
                 stmt = conn.prepareStatement(sql);
 

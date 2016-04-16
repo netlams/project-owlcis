@@ -53,14 +53,19 @@
                                     
                             </div>
                             <div class="prev pull-left">
-                                <a ng-click="repcmnt(event);" href="#"><i class="fa fa-reply"></i></a>
+                                <a ng-click="repcmnt(event, x.reviewid,x.thumbsup,x.thumbsdown);" href="#"><i class="fa fa-reply"></i></a>
                             </div>
                             <div class="posted pull-left">
                                 <i class="fa fa-clock-o"></i>
                                 Posted:
                                 {{x.f_name}} {{x.l_name}}
                                 {{x.time_stamp}}</div>
-                            <div class="comments"></div>
+                            <div class="comments">
+                               {{ (comnts | filter:{reviewID:x.reviewid})[0].comment_text }}
+                               {{ (comnts | filter:{reviewID:x.reviewid})[0].f_name }}
+                               {{ (comnts | filter:{reviewID:x.reviewid})[0].l_name }}
+                                
+                            </div>
                     </div>
                 </div>
             </div>

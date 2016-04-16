@@ -29,7 +29,8 @@ var app = angular.module('authApp');
                         });
                         $scope.countlikes = 0;
                         //Comments handling
-                        $scope.repcmnt=function (e) {
+                        var greviewId;
+                        $scope.repcmnt=function (e,reviewid,tup,tdown) {
                             swal({
                                 title: 'Input something',
                                 html: '<p><textarea id="cmnt" />',
@@ -39,22 +40,23 @@ var app = angular.module('authApp');
                               }).then(function(isConfirm) {
                                 if (isConfirm) {
                                     var cmnt=$("#cmnt").val();
+                                    greviewId = reviewid;
                                     data={
-                                        comment:cmnt,
-                                        
+                                        userID: 1, //for testing
+                                        reviewID:reviewid,
+                                        comment_text:cmnt 
                                     };
                         
                                     console.log(data);
                                     //var request = $http.post('/api/postcomment',); 
-                                      $http.post('/api/postcommnet', $data)
-                        .then(function (response) {
-                            $scope.example2 = response.data;
-                            console.log($scope.json_object);
-                            console.log($scope.example2);
-                        }, function (response) {
-                            console.log($scope.json_object);
-
-                        });
+//                                    $http.post('/api/postcomment', data)
+//                        .then(function (response) {
+//                            console.log("sucess");
+//                            
+//                        }, function (response) {
+//                            console.log("error");
+//
+//                        });
                                     $(".sweet-cancel").click(); 
                                     };
                                 });
@@ -74,7 +76,14 @@ var app = angular.module('authApp');
 //                        };
                         
                        
-                        
+                        // displying commnts
+                        (function disp(){ 
+                            $http.get('/api/commentreview').then(function (cmnts) {
+                                $scope.comnts = cmnts.data;
+                                
+                                console.log($scope.comnts);
+                                });
+                            })();
                         // process the form
                         $scope.Formprocess = function () {
 
@@ -93,7 +102,7 @@ var app = angular.module('authApp');
                 thumbsup_++;
                         $scope.json_object = {
                         'reviewid': reviewid,
-                                'thumbsUp': thumbsup_,
+                         'thumbsUp': thumbsup_,
                         };
                         $scope.myjson = $scope.json_object;
                         console.log($scope.json_object);
