@@ -60,12 +60,12 @@
                                 Posted:
                                 {{x.f_name}} {{x.l_name}}
                                 {{x.time_stamp}}</div>
-                            <div class="comments">
-                               {{ (comnts | filter:{reviewID:x.reviewid})[0].comment_text }}
-                               {{ (comnts | filter:{reviewID:x.reviewid})[0].f_name }}
-                               {{ (comnts | filter:{reviewID:x.reviewid})[0].l_name }}
-                                
-                            </div>
+                            <div ng-repeat="cmnt in comnts=(comnts | filter:{reviewID:x.reviewid})" class="comments">
+                                {{cmnt.comment_text}}
+                                {{cmnt.f_name}}
+                                {{cmnt.l_name}}
+                             </div>
+                            <div ng-show="!(comnts | filter:{reviewID:x.reviewid}).length">No Comments</div>
                     </div>
                 </div>
             </div>
