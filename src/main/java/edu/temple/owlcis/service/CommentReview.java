@@ -183,7 +183,8 @@ public List getAllComment() throws SQLException {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT rc.review_id,  comment_text, course_id, f_name, l_name, semester, "
+                String sql = "SELECT rc.review_id,  comment_text, course_id, substring(f_name,1,1), "
+                        + "substring(l_name,1,1), semester, "
                         + " rc.time_stamp, rc.user_id\n" +
 "FROM owlcis.course_review_comment as rc, owlcis.user as u, owlcis.course_review as cr\n" +
 " where rc.user_id = u.user_id AND rc.review_id = cr.review_id;";

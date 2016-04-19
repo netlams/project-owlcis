@@ -17,6 +17,7 @@ var app = angular.module('authApp');
                 $http.get('/api/viewreviews').then(function (value) {
                 $scope.example2 = value.data;
                 });
+                        $scope.user_role = getCookie("ROLE");
                         $scope.Dataform = {};
                         // get dept list
                         CourseList.getCourseList()
@@ -32,7 +33,7 @@ var app = angular.module('authApp');
                         var greviewId;
                         $scope.repcmnt=function (e,reviewid,tup,tdown) {
                             swal({
-                                title: 'Input something',
+                                title: 'Enter your comment',
                                 html: '<p><textarea id="cmnt" />',
                                  showCancelButton: true,
                                 closeOnConfirm: false,
@@ -48,32 +49,19 @@ var app = angular.module('authApp');
                                     };
                         
                                     console.log(data);
-                                    //var request = $http.post('/api/postcomment',); 
-//                                    $http.post('/api/postcomment', data)
-//                        .then(function (response) {
-//                            console.log("sucess");
-//                            
-//                        }, function (response) {
-//                            console.log("error");
-//
-//                        });
+                          //var request = $http.post('/api/postcomment',); 
+                                  $http.post('/api/postcomment', data)
+                        .then(function (response) {
+                            console.log("sucess");
+                            
+                        }, function (response) {
+                            console.log("error");
+
+                        });
                                     $(".sweet-cancel").click(); 
                                     };
                                 });
                         };
-//                            swal({
-//                                title: 'Comment here..!!',
-//                                        html:
-//                                        '<div>\n\
-//                                        <form id="cmntform" >\n\
-//                                            <input type="hidden" value=""/>\
-//                                            <textarea name="comment" col="60" row="10"></textarea>\n\
-//                                            <input class="cmntsubbtn btn btn-default" type="submit" name="submit"  value="Submit"/>\n\
-//                                        </form> \
-//                                        </div>',
-//                                        showCloseButton: true
-//                                        });
-//                        };
                         
                        
                         // displying commnts

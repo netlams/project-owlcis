@@ -35,7 +35,7 @@
                 {url: '#schedule', name: 'Schedule'},
                 {url: '#forum', name: 'Forum'}];
             $scope.modAdvNav = [{url: '#home', name: 'Home'},
-                {url: '#course', name: 'Course'},
+                {url: '#reviews', name: 'Reviews'},
                 {url: '#forum', name: 'Forum'}];
             $scope.fname = CookieService.getCookie('FNAME');
             $scope.role = CookieService.getCookie('ROLE');
