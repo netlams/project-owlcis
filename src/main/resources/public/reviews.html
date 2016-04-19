@@ -72,59 +72,23 @@
 
                             <div class="box-comments-user" ng-repeat="cmnt in comnts = (comnts| filter:{reviewID:x.reviewid})">
                                 <p>{{cmnt.f_name}}.{{cmnt.l_name}}:</p>
-                                <p>{{cmnt.commnet_text}}</p>
+                                <p>{{cmnt.comment_text}}</p>
                                 <p>{{cmnt.time_stamp}}</p>
 
                             </div>
-
-
-                        </div>
-
-
-
-                    </div>
-
-
-
-
-
-                    <!--
-                     <div ng-repeat="cmnt in comnts=(comnts | filter:{reviewID:x.reviewid})">
-                           
-                         
-                         
-                         
-                         <div class="comment-user">
-                                 <p>
-                                     {{cmnt.f_name}}.{{cmnt.l_name}}:
-                                 </p>
-                                 
-                         </div>   
-                                                  
-                         
-           
-                         <div class="comment-user">
-                                
-                             <div class="box-dates-comments">
-                                 <p>
-                                     {{cmnt.f_name}}.{{cmnt.l_name}}:
-                                 </p>
-                             </div>
-                                <p>
-                                
-                                </p>
-                            
-                         </div>
-                    
-                         
-                     </div>    -->
-                  <div ng-show="!(comnts | filter:{reviewID:x.reviewid}).length" >
-                        <div class="comment-user">
+                              <div ng-show="!(comnts | filter:{reviewID:x.reviewid}).length" >
+                        <div class="box-comments-user">
                             No Comments
                         </div>
-         
+         </div>
+ </div>
+
+
 
                     </div>
+
+
+
                 </div>
             </div>
         </form>

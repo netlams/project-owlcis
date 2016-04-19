@@ -52,6 +52,7 @@ var app = angular.module('authApp');
                           //var request = $http.post('/api/postcomment',); 
                                   $http.post('/api/postcomment', data)
                         .then(function (response) {
+                             $scope.cmnt = response.data;
                             console.log("sucess");
                             
                         }, function (response) {

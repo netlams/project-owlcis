@@ -571,11 +571,13 @@ public class Main implements SparkApplication {
             Gson gson = new Gson();
             User user = request.session().attribute("USER");
             CommentReview testComment = gson.fromJson(request.body(), CommentReview.class);
+            System.out.println("CommentReview in MAin for Insert" + testComment);
             testComment.setUserID(user.getId());
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
                     if (testComment.insertComment(dbc.getConn())) {
+                        
                         response.status(201);
                         return "HTTP 201 - CREATED";
                     }

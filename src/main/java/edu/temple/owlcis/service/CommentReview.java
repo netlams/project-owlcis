@@ -250,18 +250,18 @@ public boolean insertComment(Connection conn) throws SQLException {
 
         if (conn != null) {
             try {
-                String sql = "INSERT INTO course_review_comment (user_id, review_id, comment_text) VALUES (1,?,?)";
-
-                stmt = conn.prepareStatement(sql);
+                String sql = "INSERT INTO course_review_comment (review_id, user_id, comment_text)"
+                        + "VALUES (?, ?, ?)";
+               stmt = conn.prepareStatement(sql);
 
                 //Set parameters
-                 stmt.setInt(1, userID);
-                stmt.setInt(2, reviewID);
-               stmt.setString(3, comment_text);
+                stmt.setInt(1, reviewID);
+                stmt.setInt(2, userID);
+                stmt.setString(3, comment_text);
+                System.out.println("SQL FOR INSERTING COMMENT"+ sql);
                 
-                //Execute query
                 stmt.executeUpdate();
-                System.out.println("insert comment in comment reveiw query executed.");
+                System.out.println("comment post reviews Query executed.");
 
                 return true;
             } catch (SQLException ex) {
