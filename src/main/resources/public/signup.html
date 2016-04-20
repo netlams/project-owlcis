@@ -1,5 +1,5 @@
 <!-- PAGE CONTENT -->
-<div class="page-content" data-ng-controller="signupController">
+<div class="page-content">
     <div class="container center-block">
         <div class="row">
             <div class="panel panel-default">
@@ -79,9 +79,9 @@
                         <!--Sign up-->
                         <div class="form-group">
                             <div class="row">
-                                <p class="alert alert-success fade in col-md-6 col-md-offset-3" data-ng-show="formData.succ">{{formData.succ}}</p>
-                                <p class="alert alert-warning fade in col-md-6 col-md-offset-3" data-ng-show="signupForm.$invalid && !signupForm.$pristine">Please fill all the fields</p>
-                                <p class="alert alert-danger fade in col-md-6 col-md-offset-3" data-ng-show="formData.err">{{formData.err}}
+                                <p class="alert alert-success fade in col-md-6 col-md-offset-3 text-center" data-ng-show="formData.succ">{{formData.succ}}</p>
+                                <p class="alert alert-warning fade in col-md-6 col-md-offset-3 text-center" data-ng-show="signupForm.$invalid && !signupForm.$pristine">Please fill all the fields</p>
+                                <p class="alert alert-danger fade in col-md-6 col-md-offset-3 text-center" data-ng-show="formData.err">{{formData.err}}
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 </p>
                             </div>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>MAP MY CLASSES</title>
+        <style>
+            body {
+                font-family: Verdana, Helvetica, Arial, sans-serif;
+            }
+            .header-col text {
+                fill-opacity: 1;
+                font: 300 16px Verdana, Helvetica, Arial, sans-serif;
+                fill: black;
+            }
+            .course text {
+                fill: white;
+                font-size: 12px;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <script>
+
+            // ************** Generate the flowchart diagram  *****************
+            var margin = {top: 50, right: 100, bottom: 20, left: 100},
+            width = (window.innerWidth || document.body.clientWidth) - margin.right - margin.left,
+                    height = (window.innerHeight || document.body.clientHeight) - margin.top - margin.bottom;
+            var purpColor = '#993366',
+                    lightGrayColor = '#B7C8E2',
+                    yellowColor = '#FFA928',
+                    redColor = '#993300',
+                    blueColor = '#336699';
+
+            // set max height
+            if (height > 800)
+                height = 800;
+            else if (height < 500)
+                height = 500;
+            // set min width
+            if (width < 600) {
+                width = 900;
+                margin.right = margin.left = 20;
+            }
+
+            /* svg set up */
+            var svg = d3.select("body").append("svg")
+                    .attr("width", width + margin.right + margin.left)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr('id', 'flowchart')
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            /**
+             *  function to render flowchart 
+             */
+            function render(data) {
+                /* header position set up */
+                var headerDimen = {w: 100, h: 50},
+                headerXApart = 110,
+                        headerTextXApart = headerDimen.w / 2,
+                        headerTextYApart = headerDimen.h / 2 + 5,
+                        courseYApart = 80,
+                        endPadding = headerXApart - headerDimen.w;
+                var fallCnt = 1, springCnt = 1;
+
+                /* draw title */
+                var titleColor = '#4778BE';
+                var title = svg.append('g')
+                        .attr('id', '#title')
+                        .attr("transform", "translate(0," + -margin.top + ")");
+                // draw title box
+                title.append('rect')
+                        .attr('x', 0)
+                        .attr('y', 0)
+                        .attr('width', (data.list.length * headerXApart) - endPadding) // cut off 10px padding on end
+                        .attr('height', margin.top)
+                        .attr('fill', titleColor)
+                        .style({stroke: lightGrayColor, "stroke-width": "2px"});
+                // draw header titles
+                title.append('text')
+                        .attr('x', ((data.list.length * headerXApart) - endPadding) / 2)
+                        .attr('y', headerDimen.h - headerDimen.h / 2.5)
+                        .attr('text-anchor', "middle")
+                        .text(function (d) {
+                            return "Tailored by OWLCIS for "
+                                    + data.member.fname.capitalizeFirstLetter() + " "
+                                    + data.member.lname.capitalizeFirstLetter()
+                                    + " | Flowchart Sequence For " + data.member.degreeType
+                                    + " in " + data.member.major;
+                        })
+                        .style('fill', '#EEE');
+                // draw owlcis logo image
+                title.append('image')
+                        .attr('xlink:href', 'owlcislogo.png')
+                        .attr('x', 50)
+                        .attr('y', 0)
+                        .attr('height', '50px')
+                        .attr('width', '80px');
+
+
+                /* data position and header prep */
+                data.list.forEach(function (d, i) {
+                    d.i = i + 1;
+                    d.title = ((i % 2) == 0) ? "Fall " + romanize(fallCnt++) : "Spring " + romanize(springCnt++); // Fall or Spring
+                    d.x = i * headerXApart; // padding between each semester header
+
+                    var semester = svg.append('g').attr('id', '#semester' + d.i).selectAll('semester' + d.i).data(d);
+                    semester.attr('transform', "translate(" + margin.left + "," + margin.top + ")");
+                    // enter data            
+                    semester.enter().append('g').attr('class', 'course');
+                    // draw course box
+                    semester.append('rect')
+                            .attr('x', function (da) {
+                                return d.x;
+                            })
+                            .attr('y', function (da, ia) {
+                                return (ia + 1) * courseYApart;
+                            })
+                            .attr('width', headerDimen.w)
+                            .attr('height', headerDimen.h)
+                            .attr('fill', function (da) {
+                                var math = new RegExp("MATH");
+                                var cis = new RegExp("CIS");
+                                var eng = new RegExp("ENG");
+                                if (cis.test(da.courseID.toUpperCase()))
+                                    return purpColor;
+                                else if (math.test(da.courseID.toUpperCase()))
+                                    return yellowColor;
+                                else if (eng.test(da.courseID.toUpperCase()))
+                                    return redColor;
+                                else
+                                    return blueColor;
+                            });
+                    // draw header titles
+                    semester.append('text')
+                            .attr('x', function (da) {
+                                return d.x + headerTextXApart;
+                            })
+                            .attr('y', function (da, ia) {
+                                return ((ia + 1) * courseYApart) + headerTextYApart;
+                            })
+                            .attr('text-anchor', "middle")
+                            .text(function (da) {
+                                return da.courseID;
+                            })
+                            .append('tspan')
+                            .attr('x', function (da) {
+                                return d.x + headerTextXApart;
+                            })
+                            .attr('dy', '15')
+                            .text(function (da) {
+                                console.log(da);
+                                if (da.semester.length > 1)
+                                    return da.semester;
+                                else
+                                    return "";
+                            })
+                            .style('fill', '#EEE');
+
+                });
+
+                /* bind data */
+                var header = svg.selectAll('.header-col').data(data.list);
+
+                /* enter data */
+                header.attr('transform', "translate(" + margin.left + "," + margin.top + ")")
+                        .enter().append('g').attr('class', 'header-col');
+                // draw header boxes
+                header.append('rect')
+                        .attr('x', function (d) {
+                            return d.x;
+                        })
+                        .attr('y', 0)
+                        .attr('width', headerDimen.w)
+                        .attr('height', headerDimen.h)
+                        .attr('fill', lightGrayColor);
+                // draw header titles
+                header.append('text')
+                        .attr('x', function (d) {
+                            return d.x + headerTextXApart
+                        })
+                        .attr('y', function (d) {
+                            return headerTextYApart;
+                        })
+                        .attr('text-anchor', "middle")
+                        .text(function (d) {
+                            return d.title;
+                        });
+                // draw divider lines
+                header.append('line')
+                        .attr('x1', function (d) {
+                            return d.x;
+                        })
+                        .attr('y1', 0)
+                        .attr('x2', function (d) {
+                            return d.x;
+                        })
+                        .attr('y2', height)
+                        .style({stroke: lightGrayColor, "stroke-width": "1px"});
+                header.append('line')
+                        .attr('x1', function (d) {
+                            return d.x + headerDimen.w;
+                        })
+                        .attr('y1', 0)
+                        .attr('x2', function (d) {
+                            return d.x + headerDimen.w;
+                        })
+                        .attr('y2', height)
+                        .style({stroke: lightGrayColor, "stroke-width": "1px"});
+                header.append('line')
+                        .attr('x1', function (d) {
+                            return d.x;
+                        })
+                        .attr('y1', height)
+                        .attr('x2', function (d) {
+                            return d.x + headerDimen.w;
+                        })
+                        .attr('y2', height)
+                        .style({stroke: lightGrayColor, "stroke-width": "1px"});
+            }
+            
+            /**
+             * function to romaize the number (roman numerals)
+             */
+            function romanize(num) {
+                if (!+num)
+                    return NaN;
+                var digits = String(+num).split(""),
+                        key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
+                            "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
+                            "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
+                        roman = "",
+                        i = 3;
+                while (i--)
+                    roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+                return Array(+digits.join("") + 1).join("M") + roman;
+            }
+            
+            /**
+             * function to capitalize first letter of a string word
+             */
+            String.prototype.capitalizeFirstLetter = function () {
+                return this.charAt(0).toUpperCase() + this.slice(1);
+            }
+            
+            /* http request to retrieve data */
+            d3.json('/api/testflow', function (error, data) {
+                if (error) { 
+                    alert("not logged in");
+                    return console.warn(error); 
+                }
+                render(data);
+                console.log(data.member);
+            });
+        </script>
+    </body>
+</html>

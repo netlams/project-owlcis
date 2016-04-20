@@ -27,7 +27,7 @@
                 check = true;
             }
             $http.get('/api/viewlastreviews').success(function (data) {
-                console.log(data);
+//                console.log(data);
                 $scope.initialdataset = data;
             })
             $scope.initialData = function () {

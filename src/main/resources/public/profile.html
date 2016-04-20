@@ -7,27 +7,27 @@
                     <h2 class="panel-title section-heading no-margin text-center">Member's Profile</h2>
                 </div>
                 <div class="panel-body">
-                    <form name="updateProfileForm" class="form-horizontal">
+                    <form name="updateProfileForm" class="form-horizontal" data-ng-submit="processProfileForm()">
                         <!--Name-->
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label col-sm-offset-3">Name</label>
                             <div class="col-sm-3">
-                                <input name="name" type="text" class="form-control" value="Jane Doe" disabled>
+                                <input name="name" type="text" class="form-control" value="{{profileData.name}}" disabled>
                             </div>
                         </div>
                         <!--Email-->
                         <div class="form-group">
                             <label for="email" class="col-sm-2 control-label col-sm-offset-3">Email</label>
                             <div class="col-sm-3">
-                                <input name="email" type="text" class="form-control" value="example@temple.edu" disabled>
+                                <input name="email" type="text" class="form-control" value="{{profileData.email}}" disabled>
                             </div>
                         </div>
                         <!--Status-->
                         <div class="form-group">
                             <label for="studentOrAlumni" class="col-sm-2 control-label col-sm-offset-3">Status</label>
                             <div class="col-sm-3">
-                                <select name="" id="formData.studentOrAlumni" data-ng-model="formData.studentOrAlumni" class="form-control" required>
-                                    <option data-ng-repeat="option in formData.studentOrAlumniOptions" value="{{option.val}}">{{option.name}}</option>
+                                <select name="" id="profileData.studentOrAlumni" data-ng-model="profileData.studentOrAlumni" class="form-control" required>
+                                    <option data-ng-repeat="option in profileOptions.studentOrAlumniOptions" value="{{option.val}}">{{option.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -35,8 +35,8 @@
                         <div class="form-group">
                             <label for="major" class="col-sm-2 control-label col-sm-offset-3">Major</label>
                             <div class="col-sm-3">
-                                <select name="major" id="formData.major" data-ng-model="formData.major" class="form-control" required>
-                                    <option data-ng-repeat="option in formData.availMajorOptions" value="{{option.shortname}}">{{option.name}}</option>
+                                <select name="major" id="profileData.major" data-ng-model="profileData.major" class="form-control" required>
+                                    <option data-ng-repeat="option in profileOptions.availMajorOptions" value="{{option.shortname}}">{{option.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -44,8 +44,8 @@
                         <div class="form-group">
                             <label for="degreeType" class="col-sm-2 control-label col-sm-offset-3">Degree Type</label>
                             <div class="col-sm-2">
-                                <select name="degreeType" id="formData.degree" data-ng-model="formData.degree" class="form-control" data-ng-required="formData.role == 'member'">
-                                    <option data-ng-repeat="option in formData.availDegreeOptions" value="{{option.name}}">{{option.name}}</option>
+                                <select name="degreeType" id="profileData.degreeType" data-ng-model="profileData.degreeType" class="form-control" data-ng-required="profileOptions.role == 'member'">
+                                    <option data-ng-repeat="option in profileOptions.availDegreeOptions" value="{{option.name}}">{{option.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -53,11 +53,17 @@
                         <div class="form-group">
                             <label for="gradDate" class="col-sm-2 control-label col-sm-offset-3">Graduation Date</label>
                             <div class="col-sm-3">
-                                <input name="gradDate" type="date" class="form-control" value="2016-05-06" required>
+                                <input name="gradDate" type="text" class="form-control" value="{{profileData.gradDate}}" data-ng-model="profileData.gradDate" required>
                             </div>
                         </div>
                         <!--Submit-->
                         <div class="form-group">
+                            <div class="row">
+                                <p class="alert alert-success fade in col-md-6 col-md-offset-3 text-center" data-ng-show="profileOptions.succ">{{profileOptions.succ}}</p>
+                                <p class="alert alert-danger fade in col-md-6 col-md-offset-3 text-center" data-ng-show="profileOptions.err">{{profileOptions.err}}
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                </p>
+                            </div>
                             <div class="col-sm-2 col-sm-offset-5">
                                 <input type="submit" class="btn btn-warning" value="Update my Profle">
                             </div>
@@ -96,7 +102,7 @@
                                         <td>
                                             <ul class="list-group">
                                                 <li class="list-group-item" data-ng-repeat="course in value">
-                                                    {{course.id}} - {{course.name}}
+                                                    {{course.courseID}} <br/> {{course.courseTitle}}
                                                 </li>
                                             </ul>
                                         </td>
@@ -104,35 +110,56 @@
                                 </tbody>
                             </table>
                             <!--Only Show this when in Add Tab-->
-                            <form class="form" data-ng-show="tab == 'add'">
+                            <form class="form" data-ng-show="tab == 'add'" data-ng-submit="addCourse()">
                                 <div class="form-group">
-                                    <div class="col-xs-6 col-sm-3">
-                                        <select name='season' class="form-control" required>
-                                            <option value='1'>Fall</option>
-                                            <option value='2'>Spring</option>
-                                            <option value='2'>Summer</option>
+                                    <div class="row">
+                                        <p class="alert alert-success fade in col-sm-12 text-center" data-ng-show="addTabFormData.succ">{{addTabFormData.succ}}
+                                            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                        </p>
+                                        <p class="alert alert-danger fade in col-sm-12 text-center" data-ng-show="addTabFormData.err">{{addTabFormData.err}}
+                                            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-3">
+                                        <select name='season' class="form-control" data-ng-model="addTabFormData.season" required>
+                                            <option value="">-Select-</option>
+                                            <option value='FA'>Fall</option>
+                                            <option value='SP'>Spring</option>
+                                            <option value='SU'>Summer</option>
                                         </select>
                                     </div>
-                                    <div class="col-xs-6 col-sm-3">
-                                        <input type='number' class="form-control" max='2100' min='1990' value="2016" required/>
+                                    <div class="col-xs-6 col-sm-6 col-md-3">
+                                        <input name='year' type='number' class="form-control" max='99' min='00' data-ng-model="addTabFormData.year" required/>
                                     </div>
-                                    <div class="col-xs-12 col-sm-3">
-                                        <select name='course' class="form-control" required>
-                                            <option value='1'>CIS 1001</option>
-                                            <option value='2'>CIS 1056</option>
-                                            <option value='2'>CIS 1057</option>
+                                    <div class="col-xs-12 col-sm-12 col-md-4">
+                                        <select name='courseID' class="form-control" data-ng-model="addTabFormData.courseID" required>
+                                            <option value="">-Select a Course-</option>
+                                            <option data-ng-repeat="option in addTabFormOpt.availCourse" value="{{option.course_id}}">{{option.course_id}}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group col-2">
+                                <div class="form-group col-xs-12 col-md-2">
                                     <button type="submit" class="btn btn-primary">Add Course</button>
                                 </div>
                             </form>
-                            <!--Only Show this when in Edit Tab-->
-                            <form data-ng-show="tab == 'del'" data-ng-submit="processForm()">
+                            <!--Only Show this when in Del Tab-->
+                            <form data-ng-show="tab == 'del'" data-ng-submit="deleteCourse()">
+                                <!--Shows the course to delete-->
+                                <div class="course-labels col-xs-12 text-center">
+                                    <span class="label label-primary course-label" data-ng-repeat="item in deleteCourseList track by $index">{{item.courseID}}/{{item.semester}}</span>
+                                </div>
+                                <div class="col-xs-12 text-center">
+                                    <p class="alert alert-success fade in col-sm-12 text-center" data-ng-show="delTabFormData.succ">{{delTabFormData.succ}}
+                                        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    </p>
+                                    <p class="alert alert-danger fade in col-sm-12 text-center" data-ng-show="delTabFormData.err">{{delTabFormData.err}}
+                                        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    </p>
+                                    <input type="submit" class="btn btn-danger" value="Delete Selected Courses"/>
+                                    <input type="button" class="btn btn-default" value="Reset" data-ng-click="resetDelete()"/>
+                                </div>
                                 <table class="table table-striped course-listing">
                                     <thead>
-                                        <tr><th><input type="submit" class="btn btn-danger" value="Delete Selected Courses"/></th></tr>
                                         <tr>
                                             <th>Semester</th>
                                             <th>CRN - Course Name</th>
@@ -143,9 +170,9 @@
                                             <td>{{key}}</td>
                                             <td>
                                                 <div class="list-group">
-                                                    <button type="button" class="list-group-item" data-ng-repeat="course in value">
-                                                        <label for="{{course.name}}" data-ng-click="deleteCourseList.push(course.id)">{{course.id}} - {{course.name}}</label>
-                                                        <input type="checkbox" id="{{course.name}}" name="{{course.name}}" value="{{course.val}}" class="pull-right">
+                                                    <button type="button" class="list-group-item animate-courselist-if" data-ng-repeat="course in value" 
+                                                            data-ng-click="addToDeleteList(course.courseID, key)" data-ng-if="!(deleteListCheckMap.get(course.courseID)==key)">
+                                                        {{course.courseID}} <br/> {{course.courseTitle}}
                                                     </button>
                                                 </div>
                                             </td>
