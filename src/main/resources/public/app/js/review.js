@@ -18,6 +18,7 @@
                 $scope.example2 = value.data;
             });
             $scope.user_role = getCookie("ROLE");
+            $scope.userID = getCookie("ID");
             $scope.Dataform = {};
             // get dept list
             CourseList.getCourseList()
@@ -43,7 +44,8 @@
                         var cmnt = $("#cmnt").val();
                         greviewId = reviewid;
                         data = {
-                            userID: 1, //for testing
+                            //user_id: userID, //for testing
+                            userID: 1,
                             reviewID: reviewid,
                             comment_text: cmnt
                         };
