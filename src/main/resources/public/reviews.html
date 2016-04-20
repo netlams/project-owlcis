@@ -33,30 +33,72 @@
                         </div>
                         <div class="col-md-10">
                             <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
-                        </div>
-                        <div class="postinfobot">
-                            <div class="likeblock pull-left">
-                                <a href="#" class="up">
-                                    <i class="fa fa-thumbs-o-up" ng-click="like()">
-                                        DB: {{x.thumbsup}}
-                                    </i></a>
 
-                                {{myjson}}
+                            <div class="postinfobot">
+                                <div class="likeblock pull-left">
+                                    <a href="#" class="up">
+                                        <i  class="fa fa-thumbs-o-up" ng-init="thumbupcount = x.thumbsup" ng-click="like(x.reviewid, x.thumbsup);
+                                                    thumbupcount = thumbupcount + 1">
+                                            {{thumbupcount}}
 
-                                <a href="#" class="down"><i class="fa fa-thumbs-o-down">
+                                        </i></a>
+                                    <!--Like: {{json_object}} -->
 
-                                    </i>DB: {{x.thumbsdown}}</a>
+                                </div>
+
+                                <div class="likeblock pull-left">
+                                    <a href="#" class="down">
+                                        <i class="fa fa-thumbs-o-down" 
+                                           ng-click="dislike(x.reviewid, x.thumbsup, x.thumbsdown);
+                                           ">
+                                            {{x.thumbsdown}}
+                                        </i></a>
+                                    <!--Dislike:{{json_object_down}} -->
+
+                                </div>
+                                <div class="prev pull-left">
+                                    <div ng-show="user_role != 'member'">
+                                        <a ng-click="repcmnt(event, x.reviewid, x.thumbsup, x.thumbsdown);" href="#">
+                                            <i class="fa fa-reply"></i></a>
+                                    </div>
+                                </div>
+                                <div class="posted pull-left">
+                                    <i class="fa fa-clock-o"></i>
+                                    Posted:
+                                    {{x.f_name}} {{x.l_name}}
+                                    {{x.time_stamp}}</div>
+                            </div>    
+
+                            <div style="clear:both;"></div>
+                            <div class="panel-heading">
+                                <p align="left">Comments</p>
+                                <div class="panel panel-default-comment" 
+                                     ng-repeat="cmnt in comnts = (comnts| filter:{reviewID:x.reviewid})">
+
+                                    <p  align="left">
+                                        <span>{{cmnt.f_name}}.{{cmnt.l_name}}:</span> 
+
+                                        <span>{{cmnt.comment_text}}</span>
+
+                                        <span>Posted On: {{cmnt.time_stamp}}</span>
+                                    </p>
+
+
+                                </div>
                             </div>
-                            <div class="prev pull-left">
-                                <a href="#"><i class="fa fa-reply"></i></a>
+                            <div ng-show="!(comnts | filter:{reviewID:x.reviewid}).length" >
+                                <div class="box-comments-user">
+                                    <p align="left"><span>No Comments have been Posted.</span></p>
+                                </div>
                             </div>
-                            <div class="posted pull-left">
-                                <i class="fa fa-clock-o"></i>
-                                Posted:
-                                {{x.f_name}} {{x.l_name}}
-                                {{x.time_stamp}}</div>
                         </div>
+
+
+
                     </div>
+
+
+
                 </div>
             </div>
         </form>

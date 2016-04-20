@@ -104,7 +104,7 @@ public class ViewReviews {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT  cr.review_id, cr.review_text, cr.time_stamp, cr.course_id, u.f_name, u.l_name, "
+                String sql = "SELECT  cr.review_id, cr.review_text, cr.time_stamp, cr.course_id, substring(u.f_name,1,1),substring(u.l_name,1,1), "
                         + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_down, cr.thumbs_up"
                         + " FROM owlcis.course_review cr"
                         + " JOIN owlcis.user u ON u.user_id = cr.user_id"

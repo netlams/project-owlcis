@@ -2,7 +2,7 @@
  * Created by dhruvin sheth
  */
 
-var authApp = angular.module('authApp', ['ngAnimate', 'ui.router', 'angular.filter']);
+var authApp = angular.module('authApp', ['ngAnimate', 'ui.router', 'angular.filter', 'ngSanitize']);
 
 authApp.config(function ($stateProvider, $urlRouterProvider) {
 
