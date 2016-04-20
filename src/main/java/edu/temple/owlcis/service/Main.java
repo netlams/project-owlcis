@@ -74,39 +74,39 @@ public class Main implements SparkApplication {
         post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
             Pattern p = Pattern.compile("\\d+");
             //Matcher m = p.matcher(request.body());
-            System.out.println("Body: "+ request.body());
-            String  reviewd= request.body().substring(1, request.body().indexOf(','));
-            System.out.print("Review id in main"+ reviewd);
+            System.out.println("Body: " + request.body());
+            String reviewd = request.body().substring(1, request.body().indexOf(','));
+            System.out.print("Review id in main" + reviewd);
             Matcher m = p.matcher(reviewd);
             int revid = -1;
             int upid = 0;
-             String  up= request.body().substring(request.body().indexOf(',')+1, request.body().length()-1);
-             System.out.println("Thumsbs up"+ up);
+            String up = request.body().substring(request.body().indexOf(',') + 1, request.body().length() - 1);
+            System.out.println("Thumsbs up" + up);
             /* String rb = request.body();
              int mylenth = rb.length();
-           int up = toInt32(rb.substring(mylenth-1));
-            */
+             int up = toInt32(rb.substring(mylenth-1));
+             */
             if (m.find()) {
                 revid = toInt32(m.group());
                 System.out.println("review id: " + revid);
             }
             Matcher t = p.matcher(up);
-            if (t.find()){
+            if (t.find()) {
                 upid = toInt32(t.group());
-                System.out.println("thumbs up in matcher"+ upid);
+                System.out.println("thumbs up in matcher" + upid);
             }
-            ThumbRatings tr = new ThumbRatings(revid,upid,0);
+            ThumbRatings tr = new ThumbRatings(revid, upid, 0);
             Database dbc = new Database();
-            
+
             if (dbc.getError().length() == 0) {
                 try {
                     /*if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
-                      */
+                     */
                     if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
-                            response.status(201);
-                            return "HTTP 201 - CREATED";
-                        }
-                    
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
@@ -118,48 +118,48 @@ public class Main implements SparkApplication {
         post(API_LOC + "/incthumbsdown", (request, response) -> {
             Pattern p = Pattern.compile("\\d+");
             //Matcher m = p.matcher(request.body());
-            System.out.println("Body: "+ request.body());
-            String  reviewd= request.body().substring(1, request.body().indexOf(','));
-            System.out.print("Review id in main"+ reviewd);
-           int revid = -1;
-           Matcher m = p.matcher(reviewd);
+            System.out.println("Body: " + request.body());
+            String reviewd = request.body().substring(1, request.body().indexOf(','));
+            System.out.print("Review id in main" + reviewd);
+            int revid = -1;
+            Matcher m = p.matcher(reviewd);
             if (m.find()) {
                 revid = toInt32(m.group());
                 //System.out.println("review id: " + revid);
             }
-            
+
             int upid = 0;
-            String  up= request.body().substring(request.body().indexOf(',')+1, request.body().lastIndexOf(','));
-             System.out.println("Thumbs Up in Main "+ up);
-             Matcher t = p.matcher(up);
-            if (t.find()){
+            String up = request.body().substring(request.body().indexOf(',') + 1, request.body().lastIndexOf(','));
+            System.out.println("Thumbs Up in Main " + up);
+            Matcher t = p.matcher(up);
+            if (t.find()) {
                 upid = toInt32(t.group());
-                System.out.println("thumbs up in matcher "+ upid);
+                System.out.println("thumbs up in matcher " + upid);
             }
-            
+
             int downid = 0;
-             String down = request.body().substring(request.body().lastIndexOf(',')+1, request.body().length()-1);
-             System.out.println("Thumsbs down in main"+ down);
-             Matcher u = p.matcher(down);
-            if (u.find()){
+            String down = request.body().substring(request.body().lastIndexOf(',') + 1, request.body().length() - 1);
+            System.out.println("Thumsbs down in main" + down);
+            Matcher u = p.matcher(down);
+            if (u.find()) {
                 downid = toInt32(u.group());
-                System.out.println("thumbs down in matcher"+ downid);
+                System.out.println("thumbs down in matcher" + downid);
             }
-            
-            ThumbRatings tr = new ThumbRatings(revid,upid,downid);
+
+            ThumbRatings tr = new ThumbRatings(revid, upid, downid);
 
             Database dbc = new Database();
 
             if (dbc.getError().length() == 0) {
                 try {
                     /*if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
-                      */  
+                     */
                     if (tr.incThumbsDown(dbc.getConn())) { //attempt to call method to inc thumbs-up
-                            response.status(201);
-                   
-                            return "HTTP 201 - CREATED";
-                        }
-                    
+                        response.status(201);
+
+                        return "HTTP 201 - CREATED";
+                    }
+
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
@@ -546,7 +546,7 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
-        
+
         /*
          * Comment Reviews GET Route
          */
@@ -563,7 +563,7 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
-        
+
         /**
          * Post Comment in review
          */
@@ -577,7 +577,7 @@ public class Main implements SparkApplication {
             if (dbc.getError().length() == 0) {
                 try {
                     if (testComment.insertComment(dbc.getConn())) {
-                        
+
                         response.status(201);
                         return "HTTP 201 - CREATED";
                     }
@@ -589,5 +589,5 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
     }
-    
+
 }

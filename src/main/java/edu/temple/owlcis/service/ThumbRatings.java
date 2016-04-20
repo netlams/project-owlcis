@@ -21,9 +21,9 @@ public class ThumbRatings {
     public ThumbRatings(int rid, int thumbsup, int thumbsdown) {
         this.reviewID = rid;
         this.thumbsUp = thumbsup;
-        System.out.print("Thumbs up in CONS "+ this.thumbsUp);
+        System.out.print("Thumbs up in CONS " + this.thumbsUp);
         this.thumbsDown = thumbsdown;
-        System.out.print("Thumbs down in CONS "+ this.thumbsDown);
+        System.out.print("Thumbs down in CONS " + this.thumbsDown);
     }
 
     public int getReviewID() {
@@ -150,14 +150,14 @@ public class ThumbRatings {
 
         if (conn != null) {
             try {
-               sql = "UPDATE course_review SET thumbs_up = ? WHERE review_id = ? ";
-              //  sql = "UPDATE course_review SET thumbs_up =  20 WHERE review_id = 58 ";
+                sql = "UPDATE course_review SET thumbs_up = ? WHERE review_id = ? ";
+                //  sql = "UPDATE course_review SET thumbs_up =  20 WHERE review_id = 58 ";
                 /* 
-                "UPDATE course_review SET thumbs_up = "+this.thumbsUp+"WHERE review_id = "+this.reviewID 
+                 "UPDATE course_review SET thumbs_up = "+this.thumbsUp+"WHERE review_id = "+this.reviewID 
 
-                print sql afeter set Int 
-                */
-                
+                 print sql afeter set Int 
+                 */
+
                 stmt = conn.prepareStatement(sql);
 
                 //Set parameters
@@ -166,10 +166,10 @@ public class ThumbRatings {
 
                 //Execute query
                 stmt.execute();
-               System.out.println("Sql "+"UPDATE course_review SET thumbs_up = "+this.thumbsUp+" WHERE review_id = "+this.reviewID );
-                System.out.println("Thumbs up"+ this.thumbsUp);
-                 System.out.println("Review IDi"+ this.reviewID);
-                 
+                System.out.println("Sql " + "UPDATE course_review SET thumbs_up = " + this.thumbsUp + " WHERE review_id = " + this.reviewID);
+                System.out.println("Thumbs up" + this.thumbsUp);
+                System.out.println("Review IDi" + this.reviewID);
+
                 System.out.println("IncThumbsUp query executed.");
                 //this.thumbsUp++;
                 return true;
@@ -209,8 +209,8 @@ public class ThumbRatings {
         String sql;
 
         if (conn != null) {
-            System.out.print("thumbs up in down"+ this.thumbsUp);
-            System.out.print("thumbs Down in down"+ this.thumbsDown);
+            System.out.print("thumbs up in down" + this.thumbsUp);
+            System.out.print("thumbs Down in down" + this.thumbsDown);
             try {
                 //Check if incrementing thumbs-down count will make it 10 more than thumbs-up count
                 //thumbs-up count. If this is true, remove the course review from the database.

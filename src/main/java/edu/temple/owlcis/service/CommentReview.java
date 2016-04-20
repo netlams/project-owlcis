@@ -5,7 +5,6 @@
  */
 package edu.temple.owlcis.service;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,21 +12,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  *
  * @author sheth
- **/
+ *
+ */
 /*
-The intended goal for this class to display comments on our 
-reviewss page and post comments to database.
-insertCommnet=  insert comment to comment_review table in db
-displayComemnt= display comment under review from table in db
-*/
+ The intended goal for this class to display comments on our 
+ reviewss page and post comments to database.
+ insertCommnet=  insert comment to comment_review table in db
+ displayComemnt= display comment under review from table in db
+ */
 public class CommentReview {
+
     //Global Variables
     private int userID;
     private int reviewID;
-   // private int commentID;
+    // private int commentID;
     private String courseID;
     private String f_name;
     private String l_name;
@@ -38,34 +40,32 @@ public class CommentReview {
 //Constructor that sets all variables to empty
     public CommentReview() {
         this.userID = 0;
-        this.reviewID= 0;
-       // this.commentID= 0;
+        this.reviewID = 0;
+        // this.commentID= 0;
         this.courseID = "";
         this.semester = "";
-        this.f_name= "";
-        this.l_name= "";
-        this.comment_text= "";
-        this.semester= "";
-        this.time_stamp= "";
+        this.f_name = "";
+        this.l_name = "";
+        this.comment_text = "";
+        this.semester = "";
+        this.time_stamp = "";
     }
 
-  /* @Override
-    public String toString() {
-        return "CommentReview{" + "userID=" + userID + ", reviewID=" + reviewID + ", "
-                + "comment_text=" + comment_text + ", "
-                + "f_name=" + f_name + ", l_name=" + l_name + ","
-                + " semester=" + semester + '}';
-    }
-    */
-     @Override
+    /* @Override
+     public String toString() {
+     return "CommentReview{" + "userID=" + userID + ", reviewID=" + reviewID + ", "
+     + "comment_text=" + comment_text + ", "
+     + "f_name=" + f_name + ", l_name=" + l_name + ","
+     + " semester=" + semester + '}';
+     }
+     */
+    @Override
     public String toString() {
         return "CommentReview{" + "reviewID=" + reviewID + ", userID=" + userID + ", "
-                + "comment_text=" + comment_text  + '}';
+                + "comment_text=" + comment_text + '}';
     }
-    
-    
-    
-   /**
+
+    /**
      *
      * @return ID of user associated with this course review
      */
@@ -81,6 +81,7 @@ public class CommentReview {
     public void setUserID(int userID) {
         this.userID = userID;
     }
+
     /**
      *
      * @return ID of user associated with this course review
@@ -102,7 +103,6 @@ public class CommentReview {
         return courseID;
     }
 
-    
     public void setCourseID(String courseID) {
         this.courseID = courseID;
     }
@@ -141,21 +141,23 @@ public class CommentReview {
         this.semester = semester;
     }
 
-    
-    public String getfName(){
+    public String getfName() {
         return f_name;
     }
-    public void setfName(String f_name){
-        this.f_name= f_name;
+
+    public void setfName(String f_name) {
+        this.f_name = f_name;
     }
 
-    public String getLName(){
+    public String getLName() {
         return l_name;
     }
-    public void seeLName(String l_name){
-        this.l_name= l_name;
+
+    public void seeLName(String l_name) {
+        this.l_name = l_name;
     }
-     public String gettime_stamp() {
+
+    public String gettime_stamp() {
         return time_stamp;
     }
 
@@ -163,19 +165,19 @@ public class CommentReview {
         this.time_stamp = time;
     }
 
- public CommentReview(int r, String c, String c_id, String f, String l, String s, String t, int u) {
+    public CommentReview(int r, String c, String c_id, String f, String l, String s, String t, int u) {
         this.reviewID = r;
         this.comment_text = c;
-         this.courseID = c_id;
+        this.courseID = c_id;
         this.f_name = f;
         this.l_name = l;
         this.semester = s;
-         this.time_stamp = t;
-         this.userID = u;
-        
+        this.time_stamp = t;
+        this.userID = u;
+
     }
 
-public List getAllComment() throws SQLException {
+    public List getAllComment() throws SQLException {
         Database dbc = new Database();
         if (dbc.getError().length() == 0) {
             // no errors
@@ -185,9 +187,9 @@ public List getAllComment() throws SQLException {
             try {
                 String sql = "SELECT rc.review_id,  comment_text, course_id, substring(f_name,1,1), "
                         + "substring(l_name,1,1), semester, "
-                        + " rc.time_stamp, rc.user_id\n" +
-"FROM owlcis.course_review_comment as rc, owlcis.user as u, owlcis.course_review as cr\n" +
-" where rc.user_id = u.user_id AND rc.review_id = cr.review_id;";
+                        + " rc.time_stamp, rc.user_id\n"
+                        + "FROM owlcis.course_review_comment as rc, owlcis.user as u, owlcis.course_review as cr\n"
+                        + " where rc.user_id = u.user_id AND rc.review_id = cr.review_id;";
 
                 stmt = dbc.getConn().createStatement();
                 rs = stmt.executeQuery(sql);
@@ -242,24 +244,21 @@ public List getAllComment() throws SQLException {
         return null;
     }
 
-
-
-
-public boolean insertComment(Connection conn) throws SQLException {
+    public boolean insertComment(Connection conn) throws SQLException {
         PreparedStatement stmt = null;
 
         if (conn != null) {
             try {
                 String sql = "INSERT INTO course_review_comment (review_id, user_id, comment_text)"
                         + "VALUES (?, ?, ?)";
-               stmt = conn.prepareStatement(sql);
+                stmt = conn.prepareStatement(sql);
 
                 //Set parameters
                 stmt.setInt(1, reviewID);
                 stmt.setInt(2, userID);
                 stmt.setString(3, comment_text);
-                System.out.println("SQL FOR INSERTING COMMENT"+ sql);
-                
+                System.out.println("SQL FOR INSERTING COMMENT" + sql);
+
                 stmt.executeUpdate();
                 System.out.println("comment post reviews Query executed.");
 
@@ -289,6 +288,5 @@ public boolean insertComment(Connection conn) throws SQLException {
         }
         return false;
     }
-
 
 }

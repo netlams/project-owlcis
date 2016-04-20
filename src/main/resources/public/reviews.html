@@ -69,19 +69,28 @@
                             </div>    
 
                             <div style="clear:both;"></div>
+                            <div class="panel-heading">
+                                <p align="left">Comments</p>
+                                <div class="panel panel-default-comment" 
+                                     ng-repeat="cmnt in comnts = (comnts| filter:{reviewID:x.reviewid})">
 
-                            <div class="box-comments-user" ng-repeat="cmnt in comnts = (comnts| filter:{reviewID:x.reviewid})">
-                                <p>{{cmnt.f_name}}.{{cmnt.l_name}}:</p>
-                                <p>{{cmnt.comment_text}}</p>
-                                <p>{{cmnt.time_stamp}}</p>
+                                    <p  align="left">
+                                        <span>{{cmnt.f_name}}.{{cmnt.l_name}}:</span> 
 
+                                        <span>{{cmnt.comment_text}}</span>
+
+                                        <span>Posted On: {{cmnt.time_stamp}}</span>
+                                    </p>
+
+
+                                </div>
                             </div>
-                              <div ng-show="!(comnts | filter:{reviewID:x.reviewid}).length" >
-                        <div class="box-comments-user">
-                            No Comments
+                            <div ng-show="!(comnts | filter:{reviewID:x.reviewid}).length" >
+                                <div class="box-comments-user">
+                                    <p align="left"><span>No Comments have been Posted.</span></p>
+                                </div>
+                            </div>
                         </div>
-         </div>
- </div>
 
 
 
