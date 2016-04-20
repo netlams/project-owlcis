@@ -44,30 +44,36 @@
     app.controller('scheduleListViewCtrl', ['$scope', 'DTOptionsBuilder', 'DTColumnBuilder', 'DTColumnDefBuilder',
         function ($scope, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder) {
             var vm = this;
-            $scope.loadData = function () {
-                // Table options
-                vm.dtOptions = {
-                    ajax: './api/schedule',
-                    dom: 'Bfrti',
-                    paginationType: 'simple_numbers',
-                    displayLength: 10,
-                    aaSorting: [],
-                    buttons: [
-                        'columnsToggle', 'print', 'pdf', 'excel'
-                    ]
-                };
-                // Column options 
-                vm.dtColumns = [
-                    DTColumnBuilder.newColumn('semester').withTitle('Semester').withClass('text-primary'),
-                    DTColumnBuilder.newColumn('courseID').withTitle('Course ID'),
-                    DTColumnBuilder.newColumn('courseTitle').withTitle('Name')
-                ];
+            // Table options
+            vm.dtOptions = {
+                ajax: './api/schedule',
+                dom: 'Bfrti',
+                paginationType: 'simple_numbers',
+                displayLength: 10,
+                aaSorting: [],
+                buttons: [
+                    'columnsToggle', 'print', 'pdf', 'excel'
+                ]
             };
-            // run this
-            $scope.loadData();
-            
-            $scope.$on('someEvent', function(event, msg) {
-                console.log("view ctrl called");
+            // Column options 
+            vm.dtColumns = [
+                DTColumnBuilder.newColumn('semester').withTitle('Semester').withClass('text-primary'),
+                DTColumnBuilder.newColumn('courseID').withTitle('Course ID'),
+                DTColumnBuilder.newColumn('courseTitle').withTitle('Name')
+            ];
+            // reload options
+            vm.reloadData = reloadData;
+            vm.dtInstance = {};
+
+            function reloadData() {
+                var resetPaging = false;
+                vm.dtInstance.reloadData(null, resetPaging);
+            }
+
+            $scope.$on('fetchReload', function (event, msg) {
+                if (msg === "view") {
+                    reloadData();
+                };
             });
         }]);
 
@@ -129,7 +135,7 @@
                     });
 
             $scope.addSchedule = function () {
-                $scope.formData.semester = $scope.formData.season +  $scope.formData.year;
+                $scope.formData.semester = $scope.formData.season + $scope.formData.year;
                 $http.post('./api/schedule/add', $scope.formData)
                         .then(function (response) {
                             if (response.status == 201) {
@@ -150,10 +156,11 @@
                                         + response.data);
                             }
                         });
-                       
+
                 // set the timer to reset any alert messages
-                if (angular.isDefined(resetMsgTimer)) return;
-                resetMsgTimer = $interval(resetMsg, 5000); 
+                if (angular.isDefined(resetMsgTimer))
+                    return;
+                resetMsgTimer = $interval(resetMsg, 5000);
             };
 
             $scope.removeSchedule = function (i) {
@@ -163,29 +170,36 @@
                             if (response.status == 200) {
                                 $scope.formData.err = null;
                                 $scope.formData.succ = "Deleted " + removal.courseID;
-                                  vm.data.splice(i, 1);
+                                vm.data.splice(i, 1);
                             }
                         }, function (response) {
-                                $scope.formData.err = "Failed to add";
-                                $scope.formData.succ = null;
-                                console.log("Error in processing form. "
-                                        + response.data);
+                            $scope.formData.err = "Failed to add";
+                            $scope.formData.succ = null;
+                            console.log("Error in processing form. "
+                                    + response.data);
                         });
-                
+
                 // set the timer to reset any alert messages
-                if (angular.isDefined(resetMsgTimer)) return;
+                if (angular.isDefined(resetMsgTimer))
+                    return;
                 resetMsgTimer = $interval(resetMsg, 5000);
             };
-            
+
             /**
              * reset the alert messages
-             */  
+             */
             resetMsg = function () {
                 $scope.formData.succ = null;
                 $scope.formData.err = null;
                 $interval.cancel(resetMsgTimer);
                 resetMsgTimer = undefined;
             };
+
+            $scope.$on('fetchReload', function (event, msg) {
+                if (msg === "edit") {
+                    $scope.fetchData();
+                };
+            });
         }]);
 
     /* Profile Controller */
@@ -197,6 +211,7 @@
                     // change tab to ...
                     $scope.changeTab = function (tab) {
                         $scope.tab = tab;
+                        $scope.$broadcast('fetchReload', tab);
                     };
 
                     // initialize default values
