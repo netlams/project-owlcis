@@ -1,8 +1,11 @@
 (function () {
     var app = angular.module('authApp');
 
-    /* Degree Long-name Service */
+    /* Degree Long-name Analyzer Service */
     app.service('DegreeInfoService', function () {
+        /**
+         * Pass in abbr. degree name and get its long name
+         */
         this.getLongName = function (x) {
             if (x.toUpperCase() === "CSM")
                 return "Computer Science & Math";
@@ -11,6 +14,9 @@
             else
                 return "Computer Science";
         };
+        /**
+         * Pass in abbr. degree name and get its advisor info 
+         */
         this.getAdvising = function (x) {
             if (x.toUpperCase() === "CSM") {
                 return {
@@ -64,12 +70,16 @@
             // reload options
             vm.reloadData = reloadData;
             vm.dtInstance = {};
-
+            
+            /**
+             * Func to reload
+             */
             function reloadData() {
                 var resetPaging = false;
                 vm.dtInstance.reloadData(null, resetPaging);
             }
-
+            
+            // listen for event
             $scope.$on('fetchReload', function (event, msg) {
                 if (msg === "view") {
                     reloadData();
@@ -84,6 +94,10 @@
             var vm = this;
             // global timer control
             var resetMsgTimer;
+            
+            /**
+             * Func to fetch schedules
+             */
             $scope.fetchData = function () {
                 // Edit Mode stuff
                 vm.data = $resource('./api/schedule').query();
@@ -111,7 +125,10 @@
                 err: null,
                 succ: null
             };
-
+            
+            /**
+             * gets a schedule from ajax table data
+             */ 
             function getCourseFromData(i) {
                 return {
                     year: parseInt(vm.data[i].semester.substring(2, 4)),
@@ -133,7 +150,10 @@
                         $scope.addTabFormData.err = "Failed to get course list";
                         console.log("Failed to get course list" + response);
                     });
-
+            
+            /**
+             * Func to add schedule
+             */
             $scope.addSchedule = function () {
                 $scope.formData.semester = $scope.formData.season + $scope.formData.year;
                 $http.post('./api/schedule/add', $scope.formData)
@@ -162,7 +182,10 @@
                     return;
                 resetMsgTimer = $interval(resetMsg, 5000);
             };
-
+            
+            /**
+             * Func to remove a schedule
+             */
             $scope.removeSchedule = function (i) {
                 var removal = getCourseFromData(i);
                 $http.post('./api/schedule/remove', removal)
@@ -194,7 +217,8 @@
                 $interval.cancel(resetMsgTimer);
                 resetMsgTimer = undefined;
             };
-
+            
+            // event listener
             $scope.$on('fetchReload', function (event, msg) {
                 if (msg === "edit") {
                     $scope.fetchData();
