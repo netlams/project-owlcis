@@ -41,20 +41,96 @@
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Schedule List
+                    My Schedule List
                 </div>
                 <div class="panel-body" id='dvData'>
-                    <div class="schedule-table" ng-controller="ScheduleListController as schedule">
-                    <table datatable="" dt-options="schedule.dtOptions" dt-columns="schedule.dtColumns" class="table table-striped table-bordered"></table>
+                    <!--Tab Menu-->
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" data-ng-class="{active: tab == 'view'}">
+                            <a data-ng-click="changeTab('view')">View</a>
+                        </li>
+                        <li role="presentation" data-ng-class="{active: tab == 'edit'}">
+                            <a data-ng-click="changeTab('edit')">Edit</a>
+                        </li>
+                    </ul>
+                    <br/>
+
+                    <!--View Mode-->
+                    <div class="schedule-table table-responsive" ng-controller="scheduleListViewCtrl as schedule" data-ng-show="tab == 'view'">
+                        <table datatable="" dt-options="schedule.dtOptions" dt-columns="schedule.dtColumns" class="table table-bordered" data-ng-show="tab == 'view'">         
+                        </table>
                     </div>
+
+                    <!--Edit Mode-->
+                    <form data-ng-controller="scheduleListEditCtrl as schedule"  data-ng-show="tab == 'edit'"  data-ng-submit="addSchedule()" >
+                        <div class="row">
+                            <p class="alert alert-success fade in col-md-6 col-md-offset-3 text-center" data-ng-show="formData.succ">{{formData.succ}}
+                                <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+                            <p class="alert alert-danger fade in col-md-6 col-md-offset-3 text-center" data-ng-show="formData.err">{{formData.err}}
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            </p>
+                        </div>
+                        <div class="table-responsive">
+                            <table datatable="ng" dt-options="schedule.dtOptions" dt-column-defs="schedule.dtColumnDefs" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="col-xs-2">
+                                <div class="form-group text-center no-margin-botton">
+                                    <label for='season'>Season</label>
+                                    <select name='season' class="form-control" data-ng-model="formData.season" required>
+                                        <option value="">-Select-</option>
+                                        <option value='FA'>Fall</option>
+                                        <option value='SP'>Spring</option>
+                                        <option value='SU'>Summer</option>
+                                    </select>
+                                </div>
+                                </th>
+                                <th class="col-xs-2">
+                                <div class="form-group text-center">
+                                    <label for='year'>Year</label>
+                                    <input name='year' type='number' class="form-control" max='99' min='00' data-ng-model="formData.year" required/>
+                                </div>
+                                </th>
+                                <th class="col-xs-6">
+                                <div class="form-group text-center">
+                                    <label for='courseID'>CourseID</label>
+                                    <select name='courseID' class="form-control" data-ng-model="formData.courseID" required>
+                                        <option value="">-Select a Course-</option>
+                                        <option data-ng-repeat="option in availCourse" value="{{option.course_id}}">{{option.course_id}}</option>
+                                    </select>
+                                </div>
+                                </th>
+                                <th class="col-xs-2">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary smaller-icon"><i class="fa fa-plus"></i></button>
+                                </div>
+                                </th>
+                                </tr>
+                                <tr class="active">
+                                    <th class="col-xs-2">Semester</th>
+                                    <th class="col-xs-2">Course ID</th>
+                                    <th class="col-xs-6">Name</th>
+                                    <th class="col-xs-2"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="sch in schedule.data">
+                                        <td class="col-xs-2">{{ sch.semester}}</td>
+                                        <td class="col-xs-2">{{ sch.courseID}}</td>
+                                        <td class="col-xs-6">{{ sch.courseTitle}}</td>
+                                        <td class="col-xs-2">
+                                            <button type="button" data-ng-click="removeSchedule($index)" class="btn btn-danger smaller-icon"><i class="fa fa-trash-o"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding: 5px;">
                 <div class="btn-group" role="group">
                     <a href="/dummy_flowchart.html" target="_blank" class="btn btn-primary">View Flowchart</a>
-                </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary">Download</button>
                 </div>
                 <div class="btn-group" role="group">
                     <a href="https://cst.temple.edu/students/advising-and-student-services/online-appointment-scheduler" 
@@ -63,9 +139,6 @@
             </div>
 
         </div>
-
-    </div>
-    <div class="row">
 
     </div>
 </div> <!-- /container -->

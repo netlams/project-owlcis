@@ -5,7 +5,10 @@
  */
 package edu.temple.owlcis.service;
 
-import com.google.gson.Gson;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,14 +33,12 @@ import java.util.stream.Collectors;
 public class ScheduleBuilder {
 
     //Global variables
-    private Member member; //the username of the student who created the schedule (e.g., tue11223@temple.edu)
-    private Profile profile;
-    
+    private Profile profile;//the user of the student who created the schedule (e.g., tue11223@temple.edu)
+
     /**
      * Default constructor
      */
     public ScheduleBuilder() {
-        this.member = new Member();
         this.profile = new Profile();
     }
 
@@ -49,14 +50,27 @@ public class ScheduleBuilder {
      */
     public ScheduleBuilder(User u) throws Exception, NullPointerException {
         this();
-        this.member.setId(u.getId());
-        profile = new Profile(this.member);
+        this.profile = new Profile(new Member(u));
+        loadMember();
+        this.profile.setCompleted((short) 0);
+    }
+
+    /**
+     * Check if the user is a member by trying to fetch his/her profile
+     *
+     * @return True if member; otherwise throw exceptions
+     * @throws Exception if any errors
+     * @throws NullPointerException if non-existing member
+     */
+    public boolean loadMember() throws Exception, NullPointerException {
         Database dbc = new Database();
         // Database connection OK
         if (dbc.getError().length() == 0) {
             try {
-                if (!profile.fetchProfile(dbc.getConn()))
+                if (!profile.fetchProfile(dbc.getConn())) {
                     throw new NullPointerException();
+                }
+                return true;
             } catch (Exception ex) {
                 throw new Exception();
             } finally {
@@ -65,41 +79,143 @@ public class ScheduleBuilder {
                 }
             }
         }
+        return false;
+    }
+
+    public LinkedList getSchedule(Connection conn) throws SQLException {
+//        try {
+//            profile.fetchAllCourses(conn);
+//            return profile.getTakenCourses();
+//        } catch (Exception ex) {
+//            System.out.println("Error: " + ex.getMessage());
+//        }
+//        return null;
+        PreparedStatement stmt = null;
+        ResultSet results = null;
+        String sql;
+        LinkedList <Schedule> list = new LinkedList<>(); 
+
+        if (conn != null) {
+            try {
+                /* Querying takes table ....................... */
+                sql = "SELECT takes.course_id, takes.semester, course_title "
+                        + "FROM takes INNER JOIN course "
+                        + "ON takes.course_id=course.course_id where mem_id=? "
+                        + "ORDER BY SUBSTR(takes.semester FROM 3 FOR 4), "
+                        + "takes.semester DESC";
+                stmt = conn.prepareStatement(sql);
+                //Set param
+                stmt.setInt(1, this.profile.getMember().getId());
+                //Execute query
+                results = stmt.executeQuery();
+
+                while (results.next()) {
+                    Schedule schedule
+                            = new Schedule(results.getString("takes.course_id"),
+                                    results.getString("course_title"),
+                                    results.getString("semester"));
+                    list.add(schedule);
+                }
+
+                return list;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (results != null) {
+                    try {
+                        results.close();
+                    } catch (SQLException sqlEx) {
+                    } //ignore
+                }
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                    } //ignore
+                }
+            }
+        }
+        return null; //will only return false if connection is null
     }
 
     /**
-     * the constructor for the ScheduleBuilder object
-     *
-     * @param m the member
-     */
-    public ScheduleBuilder(Member m) {
-        this.member = m;
-    }
-
-    /**
-     * Purpose: add courses to a schedule Pre-conditions: the schedule does not
+     * Purpose: add schedule to a schedule Pre-conditions: the schedule does not
      * contain the course to be added Post-conditions: the schedule contains the
      * course
      *
+     * @param sch
+     * @param conn
      * @param courseID the ID of the course to be added to the schedule
      * @return true if the course was successfully added to the schedule; false
      * if it was not added
+     * @throws java.sql.SQLException
      */
-    public boolean addCourse(String courseID) {
-        return true;
+    public boolean addSchedule(Schedule sch, Connection conn) throws SQLException {
+        this.profile.setTakenCourses(this.getSchedule(conn)); 
+        try {
+            if (this.profile.addTakenCourse(sch, conn)) {
+                return true;
+            }
+        } catch (Exception ex) {
+            System.out.println("The Error: " + ex.getMessage());
+            throw new SQLException(ex);
+        }
+        return false;
     }
 
     /**
-     * Purpose: delete courses from a schedule Pre-conditions: the schedule
+     * Purpose: delete schedule from a schedule Pre-conditions: the schedule
      * contains the course to be deleted Post-conditions: the schedule does not
      * contain the course
      *
+     * @param sch
+     * @param conn
      * @param courseID the ID of the course to be deleted from the schedule
      * @return true if the course was successfully deleted from the schedule;
      * false if it was not deleted
+     * @throws java.sql.SQLException
      */
-    public boolean deleteCourse(String courseID) {
-        return true;
+    public boolean removeSchedule(Schedule sch, Connection conn) throws SQLException {
+        PreparedStatement stmt = null;
+        String sql;
+
+        if (conn != null) {
+            try {
+                sql = "DELETE FROM takes "
+                        + "WHERE mem_id = ? "
+                        + "AND course_id = ? "
+                        + "AND semester = ? ";
+                stmt = conn.prepareStatement(sql);
+
+                //Set parameters
+                stmt.setInt(1, this.profile.getMember().getId());
+                stmt.setString(2, sch.getCourseID().toUpperCase());
+                stmt.setString(3, sch.getSemester().toUpperCase());
+
+                //Execute query
+                stmt.executeUpdate();
+
+                return true;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                    } //ignore
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -306,7 +422,7 @@ public class ScheduleBuilder {
         // ******** ^comparsion end
 
         List<List> returnList = new LinkedList<List>(flowchart.values());
-        StudentFlowchart flow = new StudentFlowchart(returnList, this.member);
+        StudentFlowchart flow = new StudentFlowchart(returnList, this.profile.getMember());
         return flow;
 //        return returnList;
 
@@ -343,10 +459,4 @@ public class ScheduleBuilder {
 ////        flow.setSemesterList(tree);
 //        return flow;
     }
-
-    public List getSchedule() {
-
-        return null;
-    }
-
 }

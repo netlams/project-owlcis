@@ -595,10 +595,10 @@ public class Main implements SparkApplication {
             // check if there's a logged-in session
             if (user != null) {
                 try {
-                    ScheduleBuilder model = new ScheduleBuilder(user);
+                    ScheduleBuilder sb = new ScheduleBuilder(user);
                     response.status(200);
                     response.type("application/json");
-                    return new Gson().toJson(model.generateFlowchart());
+                    return new Gson().toJson(sb.generateFlowchart());
                 } catch (NullPointerException ex) {
                     // not valid member
                     response.status(400);
@@ -614,7 +614,100 @@ public class Main implements SparkApplication {
             return "HTTP 401 - Unauthorized";
         });
 
-        /*
+        /**
+         * Get Schedule Courses Route
+         */
+        get(API_LOC + "/schedule", (request, response) -> {
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        response.status(200);
+                        response.type("application/json");
+                        return new Gson().toJson(sb.getSchedule(dbc.getConn()));
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
+                    }
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
+        /**
+         * post forum Route
+         */
+        post(API_LOC + "/schedule/add", (request, response) -> {
+            User user = request.session().attribute("USER");
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        if (sb.addSchedule(schedule, dbc.getConn())) { //attempt to add new taken course
+                            response.status(201);
+                            return "HTTP 201 - CREATED";
+                        } else {
+                            response.status(400);
+                            return "HTTP 400 - BAD REQUEST";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
+                    }
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
+        /**
+         * post forum Route
+         */
+        post(API_LOC + "/schedule/remove", (request, response) -> {
+//            User user = request.session().attribute("USER");
+            User user = new User();
+            user.setId(83);
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        if (sb.removeSchedule(schedule, dbc.getConn())) { //attempt to add new taken course
+                            response.status(200);
+                            return "HTTP 200 - OK";
+                        } else {
+                            response.status(400);
+                            return "HTTP 400 - BAD REQUEST";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
+                    }
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+
+        /**
          * ViewCourseReviews GET Route
          */
         get(API_LOC + "/viewlastreviews", (request, response) -> {
@@ -631,7 +724,7 @@ public class Main implements SparkApplication {
             }
         });
 
-        /*
+        /**
          * CourseCount GET Route
          */
         get(API_LOC + "/coursecount", (request, response) -> {
