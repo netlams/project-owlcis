@@ -269,4 +269,38 @@ public class CourseReview {
         return false;
     }
 
+    public boolean deleteReview(Connection conn, String review) throws SQLException {
+        PreparedStatement stmt = null;
+        String sql;
+
+        if (conn != null) {
+            try {
+                sql = "DELETE FROM course_review "
+                        + "WHERE review_text = '" + review + "'";
+                stmt = conn.prepareStatement(sql);
+
+
+                //Execute query
+                stmt.executeUpdate();
+
+                return true;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                    } //ignore
+                }
+            }
+        }
+        return false;
+    }
 }
+
+
