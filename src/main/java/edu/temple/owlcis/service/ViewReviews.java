@@ -383,4 +383,75 @@ public class ViewReviews {
         }
         return null;
     }
+     public List getEveryReview() throws SQLException {
+        Database dbc = new Database();
+        if (dbc.getError().length() == 0) {
+            // no errors
+            ArrayList<ViewReviews> list = new ArrayList();
+            Statement stmt = null;
+            ResultSet rs = null;
+            try {
+                String sql = "SELECT  cr.review_id, cr.review_text, cr.time_stamp, cr.course_id, substring(u.f_name,1,1),substring(u.l_name,1,1), "
+                        + "cr.helpfulness, cr.easiness,cr.clarity, cr.course_id, cr.semester, cr.thumbs_up, cr.thumbs_down"
+                        + " FROM owlcis.course_review cr"
+                        + " JOIN owlcis.user u ON u.user_id = cr.user_id"
+                        + " ORDER BY cr.time_stamp";
+
+                stmt = dbc.getConn().createStatement();
+                rs = stmt.executeQuery(sql);
+                System.out.println("getFirstReviews Query executed.");
+
+                // add to list
+                while (rs.next()) {
+
+                    list.add(new ViewReviews(rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4),
+                            rs.getString(5),
+                            rs.getString(6),
+                            rs.getDouble(7),
+                            rs.getDouble(8),
+                            rs.getDouble(9),
+                            rs.getString(10),
+                            rs.getString(11),
+                            rs.getInt(12),
+                            rs.getInt(13)));
+                }
+                System.out.println(list);
+            } catch (SQLException ex) {
+                // handle any errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                // it is a good idea to release
+                // resources in a finally{} block
+                // in reverse-order of their creation
+                // if they are no-longer needed
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException sqlEx) {
+                    } // ignore
+
+                    rs = null;
+                }
+
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                    } // ignore
+
+                    stmt = null;
+                }
+
+            }
+            dbc.closeConn();
+            return list;
+        }
+        return null;
+    }
 }
