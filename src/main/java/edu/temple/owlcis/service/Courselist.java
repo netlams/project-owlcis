@@ -43,7 +43,7 @@ public class Courselist {
                 stmt = dbc.getConn().createStatement();
                 // execute query
                 rs = stmt.executeQuery(sql);
-                System.out.println("getAllDept Query executed.");
+                System.out.println("getAllCourse Query executed.");
 
                 // add to list
                 while (rs.next()) {

@@ -8,12 +8,11 @@ authApp.config(function ($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.otherwise('/home');
 
-    $stateProvider
-            .state('first', {
-                url: '/home',
-                templateUrl: 'home.html',
-                controller: 'firstController',
-            }).state('second', {
+    $stateProvider.state('first', {
+        url: '/home',
+        templateUrl: 'home.html',
+        controller: 'firstController',
+    }).state('second', {
         url: '/user',
         templateUrl: 'user.html',
         controller: 'secondController'
@@ -21,16 +20,17 @@ authApp.config(function ($stateProvider, $urlRouterProvider) {
         url: '/course',
         templateUrl: 'course.html',
         controller: 'thirdController'
-    }).state('fourth', {
+    }).state('schedule', {
         url: '/schedule',
         templateUrl: 'schedule.html',
-        controller: 'fourthController'
+        controller: 'scheduleController'
     }).state('reviews', {
         url: '/reviews',
         templateUrl: 'reviews.html',
     }).state('signup', {
         url: '/signup',
-        templateUrl: 'signup.html'
+        templateUrl: 'signup.html',
+        controller: 'signupController'
     }).state('forum', {
         url: '/forum',
         templateUrl: 'forumhome.html',
@@ -39,10 +39,10 @@ authApp.config(function ($stateProvider, $urlRouterProvider) {
         url: '/post',
         templateUrl: 'forumpost.html',
         controller: 'forumpost'
-    }).state('search', {
-        url: '/search',
-        templateUrl: 'forumsearch.html',
-        controller: 'forumsearch'
+    }).state('comments', {
+        url: '/comments',
+        templateUrl: 'forumcomments.html',
+        controller: 'forumcomments'
     }).state('profile', {
         url: '/profile',
         templateUrl: 'profile.html',
@@ -53,4 +53,3 @@ authApp.config(function ($stateProvider, $urlRouterProvider) {
         controller: 'review'
     });
 });
-
