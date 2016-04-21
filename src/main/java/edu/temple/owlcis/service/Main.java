@@ -16,9 +16,9 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import static jdk.nashorn.internal.runtime.JSType.toInt32;
-import spark.Request;
-import spark.Response;
 
 /**
  * The Main class contains the init method for OWLCIS, executing the backend
@@ -69,24 +69,43 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
-        /* Increment Thumbs-up Count */
-        post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
-            String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
-            int revid = toInt32(rb); //integer form of review id
-            System.out.println(rb);
-            System.out.println(revid);
-            ThumbRatings tr = new ThumbRatings(revid);
-
+        /** Increment Thumbs-up Count */
+        post(API_LOC + "/incthumbsup", (request, response) -> {
+            Pattern p = Pattern.compile("\\d+");
+            //Matcher m = p.matcher(request.body());
+            System.out.println("Body: " + request.body());
+            String reviewd = request.body().substring(1, request.body().indexOf(','));
+            System.out.print("Review id in main" + reviewd);
+            Matcher m = p.matcher(reviewd);
+            int revid = -1;
+            int upid = 0;
+            String up = request.body().substring(request.body().indexOf(',') + 1, request.body().length() - 1);
+            System.out.println("Thumsbs up" + up);
+            /* String rb = request.body();
+             int mylenth = rb.length();
+             int up = toInt32(rb.substring(mylenth-1));
+             */
+            if (m.find()) {
+                revid = toInt32(m.group());
+                System.out.println("review id: " + revid);
+            }
+            Matcher t = p.matcher(up);
+            if (t.find()) {
+                upid = toInt32(t.group());
+                System.out.println("thumbs up in matcher" + upid);
+            }
+            ThumbRatings tr = new ThumbRatings(revid, upid, 0);
             Database dbc = new Database();
 
             if (dbc.getError().length() == 0) {
                 try {
-                    if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
-                        if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
-                            response.status(201);
-                            return "HTTP 201 - CREATED";
-                        }
+                    /*if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
+                     */
+                    if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
                     }
+
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
@@ -97,19 +116,49 @@ public class Main implements SparkApplication {
 
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
-            String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
-            int revid = toInt32(rb); //integer form of review id
-            ThumbRatings tr = new ThumbRatings(revid);
+            Pattern p = Pattern.compile("\\d+");
+            //Matcher m = p.matcher(request.body());
+            System.out.println("Body: " + request.body());
+            String reviewd = request.body().substring(1, request.body().indexOf(','));
+            System.out.print("Review id in main" + reviewd);
+            int revid = -1;
+            Matcher m = p.matcher(reviewd);
+            if (m.find()) {
+                revid = toInt32(m.group());
+                //System.out.println("review id: " + revid);
+            }
+
+            int upid = 0;
+            String up = request.body().substring(request.body().indexOf(',') + 1, request.body().lastIndexOf(','));
+            System.out.println("Thumbs Up in Main " + up);
+            Matcher t = p.matcher(up);
+            if (t.find()) {
+                upid = toInt32(t.group());
+                System.out.println("thumbs up in matcher " + upid);
+            }
+
+            int downid = 0;
+            String down = request.body().substring(request.body().lastIndexOf(',') + 1, request.body().length() - 1);
+            System.out.println("Thumsbs down in main" + down);
+            Matcher u = p.matcher(down);
+            if (u.find()) {
+                downid = toInt32(u.group());
+                System.out.println("thumbs down in matcher" + downid);
+            }
+
+            ThumbRatings tr = new ThumbRatings(revid, upid, downid);
 
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
-                    if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
-                        if (tr.incThumbsDown(dbc.getConn())) { //attempt to call method to inc thumbs-up
-                            response.status(201);
-                            return "HTTP 201 - CREATED";
-                        }
+                    /*if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
+                     */
+                    if (tr.incThumbsDown(dbc.getConn())) { //attempt to call method to inc thumbs-up
+                        response.status(201);
+
+                        return "HTTP 201 - CREATED";
                     }
+
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
@@ -640,7 +689,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
+
         /**
          * post forum Route
          */
@@ -672,7 +721,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
+
         /**
          * post forum Route
          */
@@ -742,6 +791,48 @@ public class Main implements SparkApplication {
                 response.status(500);
                 return "Error " + ex.getMessage();
             }
+        });
+
+        /*
+         * Comment Reviews GET Route
+         */
+        get(API_LOC + "/commentreview", (request, response) -> {
+            try {
+                CommentReview rev = new CommentReview();
+                List list = rev.getAllComment();
+                response.type("application/json");
+                response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
+
+        /**
+         * Post Comment in review
+         */
+        post(API_LOC + "/postcomment", (request, response) -> {
+            Gson gson = new Gson();
+            User user = request.session().attribute("USER");
+            CommentReview testComment = gson.fromJson(request.body(), CommentReview.class);
+            System.out.println("CommentReview in MAin for Insert" + testComment);
+            testComment.setUserID(user.getId());
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (testComment.insertComment(dbc.getConn())) {
+
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
         /**

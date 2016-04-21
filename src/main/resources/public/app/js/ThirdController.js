@@ -60,10 +60,15 @@
 
                 $http.post('/api/coursereviews', $scope.json_object)
                         .then(function (response) {
+                            //success portion
+                            $scope.message = "<b>Course Review successfully Added.</b>";
                             $scope.example2 = response.data;
                             console.log($scope.json_object);
                             console.log($scope.example2);
                         }, function (response) {
+                            //so this is for error
+                            // $.notify("Error","error");
+                            $scope.message = "<b>Error: Review Can not be added.</b>";
                             console.log($scope.json_object);
 
                         });

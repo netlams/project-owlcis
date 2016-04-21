@@ -1,6 +1,6 @@
 /* Temple Cherry Red #9E1B34 */
 /* btn color (green)): #1abc9c */
-
+@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
 /* Google Sign in button */
 #google-signin-btn, #appLoginMsg button {
     margin-top: 9px;
@@ -267,4 +267,12 @@ label.star:before {
 footer {
     margin-bottom: 30px; 
     padding-top: 10px;
+}
+
+p span 
+{
+    display: inline-block;
+}
+.panel-comment{
+    background-color: #444;
 }

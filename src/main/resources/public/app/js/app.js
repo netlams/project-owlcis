@@ -2,10 +2,10 @@
  * Created by dhruvin sheth
  */
 
-var authApp = angular.module('authApp', ['ngAnimate', 'ngResource', 'ui.router', 'angular.filter', 'datatables', 'datatables.buttons', 'datatables.bootstrap']);
+var authApp = angular.module('authApp', ['ngAnimate', 'ngResource', 'ngSanitize', 'ui.router', 'ui.router', 'angular.filter', 'datatables', 'datatables.buttons', 'datatables.bootstrap']);
 
 authApp.config(function ($stateProvider, $urlRouterProvider, $compileProvider) {
-        
+
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
         $urlRouterProvider.otherwise('/home');
