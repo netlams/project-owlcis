@@ -53,5 +53,9 @@ authApp.config(function ($stateProvider, $urlRouterProvider, $compileProvider) {
             url: '/reviews',
             templateUrl: 'reviews.html',
             controller: 'review'
+        }).state('moderator', {
+            url: '/moderator',
+            templateUrl: 'moderator.html',
+            controller: 'delete'
         });
 });

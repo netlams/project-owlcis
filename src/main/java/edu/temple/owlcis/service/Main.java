@@ -726,9 +726,7 @@ public class Main implements SparkApplication {
          * post forum Route
          */
         post(API_LOC + "/schedule/remove", (request, response) -> {
-//            User user = request.session().attribute("USER");
-            User user = new User();
-            user.setId(83);
+            User user = request.session().attribute("USER");
             if (user != null) {
                 ScheduleBuilder sb = new ScheduleBuilder(user);
                 Database dbc = new Database();
@@ -851,5 +849,74 @@ public class Main implements SparkApplication {
             return gson.toJson(list);
         });
 
+        /**
+         * get EVERY review route
+         */
+        get(API_LOC + "/viewallreviews", (request, response) -> {
+            try {
+                ViewReviews rev = new ViewReviews();
+                List list = rev.getEveryReview();
+                //List list = Forum_search.getAllForum_search();
+                response.type("application/json");
+                response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
+
+         /**
+         * Delete Review Route
+         */
+        post(API_LOC + "/review/delete", (request, response) -> {
+
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            CourseReview rev = new CourseReview();
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+
+                    if (rev.deleteReview(dbc.getConn(), request.body())) {
+                        //response.status(200);
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+
+         /**
+         * Delete Post Route
+         */
+        post(API_LOC + "/post/delete", (request, response) -> {
+
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            Forum_post post = new Forum_post();
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+
+                    if (post.deletePost(dbc.getConn(), request.body())) {
+                        //response.status(200);
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
     }
 }
