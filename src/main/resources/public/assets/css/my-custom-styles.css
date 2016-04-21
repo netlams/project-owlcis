@@ -8,9 +8,12 @@
 }
 
 /* Angular animation */
-#profile-completed-course .ng-hide-remove { animation:0.8s fadeInUp ease; }
-.animate-courselist-if.ng-leave { animation:0.5s bounceOut ease; }
-.animate-courselist-if.ng-enter { animation:0.5s zoomIn ease; }
+#page-profile .alert.ng-hide-remove { animation:0.8s fadeInUp ease-out; }
+#page-profile .alert.ng-hide-add { animation:0.5s fadeOutDown ease-out; }
+#page-schedule .alert.ng-hide-remove { animation:0.8s fadeInUp ease-out; }
+#page-schedule .alert.ng-hide-add { animation:0.5s fadeOutDown ease-out; }
+.animate-courselist-if.ng-leave { animation:0.5s bounceOut linear; }
+.animate-courselist-if.ng-enter { animation:0.5s zoomIn ease-in; }
 
 /* Loading animation */
 #cssload-loader {
@@ -200,8 +203,60 @@ label.star:before {
 }
 
 /* schedule page */
+#page-schedule {
+    color: black;
+}
+
+#page-schedule .text-primary {
+    color: #1abc9c;
+}
+
+.schedule-table ul {
+    color: black;
+    list-style-type: none;
+    float: left;
+    padding-left: 1em;
+}
+
+.schedule-table ul li {
+    display: inline;
+}
+
+.schedule-table .table {
+    background-color: white;
+}
+
+#page-schedule .buttons-print, 
+#page-schedule .buttons-pdf, 
+#page-schedule .buttons-excel,
+#page-schedule .buttons-copy {
+    color: white;
+    background-image: -webkit-linear-gradient(#ec971f, #ec971f); 
+}
+
+#page-schedule .buttons-print:hover, 
+#page-schedule .buttons-pdf:hover, 
+#page-schedule .buttons-excel:hover,
+#page-schedule .buttons-copy:hover {
+    color: white;
+    background-image: -webkit-linear-gradient(#ec971f, #d58512);
+}
+
+.smaller-icon {
+    font-size: 1.2em;
+    padding: 0.2em 0.4em;
+}
+
+.no-margin-botton {
+    margin-botton: 0px; 
+}
+
+.nav-login {
+    padding-left: 15px;
+}
+
 .text-major-degree {
-    font-size: 24px;
+    font-size: 18px;
     color: #ec971f;
     background: -webkit-linear-gradient(#ddd, #ec971f);
     -webkit-background-clip: text;

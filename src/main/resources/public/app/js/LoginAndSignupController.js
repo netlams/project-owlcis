@@ -19,7 +19,7 @@
     app.service('DeptService', function ($q, $http) {
         this.getDeptList = function () {
             var defer = $q.defer();
-            $http.get('/api/depts', {cache: 'true'})
+            $http.get('./api/depts', {cache: 'true'})
                     .success(function (data) {
                         defer.resolve(data);
                     });
@@ -58,7 +58,6 @@
             $scope.loginStatus = $scope.checkLogin();
         }]);
     /* Signup Controller */
-
     app.controller('signupController', ['$scope', '$state', '$http', '$window', 'DeptService', 'CookieService',
         function ($scope, $state, $http, $window, DeptService, CookieService) {
             $scope.foundEmail = CookieService.getCookie('EMAIL');
@@ -74,13 +73,11 @@
 
             // process the form
             $scope.processForm = function () {
-                $http.post('/signup', $scope.formData)
+                $http.post('./signup', $scope.formData)
                         .then(function (response) {
                             console.log("Signup status: " + response.status);
                             console.log(response.data);
                             if (response.status == 203) {
-//                                alert("Successfully Added");
-//                                $window.location.href = '/';
                                 $scope.formData.succ = 'Successfully signed up. Redirecting you in 3 seconds ...';
                                 setTimeout(function () {
                                     $window.location.href = '/';

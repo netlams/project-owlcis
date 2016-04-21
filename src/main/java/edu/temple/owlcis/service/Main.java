@@ -31,7 +31,7 @@ public class Main implements SparkApplication {
     /**
      * A constant string to containing the backend system URL
      */
-    public static final String API_LOC = "/api";
+    public static final String API_LOC = "api";
 
     /**
      * Executes the backend logic of the app
@@ -45,7 +45,7 @@ public class Main implements SparkApplication {
          * root API
          */
         get(API_LOC + "/", (request, response) -> "<h1>/ root directory</h1> ");
-        
+
         /**
          * Post Review Route
          */
@@ -113,7 +113,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
+
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
             Pattern p = Pattern.compile("\\d+");
@@ -175,9 +175,6 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 // setting up member to fetch
                 Member member = new Member();
                 member.setId(user.getId());
@@ -217,9 +214,6 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 // get post data
                 Gson gson = new Gson();
                 Member member = gson.fromJson(request.body(), Member.class);
@@ -249,9 +243,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -280,9 +271,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -316,9 +304,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -595,7 +580,7 @@ public class Main implements SparkApplication {
             Forum_post post = new Forum_post();
             post.setUserId(user.getId());
             post.setUserEnteredQues(request.body());
-           // post.setUserId();
+            // post.setUserId();
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
@@ -658,32 +643,42 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
-                // setting up member to fetch
-                Member member = new Member();
-                member.setId(user.getId());
-                Profile profile = new Profile(member);
+                try {
+                    ScheduleBuilder sb = new ScheduleBuilder(user);
+                    response.status(200);
+                    response.type("application/json");
+                    return new Gson().toJson(sb.generateFlowchart());
+                } catch (NullPointerException ex) {
+                    // not valid member
+                    response.status(400);
+                    System.out.println("Error: " + ex.getMessage());
+                    return "HTTP 400 - Bad Request";
+                } catch (Exception ex) {
+                    response.status(500);
+                    System.out.println("Error: " + ex.getMessage());
+                    return "HTTP 500 - Internal Server Error";
+                }
+            }
+            response.status(401);
+            return "HTTP 401 - Unauthorized";
+        });
+
+        /**
+         * Get Schedule Courses Route
+         */
+        get(API_LOC + "/schedule", (request, response) -> {
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
                 Database dbc = new Database();
-                // Database connection OK
                 if (dbc.getError().length() == 0) {
                     try {
-                        if (profile.fetchProfile(dbc.getConn())) {
-                            // found member
-                            ScheduleBuilder model = new ScheduleBuilder(profile.getMember());
-                            response.status(200);
-                            response.type("application/json");
-                            return new Gson().toJson(model.generateFlowchart());
-                        } else {
-                            // not valid member
-                            response.status(400);
-                            return "HTTP 400 - Bad Request";
-                        }
+                        response.status(200);
+                        response.type("application/json");
+                        return new Gson().toJson(sb.getSchedule(dbc.getConn()));
                     } catch (Exception ex) {
-                        response.status(500);
                         System.out.println("Error: " + ex.getMessage());
-                        return "HTTP 500 - Internal Server Error";
                     } finally {
                         if (!dbc.getConn().isClosed()) {
                             dbc.closeConn();
@@ -691,11 +686,77 @@ public class Main implements SparkApplication {
                     }
                 }
             }
-            response.status(401);
-            return "HTTP 401 - Unauthorized";
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
-        /*
+        /**
+         * post forum Route
+         */
+        post(API_LOC + "/schedule/add", (request, response) -> {
+            User user = request.session().attribute("USER");
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        if (sb.addSchedule(schedule, dbc.getConn())) { //attempt to add new taken course
+                            response.status(201);
+                            return "HTTP 201 - CREATED";
+                        } else {
+                            response.status(400);
+                            return "HTTP 400 - BAD REQUEST";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
+                    }
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+
+        /**
+         * post forum Route
+         */
+        post(API_LOC + "/schedule/remove", (request, response) -> {
+//            User user = request.session().attribute("USER");
+            User user = new User();
+            user.setId(83);
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        if (sb.removeSchedule(schedule, dbc.getConn())) { //attempt to add new taken course
+                            response.status(200);
+                            return "HTTP 200 - OK";
+                        } else {
+                            response.status(400);
+                            return "HTTP 400 - BAD REQUEST";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
+                    }
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+
+        /**
          * ViewCourseReviews GET Route
          */
         get(API_LOC + "/viewlastreviews", (request, response) -> {
@@ -712,7 +773,7 @@ public class Main implements SparkApplication {
             }
         });
 
-        /*
+        /**
          * CourseCount GET Route
          */
         get(API_LOC + "/coursecount", (request, response) -> {

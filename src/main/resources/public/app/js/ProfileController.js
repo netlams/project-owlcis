@@ -21,7 +21,7 @@
                 succ: null
             };
             // Fetch Profile info
-            $http.get('/api/profile')
+            $http.get('./api/profile')
                     .success(function (response) {
                         $scope.profileData = response;
                         $scope.profileData.name = $scope.profileData.fname + " " + $scope.profileData.lname;
@@ -35,7 +35,7 @@
                     });
             // On submit
             $scope.processProfileForm = function () {
-                $http.post('/api/profile', $scope.profileData)
+                $http.post('./api/profile', $scope.profileData)
                         .then(function (response) {
                             if (response.status == 200) {
                                 $scope.profileOptions.succ = 'Successfully updated';
@@ -50,7 +50,8 @@
         }]);
 
     /* Completed Courses Controller */
-    app.controller('completedCourseController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
+    app.controller('completedCourseController', ['$scope', '$http', '$filter', '$interval', 
+        function ($scope, $http, $filter, $interval) {
             // default tab choosen
             $scope.tab = 'view';
             // change tab to ...
@@ -75,14 +76,20 @@
                 err: null,
                 succ: null
             };
+            // global timer control
+            var resetMsgTimer;
+            
+            /**
+             * Fetch the courses from user
+             */
             $scope.fetchProfileCourse = function () {
                 // Fetch Profile info
-                $http.get('/api/profile/courses')
+                $http.get('./api/profile/courses')
                         .success(function (data) {
                             $scope.courses = data;
                         })
                         .error(function (response) {
-                            console.log("Failed to get student course list" + response);
+                            console.log("Failed to get student course list " + response);
                             $scope.viewTabFormData = {
                                 err: "Failed to get student course list"
                             };
@@ -90,7 +97,7 @@
             };
             $scope.fetchProfileCourse(); // fetch at page load
             // Fetch Add tab's form data (course list for selection list)
-            $http.get('/api/courselist', {cache: 'true'})
+            $http.get('./api/courselist', {cache: 'true'})
                     .success(function (data) {
                         $scope.addTabFormOpt = {
                             availCourse: data,
@@ -103,10 +110,12 @@
                         $scope.addTabFormData.err = "Failed to get course list";
                         console.log("Failed to get course list" + response);
                     });
-            // Add tab's form submit
+            /**
+             * Add tab's form submit
+             */ 
             $scope.addCourse = function () {
                 $scope.addTabFormData.semester = $scope.addTabFormData.season + $scope.addTabFormData.year;
-                $http.post('/api/profile/add', $scope.addTabFormData)
+                $http.post('./api/profile/add', $scope.addTabFormData)
                         .then(function (response) {
                             if (response.status == 201) {
                                 $scope.addTabFormData.err = null;
@@ -126,45 +135,75 @@
                                         + response.data);
                             }
                         });
+                // set the timer to reset any alert messages
+                if (angular.isDefined(resetMsgTimer)) return;
+                resetMsgTimer = $interval(resetMsg, 5000);
             };
-            // Delete Tab's form submit
+            /**
+             * Delete Tab's form submit
+             */ 
             $scope.deleteCourse = function () {
-                var completed = false;
-                for (var i = 0; i < $scope.deleteCourseList.length; i++) {
-                    $http.post('/api/profile/delete', $scope.deleteCourseList[i])
-                            .then(function (response) {
-                                if (response.status == 200) {
-                                    $scope.delTabFormData.err = null;
-                                    $scope.delTabFormData.succ = "Successfully deleted from your history";
-                                    completed = true;
-                                }
-                            }, function (response) {
-                                $scope.delTabFormData.succ = null;
-                                $scope.delTabFormData.err = "Could not delete. Make sure you are logged in.";
-                                console.log("Error in processing form. "
-                                        + response.data);
-                            });
+                if ($scope.deleteCourseList.length === 0) {
+                    $scope.delTabFormData.succ = null;
+                    $scope.delTabFormData.err = "First select a course to delete";
                 }
-
-                var timer = setInterval(function () {
-                    if (completed) {
-                        $scope.courses = [];
-                        $scope.fetchProfileCourse();
-                        $scope.resetDelete();
-                        clearInterval(timer);
+                else {
+                    var completed = false;
+                    for (var i = 0; i < $scope.deleteCourseList.length; i++) {
+                        $http.post('/api/profile/delete', $scope.deleteCourseList[i])
+                                .then(function (response) {
+                                    if (response.status == 200) {
+                                        $scope.delTabFormData.err = null;
+                                        $scope.delTabFormData.succ = "Successfully deleted from your history";
+                                        completed = true;
+                                    }
+                                }, function (response) {
+                                    $scope.delTabFormData.succ = null;
+                                    $scope.delTabFormData.err = "Could not delete. Make sure you are logged in.";
+                                    console.log("Error in processing form. "
+                                            + response.data);
+                                });
                     }
-                }, 2000);
-                // give about 3 seconds to finish delete req
+
+                    var timer = setInterval(function () {
+                        if (completed) {
+                            $scope.courses = [];
+                            $scope.fetchProfileCourse();
+                            $scope.resetDelete();
+                            clearInterval(timer);
+                        }
+                    }, 2000);
+                    // give about 3 seconds to finish delete req
+                }
+                // set the timer to reset any alert messages
+                if (angular.isDefined(resetMsgTimer)) return;
+                resetMsgTimer = $interval(resetMsg, 5000); 
             };
-            // temporary add courses to list, before submitting request
+            /**
+             * temporary add courses to list, before submitting request
+             */ 
             $scope.addToDeleteList = function (c, s) {
                 $scope.deleteCourseList.push({courseID: c, semester: s});
-                $scope.deleteListCheckMap.set(c, s)
+                $scope.deleteListCheckMap.set(c, s);
             };
-            // reset delete list
+            /**
+             * reset delete list
+             */ 
             $scope.resetDelete = function () {
                 $scope.deleteListCheckMap = new Map();
                 $scope.deleteCourseList = [];
+            };
+            
+            /**
+             * reset the alert messages
+             */  
+            resetMsg = function () {
+                $scope.delTabFormData.succ = null;
+                $scope.delTabFormData.err = null;
+                $scope.addTabFormData.err = null;
+                $scope.addTabFormData.succ = null;
+                $interval.cancel(resetMsgTimer);
+                resetMsgTimer = undefined;
             };
         }]);
 
