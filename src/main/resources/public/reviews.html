@@ -73,7 +73,7 @@
                             <div class="panel-heading">
                                 <p align="left">Comments</p>
                                 <div class="panel panel-default-comment" 
-                                     ng-repeat="cmnt in comnts = (comnts| filter:{reviewID:x.reviewid})">
+                                     ng-repeat="cmnt in comnts = (comnts| filter:{reviewID:x.reviewid} : true )">
 
                                     <p  align="left">
                                         <span>{{cmnt.f_name}}.{{cmnt.l_name}}:</span> 
