@@ -10,11 +10,12 @@ package edu.temple.owlcis.service;
  * @author Lam
  */
 public class DegreeReq {
+
     private String courseID;
     private byte coreOrElective;
     public static final byte CORE = 1;
     public static final byte ELECTIVE = 0;
-    
+
     /**
      * Default Constructor
      */
@@ -22,7 +23,7 @@ public class DegreeReq {
         this.courseID = "";
         this.coreOrElective = DegreeReq.CORE;
     }
-    
+
     /**
      * Constructor
      */
@@ -30,8 +31,7 @@ public class DegreeReq {
         this();
         this.courseID = cid;
     }
-    
-    
+
     /**
      * Constructor
      */
@@ -68,10 +68,23 @@ public class DegreeReq {
     public void setCoreOrElective(byte coreOrElective) {
         this.coreOrElective = coreOrElective;
     }
-    
+
     @Override
     public String toString() {
-        return "DegreeReq: [" + this.courseID + ", " 
-                + ((DegreeReq.CORE==coreOrElective)?"core":"elective") + "]"; 
+        return this.courseID;
     }
+    
+    @Override
+    public int hashCode() {
+        return (int)this.coreOrElective;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if ((o instanceof DegreeReq) && ((DegreeReq) o).getCourseID().equals(this.courseID)) {
+            return true;
+        }
+        return false;
+    }
+
 }

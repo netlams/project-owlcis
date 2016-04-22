@@ -256,13 +256,15 @@ public class ScheduleBuilder {
         /**
          * 04/22 Testing stuff
          */
-        Map<String, List<DegreeReq>> testDegree = new HashMap<>();
-        testDegree.put("CIS 1001", Collections.emptyList());
-        testDegree.put("CIS 1166", Arrays.asList(new DegreeReq("MATH 1022", (byte)1)));
-        testDegree.put("CIS 1068", Arrays.asList(new DegreeReq("MATH 1022", (byte)1)));
-        testDegree.put("CIS 2233", Arrays.asList(new DegreeReq("MATH 1022", (byte)1)));
-        
-        
+        Map<DegreeReq, List<String>> testDegree = new HashMap<>();
+        testDegree.put(new DegreeReq("CIS 1001", DegreeReq.CORE), Collections.emptyList());
+        testDegree.put(new DegreeReq("CIS 1068", DegreeReq.CORE), Arrays.asList("MATH 1022"));
+        testDegree.put(new DegreeReq("CIS 1166", DegreeReq.CORE), Arrays.asList("MATH 1022"));
+        testDegree.put(new DegreeReq("CIS 2233", DegreeReq.CORE), Arrays.asList("MATH 1022"));
+        ArrayList<DegreeReq> testList = new ArrayList<>();
+        testList.add(new DegreeReq("CIS 1001"));
+        testList.add(new DegreeReq("CIS 1166"));
+        testList.add(new DegreeReq("CIS 3333"));
         
         
         
@@ -312,11 +314,18 @@ public class ScheduleBuilder {
                 .stream()
                 .filter(c -> csbsDegree.containsKey(c))
                 .collect(Collectors.toCollection(LinkedList::new));
-        LinkedList<String> test = courseList
+//        LinkedList<String> testList = testDegree
+//                .entrySet()
+//                .stream()
+//                .map(Map.Entry::toString)
+//                .collect(Collectors.toCollection(LinkedList::new));//////////
+        LinkedList<DegreeReq> testMatch = testList
                 .stream()
                 .filter(c -> testDegree.containsKey(c))
                 .collect(Collectors.toCollection(LinkedList::new));/////////////////////////
-        System.out.println("==TSET== : " + test);
+        
+        System.out.println("==TSET== : " + testMatch);///
+//        System.out.println("==TSET LIST== : " + testList);///
         //list of leftover requirements
         LinkedList<String> remainingDegreeCourseList = csbsDegree
                 .entrySet()
@@ -324,13 +333,13 @@ public class ScheduleBuilder {
                 .map(Map.Entry::getKey)
                 .filter(c -> !matchedDegreeCourseList.contains(c))
                 .collect(Collectors.toCollection(LinkedList::new));
-        LinkedList<String> test2 = testDegree
-                .entrySet()
-                .stream()
-                .map(Map.Entry::getKey)
-                .filter(c -> !test.contains(c))
-                .collect(Collectors.toCollection(LinkedList::new));/////////////////////////
-        System.out.println("==TSET2== : " + test2);
+//        LinkedList<String> test2 = testDegree
+//                .entrySet()
+//                .stream()
+//                .map(Map.Entry::getKey)
+//                .filter(c -> !test.contains(c))
+//                .collect(Collectors.toCollection(LinkedList::new));/////////////////////////
+//        System.out.println("==TSET2== : " + test2);
         //map of student schedule to be made into FLOWCHART!!
         TreeMap<String, List<Schedule>> flowchart = new TreeMap<>();
         System.out.println("matched courses: " + matchedDegreeCourseList);
