@@ -257,27 +257,7 @@ public class ScheduleBuilder {
          * DUMMY TEST
          */
         // ********* csbsDegree requirements
-        Map<String, List<String>> csbsDegree = new HashMap<>();
-        //set up
-        //prereq
-        List<String> math1022 = new ArrayList<>();
-        math1022.add("MATH 1022");
-        //map set up (REQUIREMENTS)
-        csbsDegree.put("CIS 1068", math1022);
-        csbsDegree.put("CIS 1166", math1022);
-        csbsDegree.put("CIS 2033", Arrays.asList("CIS 1068", "MATH 1041"));
-        csbsDegree.put("CIS 2107", Arrays.asList("CIS 1068"));
-        csbsDegree.put("CIS 2166", Arrays.asList("CIS 1166", "CIS 1068", "MATH 1041"));
-        csbsDegree.put("CIS 2168", Arrays.asList("CIS 1166", "CIS 1068", "MATH 1022"));
-        csbsDegree.put("CIS 2308", Arrays.asList("CIS 2107", "CIS 2168"));
-        csbsDegree.put("CIS 3207", Arrays.asList("CIS 1166", "CIS 2107", "CIS 2168"));
-        csbsDegree.put("CIS 3223", Arrays.asList("CIS 2166", "MATH 1042"));
-        csbsDegree.put("CIS 3238", Arrays.asList("CIS 2166", "CIS 3207"));
-        csbsDegree.put("CIS 4398", Arrays.asList("CIS 2166", "CIS 3238"));
-        csbsDegree.put("MATH 1022", Collections.emptyList());
-        csbsDegree.put("MATH 1041", math1022);
-        csbsDegree.put("MATH 1042", Arrays.asList("MATH 1041"));
-        csbsDegree.put("CIS 1001", Collections.emptyList());
+        Map<String, List<String>> csbsDegree = new Degree("IST_BS", 2012).getDegree();
 
         System.out.println("degree: " + csbsDegree);
         // ******** ^done for csbsDegree req
