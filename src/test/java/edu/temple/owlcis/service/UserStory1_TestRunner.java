@@ -11,7 +11,7 @@ import org.junit.runner.notification.Failure;
 
 /**
  *
- * @author Lam
+ * @author Dau
  */
 public class UserStory1_TestRunner {
 

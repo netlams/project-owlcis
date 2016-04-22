@@ -254,10 +254,23 @@ public class ScheduleBuilder {
      */
     public StudentFlowchart generateFlowchart() {
         /**
+         * 04/22 Testing stuff
+         */
+        Map<String, List<DegreeReq>> testDegree = new HashMap<>();
+        testDegree.put("CIS 1001", Collections.emptyList());
+        testDegree.put("CIS 1166", Arrays.asList(new DegreeReq("MATH 1022", (byte)1)));
+        testDegree.put("CIS 1068", Arrays.asList(new DegreeReq("MATH 1022", (byte)1)));
+        testDegree.put("CIS 2233", Arrays.asList(new DegreeReq("MATH 1022", (byte)1)));
+        
+        
+        
+        
+        
+        /**
          * DUMMY TEST
          */
         // ********* csbsDegree requirements
-        Map<String, List<String>> csbsDegree = new Degree("IST_BS", 2012).getDegree();
+        Map<String, List<String>> csbsDegree = new Degree("CS_BS", 2012).getDegree();
 
         System.out.println("degree: " + csbsDegree);
         // ******** ^done for csbsDegree req
@@ -299,6 +312,11 @@ public class ScheduleBuilder {
                 .stream()
                 .filter(c -> csbsDegree.containsKey(c))
                 .collect(Collectors.toCollection(LinkedList::new));
+        LinkedList<String> test = courseList
+                .stream()
+                .filter(c -> testDegree.containsKey(c))
+                .collect(Collectors.toCollection(LinkedList::new));/////////////////////////
+        System.out.println("==TSET== : " + test);
         //list of leftover requirements
         LinkedList<String> remainingDegreeCourseList = csbsDegree
                 .entrySet()
@@ -306,6 +324,13 @@ public class ScheduleBuilder {
                 .map(Map.Entry::getKey)
                 .filter(c -> !matchedDegreeCourseList.contains(c))
                 .collect(Collectors.toCollection(LinkedList::new));
+        LinkedList<String> test2 = testDegree
+                .entrySet()
+                .stream()
+                .map(Map.Entry::getKey)
+                .filter(c -> !test.contains(c))
+                .collect(Collectors.toCollection(LinkedList::new));/////////////////////////
+        System.out.println("==TSET2== : " + test2);
         //map of student schedule to be made into FLOWCHART!!
         TreeMap<String, List<Schedule>> flowchart = new TreeMap<>();
         System.out.println("matched courses: " + matchedDegreeCourseList);

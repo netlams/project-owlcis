@@ -14,14 +14,17 @@ import java.sql.SQLException;
  * @author Jeff, Dhruvin, Dau
  */
 public class Database {
-
+    
     private Connection connection = null;
     private static final String driver = "com.mysql.jdbc.Driver";
     private static final String dbUrl = "jdbc:mysql://localhost:3307/owlcis";
     private static final String username = "user";
     private static final String pwrd = "temple2016";
     private StringBuilder err = new StringBuilder("");
-
+    
+    /**
+     * Default Constructor
+     */
     public Database() {
         try {
             Class.forName(driver).newInstance();
@@ -50,11 +53,20 @@ public class Database {
             System.out.println("Connection not created: " + ex.getMessage());
         }
     }
-
+    
+    /**
+     * Get error
+     * @return any error messages 
+     */
     public String getError() {
         return err.toString();
     }
-
+    
+    /**
+     * Get DB Connection
+     * @return connection
+     * @throws SQLException if connection failure
+     */
     public Connection getConn() throws SQLException {
         /*
          This method will intialize Database connection for OWL CIS to backend.
@@ -85,7 +97,11 @@ public class Database {
             return null;
         }
     }
-
+    
+    /**
+     * Close DB connection
+     * @throws SQLException if connection failure 
+     */
     public void closeConn() throws SQLException {
         try {
             //it will forcefully close any open connection in Database.

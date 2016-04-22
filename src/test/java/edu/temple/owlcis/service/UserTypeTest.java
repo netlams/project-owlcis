@@ -9,14 +9,15 @@ import static org.junit.Assert.*;
 /**
  * Unit Tests Cases for Sprint 1's User Types and Methods
  *
- * @author Lam
+ * @author Dau
  */
 public class UserTypeTest {
 
     /**
-     * Case 1 - User object should have correct attributes. Input: User type
-     * with email, first name, last name, role Expected Results: String
-     * representation (toString method) matches input parameters.
+     * Case 1 - User object should have correct attributes. 
+     * Input: User type with email, first name, last name, role 
+     * Expected Results: String representation (toString method) matches input 
+     * parameters.
      */
     @Test
     public void userShouldHaveCorrectAttr() {
@@ -31,26 +32,29 @@ public class UserTypeTest {
     }
 
     /**
-     * Case 2 - Member object should have correct attributes. Input: Member type
+     * Case 2 - Member object should have correct attributes. 
+     * Input: Member type
      * with email, first name, last name, major, status (student or alumni),
-     * graduation date Expected Results: String representation (toString method)
+     * graduation date 
+     * Expected Results: String representation (toString method)
      * matches input parameters.
      *
      */
-    /*@Test
-     public void memberShouldHaveCorrectAttr() {
-     // Parameterized Constructor
-     User user = new Member("ex@temple.edu", "Jane", "Doe", "CS", "student", "2016-05-06", "BS");
-     String expected = "First Name: Jane "
-     + "Last Name: Doe "
-     + "Email: ex@temple.edu "
-     + "Role: member "
-     + "Major: CS "
-     + "studentOrAlumni: student "
-     + "GradDate: 2016-05-06 "
-     + "DegreeType: BS";
-     assertEquals("Member should have correct attributes", expected, user.toString());
-     }*/
+    @Test
+    public void memberShouldHaveCorrectAttr() {
+        // Parameterized Constructor
+        User user = new Member("ex@temple.edu", "Jane", "Doe", "CS", "student", "2016-05-06", "BS");
+        String expected = "First Name: Jane "
+                + "Last Name: Doe "
+                + "Email: ex@temple.edu "
+                + "Role: member "
+                + "Major: CS "
+                + "studentOrAlumni: student "
+                + "GradDate: 2016-05-06 "
+                + "DegreeType: BS";
+        assertEquals("Member should have correct attributes", expected, user.toString());
+    }
+
     /**
      * Case 3 - Moderator object should have correct attributes
      */
@@ -81,9 +85,9 @@ public class UserTypeTest {
     }
 
     /**
-     * Case 5 - UserFactory should return the User subtype. Input: Member,
-     * Moderator, Advisor Expected Results: Member type, Moderator type, Advisor
-     * type
+     * Case 5 - UserFactory should return the User subtype. 
+     * Input: Member, Moderator, Advisor 
+     * Expected Results: Member type, Moderator type, Advisor type
      */
     @Test
     public void userFactoryShouldReturnCorrectSubType() {
@@ -97,8 +101,9 @@ public class UserTypeTest {
     }
 
     /**
-     * Case 6 - User class constants should match. Input: Strings (Member,
-     * Moderator, Advisor) Expected Results: User class constants matches input
+     * Case 6 - User class constants should match. 
+     * Input: Strings (Member, Moderator, Advisor) 
+     * Expected Results: User class constants matches input
      */
     @Test
     public void UserClassConstantsShouldMatch() {

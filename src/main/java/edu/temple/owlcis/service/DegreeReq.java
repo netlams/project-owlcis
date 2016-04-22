@@ -12,9 +12,8 @@ package edu.temple.owlcis.service;
 public class DegreeReq {
     private String courseID;
     private byte coreOrElective;
-    public static final byte CORE = 0;
-
-    public static final byte ELECTIVE = 1;
+    public static final byte CORE = 1;
+    public static final byte ELECTIVE = 0;
     
     /**
      * Default Constructor

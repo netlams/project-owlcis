@@ -94,7 +94,8 @@ public class Degree {
         Statement stmt = null;
         for (int i = 0; i < getCourseList().size(); i++) {
             String sql = "SELECT prereq_id FROM degree, prerequisite, degree_requirement "
-                    + "WHERE degree_requirement.course_id=prerequisite.course_id "
+                    + "WHERE degree.degree_id=degree_requirement.degree_id " 
+                    + "AND degree_requirement.course_id=prerequisite.course_id "
                     + "AND degree.degree_name = \"" + this.degreeName
                     + "\" AND degree.declared_year = " + this.declaredYear
                     + " AND degree_requirement.course_id = \"" + this.getCourseList().get(i) + "\"";
