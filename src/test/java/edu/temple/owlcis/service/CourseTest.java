@@ -54,7 +54,7 @@ public class CourseTest {
         try {
 
             CourseReview test_review = new CourseReview();
-            test_review.setUserID(2);
+            test_review.setUserID(3);
             test_review.setCourseID("CIS 2168");
             test_review.setSemester("FA08");
             test_review.setHelpfulness(5);
