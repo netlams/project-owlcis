@@ -647,7 +647,14 @@ public class Main implements SparkApplication {
                     ScheduleBuilder sb = new ScheduleBuilder(user);
                     response.status(200);
                     response.type("application/json");
-                    return new Gson().toJson(sb.generateFlowchart());
+                    int year = 2012;
+                    if (request.cookie("FC_YEAR") != null) 
+                        year = Integer.parseInt(request.cookie("FC_YEAR"));
+                    String degree = "CS_BS";
+                    if (request.cookie("FC_DEGREE") != null) 
+                        degree = request.cookie("FC_DEGREE");        
+                    
+                    return new Gson().toJson(sb.generateFlowchart(degree, year));
                 } catch (NullPointerException ex) {
                     // not valid member
                     response.status(400);

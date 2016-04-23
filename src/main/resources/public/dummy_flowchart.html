@@ -92,8 +92,7 @@
                             return "Tailored by OWLCIS for "
                                     + data.member.fname.capitalizeFirstLetter() + " "
                                     + data.member.lname.capitalizeFirstLetter()
-                                    + " | Flowchart Sequence For " + data.member.degreeType
-                                    + " in " + data.member.major;
+                                    + " | Flowchart Sequence For " + data.member.major;
                         })
                         .style('fill', '#EEE');
                 // draw owlcis logo image
@@ -249,9 +248,10 @@
             String.prototype.capitalizeFirstLetter = function () {
                 return this.charAt(0).toUpperCase() + this.slice(1);
             }
-
+            
             /* http request to retrieve data */
             d3.json('./api/testflow', function (error, data) {
+//                loadLoadingAnim();
                 if (error) {
                     alert("not logged in");
                     return console.warn(error);
@@ -269,7 +269,8 @@
                 $('body').scrollTop(0);
                 createPDF();
             });
-//create pdf
+
+            /* create pdf */
             function createPDF() {
                 getCanvas().then(function (canvas) {
                     var img = canvas.toDataURL("image/png"),
@@ -283,13 +284,31 @@
                 });
             }
 
-// create canvas object
+            /* create canvas object */
             function getCanvas() {
                 form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
                 return html2canvas(form, {
                     imageTimeout: 2000,
                     removeContainer: true
                 });
+            }
+
+            /* Start loading animation */
+            function loadLoadingAnim() {
+                document.body.style.opacity = "0.1";
+                document.body.innerHTML += "<h1 id='yo'>OWLCIS is Loading</h1>";
+                return true;
+            }
+
+            /* Stop loading animation */
+            function stopLoadingAnim() {
+                /* load for 1.5 seconds */
+                setTimeout(function () {
+                    document.body.style.opacity = "1.0";
+                    var elem = document.getElementById("yo");
+                    elem.parentNode.removeChild(elem);
+                }, 500);
+                return true;
             }
         </script>
     </body>

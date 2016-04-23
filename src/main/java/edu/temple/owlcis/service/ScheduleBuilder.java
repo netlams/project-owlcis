@@ -93,7 +93,7 @@ public class ScheduleBuilder {
         PreparedStatement stmt = null;
         ResultSet results = null;
         String sql;
-        LinkedList <Schedule> list = new LinkedList<>(); 
+        LinkedList<Schedule> list = new LinkedList<>();
 
         if (conn != null) {
             try {
@@ -155,7 +155,7 @@ public class ScheduleBuilder {
      * @throws java.sql.SQLException
      */
     public boolean addSchedule(Schedule sch, Connection conn) throws SQLException {
-        this.profile.setTakenCourses(this.getSchedule(conn)); 
+        this.profile.setTakenCourses(this.getSchedule(conn));
         try {
             if (this.profile.addTakenCourse(sch, conn)) {
                 return true;
@@ -251,56 +251,57 @@ public class ScheduleBuilder {
      * @return StudentFlowchart if flowchart was successfully generated; false
      * if flowchart
      * was not generated
+     * @param y
+     * @param d
      */
-    public StudentFlowchart generateFlowchart() {
+    public StudentFlowchart generateFlowchart(String d, int y) {
         /**
          * 04/22 Testing stuff
          */
-        Map<DegreeReq, List<String>> testDegree = new HashMap<>();
-        testDegree.put(new DegreeReq("CIS 1001", DegreeReq.CORE), Collections.emptyList());
-        testDegree.put(new DegreeReq("CIS 1068", DegreeReq.CORE), Arrays.asList("MATH 1022"));
-        testDegree.put(new DegreeReq("CIS 1166", DegreeReq.CORE), Arrays.asList("MATH 1022"));
-        testDegree.put(new DegreeReq("CIS 2233", DegreeReq.CORE), Arrays.asList("MATH 1022"));
-        ArrayList<DegreeReq> testList = new ArrayList<>();
-        testList.add(new DegreeReq("CIS 1001"));
-        testList.add(new DegreeReq("CIS 1166"));
-        testList.add(new DegreeReq("CIS 3333"));
-        
-        
-        
+//        Map<DegreeReq, List<String>> csbsDegree = new HashMap<>();
+        Map<DegreeReq, List<String>> csbsDegree = new Degree(d , y).getDegree();
+//        csbsDegree.put(new DegreeReq("CIS 1001", DegreeReq.CORE), Collections.emptyList());
+//        csbsDegree.put(new DegreeReq("CIS 1068", DegreeReq.CORE), Arrays.asList("MATH 1022"));
+//        csbsDegree.put(new DegreeReq("CIS 1166", DegreeReq.CORE), Arrays.asList("MATH 1022"));
+//        csbsDegree.put(new DegreeReq("CIS 2233", DegreeReq.CORE), Arrays.asList("MATH 1022"));
+//        csbsDegree.put(new DegreeReq("MATH 1022", DegreeReq.CORE), Collections.emptyList());
+        ArrayList<DegreeReq> courseList = new ArrayList<>();
+        courseList.add(new DegreeReq("CIS 1001", DegreeReq.CORE));
+        courseList.add(new DegreeReq("CIS 1166", DegreeReq.CORE));
+        courseList.add(new DegreeReq("HIST 3333", DegreeReq.CORE));
+
         /**
          * DUMMY TEST
          */
         // ********* csbsDegree requirements
-        Map<String, List<String>> csbsDegree = new Degree("CS_BS", 2012).getDegree();
-
+//        Map<String, List<String>> csbsDegree = new Degree("CS_BS", 2012).getDegree();
         System.out.println("degree: " + csbsDegree);
         // ******** ^done for csbsDegree req
 
         // ******** sample student desired course list
-        ArrayList<String> courseList = new ArrayList<>();
+//        ArrayList<String> courseList = new ArrayList<>();
         Map<String, Integer> completedList = new TreeMap<>();
-//        completedList.put("MATH 1022", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
-//        completedList.put("MATH 1022", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
-//        completedList.put("CIS 1001", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
-        courseList.add("CIS 1001");
-        courseList.add("CIS 2308");
-        courseList.add("CIS 2107");
-        courseList.add("CIS 1166");
-        courseList.add("CIS 1068");
-        courseList.add("MATH 1022");
-        courseList.add("HIST 1001"); // irrelevant course
+////        completedList.put("MATH 1022", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
+////        completedList.put("MATH 1022", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
+////        completedList.put("CIS 1001", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
+//        courseList.add("CIS 1001");
+//        courseList.add("CIS 2308");
+//        courseList.add("CIS 2107");
+//        courseList.add("CIS 1166");
+//        courseList.add("CIS 1068");
+//        courseList.add("MATH 1022");
+//        courseList.add("HIST 1001"); // irrelevant course
 
         // *** 04/09 - A real student schedule costs of schedules (cid and semstr)
         HashMap<String, Schedule> studentScheduleMap = new HashMap<>();
         ArrayList<Schedule> scheduleFromDB = new ArrayList<>();
         scheduleFromDB.add(new Schedule("CIS 1001", "FA15"));
-        scheduleFromDB.add(new Schedule("CIS 2308", "SP16"));
-        scheduleFromDB.add(new Schedule("CIS 2107", "SP16"));
+//        scheduleFromDB.add(new Schedule("CIS 2308", "SP16"));
+//        scheduleFromDB.add(new Schedule("CIS 2107", "SP16"));
         scheduleFromDB.add(new Schedule("CIS 1166", "FA15"));
         scheduleFromDB.add(new Schedule("CIS 1068", "FA15"));
-        scheduleFromDB.add(new Schedule("MATH 1022", "FA15"));
-        scheduleFromDB.add(new Schedule("HIST 1001", "SP16"));
+//        scheduleFromDB.add(new Schedule("MATH 1022", "FA15"));
+//        scheduleFromDB.add(new Schedule("HIST 1001", "SP16"));
         for (int i = 0; i < scheduleFromDB.size(); i++) {
             studentScheduleMap.put(scheduleFromDB.get(i).getCourseID(),
                     new Schedule(scheduleFromDB.get(i).getCourseID(), scheduleFromDB.get(i).getSemester()));
@@ -310,7 +311,7 @@ public class ScheduleBuilder {
 
         // ******** comparsion start
         //list of all courses that are relevant (those that matters for the csbsDegree)
-        LinkedList<String> matchedDegreeCourseList = courseList
+        LinkedList<DegreeReq> matchedDegreeCourseList = courseList
                 .stream()
                 .filter(c -> csbsDegree.containsKey(c))
                 .collect(Collectors.toCollection(LinkedList::new));
@@ -319,15 +320,15 @@ public class ScheduleBuilder {
 //                .stream()
 //                .map(Map.Entry::toString)
 //                .collect(Collectors.toCollection(LinkedList::new));//////////
-        LinkedList<DegreeReq> testMatch = testList
-                .stream()
-                .filter(c -> testDegree.containsKey(c))
-                .collect(Collectors.toCollection(LinkedList::new));/////////////////////////
-        
-        System.out.println("==TSET== : " + testMatch);///
+//        LinkedList<DegreeReq> testMatch = testList
+//                .stream()
+//                .filter(c -> testDegree.containsKey(c))
+//                .collect(Collectors.toCollection(LinkedList::new));/////////////////////////
+
+//        System.out.println("==TSET== : " + testMatch);///
 //        System.out.println("==TSET LIST== : " + testList);///
         //list of leftover requirements
-        LinkedList<String> remainingDegreeCourseList = csbsDegree
+        LinkedList<DegreeReq> remainingDegreeCourseList = csbsDegree
                 .entrySet()
                 .stream()
                 .map(Map.Entry::getKey)
@@ -346,25 +347,33 @@ public class ScheduleBuilder {
         System.out.println("remaining courses: " + remainingDegreeCourseList);
 
         Integer semesterCnt = 1;
+        int electiveCnt = 0;
+
         boolean needPass = true; // controls the number of pass (if !needPass, then cancel while loop)
-        while (needPass || !matchedDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
-            List<String> newPass = matchedDegreeCourseList.stream().collect(Collectors.toList());
+        while (needPass || matchedDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
+            List<DegreeReq> newPass = matchedDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
             List<Schedule> allowedList = new LinkedList<>();
-            for (String course : newPass) {
-                System.out.println("Comparing " + course + ", req: " + csbsDegree.get(course).toString());
+            for (DegreeReq course : newPass) {
+                System.out.println("Comparing " + course.toString() + ", req: " + csbsDegree.get(course).toString());
                 if (csbsDegree.get(course).isEmpty()) {
-                    allowedList.add(studentScheduleMap.get(course)); //allowed to student schedule
-                    completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                    allowedList.add(studentScheduleMap.get(course.toString())); //allowed to student schedule
+                    completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                     matchedDegreeCourseList.remove(course);//no longer needed to review this next pass, so take out
+                    if (course.isElective()) {
+                        electiveCnt++; // increment elective count
+                    }
                 } else {
                     for (String prereq : csbsDegree.get(course)) { // get the prerequisites for this course
                         if (completedList.containsKey(prereq)) { //does student's history meet prereq?
                             int takenSemester = completedList.get(prereq); // when did student took this? (for non-concurrent requirement)
                             if (takenSemester < semesterCnt) { //if taken at an older/earlier semester
-                                allowedList.add(studentScheduleMap.get(course));//meets the prerequirsite, so allowed to student schedule
-                                completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                                allowedList.add(studentScheduleMap.get(course.toString()));//meets the prerequirsite, so allowed to student schedule
+                                completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                                 matchedDegreeCourseList.remove(course);//no longer needed to review this
+                                if (course.isElective()) {
+                                    electiveCnt++; // increment elective count
+                                }
                             }
                         }
                     }
@@ -380,25 +389,32 @@ public class ScheduleBuilder {
             }
         }
 
-        needPass = true;
+        semesterCnt = 1; // reset count to beginning
+        needPass = true; // control while loop
+        // strip out the electives 
+        remainingDegreeCourseList = remainingDegreeCourseList.stream().filter(c -> c.isCore()).collect(Collectors.toCollection(LinkedList::new));
+        if (matchedDegreeCourseList.size() > 0) {
+            remainingDegreeCourseList.addAll(matchedDegreeCourseList); // combine the remainding stuff
+        }
+
         // remaining req
         while (needPass || !remainingDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
-            List<String> newPass = remainingDegreeCourseList.stream().collect(Collectors.toList());
+            List<DegreeReq> newPass = remainingDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
             List<Schedule> allowedList = new LinkedList<>();
-            for (String course : newPass) {
-                System.out.println("NICE BOY " + course + ", req: " + csbsDegree.get(course).toString());
+            for (DegreeReq course : newPass) {
+                System.out.println("NICE BOY " + course.toString() + ", req: " + csbsDegree.get(course).toString());
                 if (csbsDegree.get(course).isEmpty()) {
-                    allowedList.add(new Schedule(course)); //allowed to student schedule
-                    completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                    allowedList.add(new Schedule(course.toString())); //allowed to student schedule
+                    completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                     remainingDegreeCourseList.remove(course);//no longer needed to review this next pass, so take out
                 } else if (csbsDegree.get(course).size() == 1) {
                     String prereq = csbsDegree.get(course).get(0);  // get the prerequisites for this course
                     if (completedList.containsKey(prereq)) { //does student's history meet prereq?
                         int takenSemester = completedList.get(prereq); // when did student took this? (for non-concurrent requirement)
                         if (takenSemester < semesterCnt) { //if taken at an older/earlier semester
-                            allowedList.add(new Schedule(course));//meets the prerequirsite, so allowed to student schedule
-                            completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                            allowedList.add(new Schedule(course.toString()));//meets the prerequirsite, so allowed to student schedule
+                            completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                             remainingDegreeCourseList.remove(course);//no longer needed to review this
                         }
                     }
@@ -415,8 +431,8 @@ public class ScheduleBuilder {
                         }
                     }
                     if (flag) {
-                        allowedList.add(new Schedule(course));//meets the prerequirsite, so allowed to student schedule
-                        completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                        allowedList.add(new Schedule(course.toString()));//meets the prerequirsite, so allowed to student schedule
+                        completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                         remainingDegreeCourseList.remove(course);//no longer needed to review this
                     }
                 }
@@ -426,9 +442,29 @@ public class ScheduleBuilder {
             System.out.println("\n FINISHED PASS #" + semesterCnt + ", need pass? " + needPass);
             System.out.println("->" + allowedList);
             if (needPass) {
+                List<Schedule> previousList = flowchart.get(semesterCnt.toString());
+                if (previousList != null) {
+                    System.out.println("NOT NULL " + previousList);
+                    allowedList.addAll(previousList);
+                } 
                 flowchart.put(semesterCnt.toString(), allowedList);
                 semesterCnt++;
             }
+        }
+
+        // add the min. electives
+        int reqElectiveCount = 4;
+        semesterCnt = semesterCnt - 2;
+        while (electiveCnt < reqElectiveCount) {
+            System.out.println("Elective cnt: " + electiveCnt);
+            List<Schedule> previousList = flowchart.get(semesterCnt.toString());
+            System.out.println("The prev List: " + previousList);
+            previousList.add(new Schedule("CIS ELECTIVE"));
+            previousList.add(new Schedule("CIS ELECTIVE"));
+            flowchart.put(semesterCnt.toString(), previousList);
+            semesterCnt++;
+            electiveCnt = electiveCnt +2;
+
         }
 
 //        System.out.println("allowedList: " + allowedList);
@@ -436,6 +472,7 @@ public class ScheduleBuilder {
         // ******** ^comparsion end
 
         List<List> returnList = new LinkedList<List>(flowchart.values());
+        this.profile.getMember().setMajor(d);
         StudentFlowchart flow = new StudentFlowchart(returnList, this.profile.getMember());
         return flow;
 //        return returnList;

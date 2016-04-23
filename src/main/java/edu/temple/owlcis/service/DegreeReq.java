@@ -68,6 +68,22 @@ public class DegreeReq {
     public void setCoreOrElective(byte coreOrElective) {
         this.coreOrElective = coreOrElective;
     }
+    
+    /**
+     * Is this requirement a core?
+     * @return true if elective
+     */
+    public boolean isCore() {
+        return this.coreOrElective == DegreeReq.CORE;
+    }
+    
+    /**
+     * Is this requirement an elective?
+     * @return true if elective
+     */
+    public boolean isElective() {
+        return this.coreOrElective == DegreeReq.ELECTIVE;
+    }
 
     @Override
     public String toString() {

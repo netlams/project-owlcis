@@ -276,3 +276,21 @@ p span
 .panel-comment{
     background-color: #444;
 }
+
+.modal-body {
+    font-size: 15px;
+}
+
+.modal-small-input {
+    width: 5em;
+    background-color: #FAFAD2;
+    color: #636363;
+    font-size: 12px
+}
+
+.modal-select-tag {
+    padding: 0.1em;
+    background-color: #FAFAD2;
+    color: #636363;
+    font-size: 12px;
+}

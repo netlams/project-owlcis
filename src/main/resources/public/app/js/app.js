@@ -13,11 +13,6 @@ authApp.config(function ($stateProvider, $urlRouterProvider, $compileProvider) {
         $stateProvider.state('first', {
             url: '/home',
             templateUrl: 'home.html',
-            controller: 'firstController',
-        }).state('second', {
-            url: '/user',
-            templateUrl: 'user.html',
-            controller: 'secondController'
         }).state('third', {
             url: '/course',
             templateUrl: 'course.html',

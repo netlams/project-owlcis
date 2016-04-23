@@ -23,8 +23,8 @@ public class Degree {
 
     private String degreeName;
     private int declaredYear;
-    private Map<String, List<String>> degree = new HashMap<>();
-    private List<String> courseList = new ArrayList<>();
+    private Map<DegreeReq, List<String>> degree = new HashMap<>();
+    private List<DegreeReq> courseList = new ArrayList<>();
     
     /**
      * Parameterized Constructor.
@@ -37,11 +37,12 @@ public class Degree {
         this.degreeName = name;
         this.declaredYear = year;
         Database dbc = new Database();
-
+        
         try {
             if (dbc.getError().length() == 0) {
                 // get list of req courses
-                getReqCourses(dbc.getConn());
+                getCoreCourses(dbc.getConn());
+                getElectiveCourses(dbc.getConn());
                 // get prerequisites
                 getPrerequisites(dbc.getConn());
                 dbc.closeConn();
@@ -53,22 +54,58 @@ public class Degree {
     }
 
     /**
-     * Get the required courses for this degree
+     * Get the required core courses for this degree
      * 
      * @param conn the database connection
      * @throws SQLException 
      */
-    public final void getReqCourses(Connection conn) throws SQLException {
+    public final void getCoreCourses(Connection conn) throws SQLException {
         Statement stmt = null;
-        String sql = "SELECT course_id FROM degree_requirement "
-                + "INNER JOIN degree ON degree.degree_id=degree_requirement.degree_id "
-                + "WHERE degree.degree_name = \"" + this.degreeName
-                + "\" AND degree.declared_year = " + this.declaredYear;
+        String sql = "SELECT degree_requirement.course_id FROM degree_requirement "
+                + "INNER JOIN degree ON degree.degree_id=degree_requirement.degree_id, course "
+                + "WHERE course.course_id=degree_requirement.course_id "
+                + "AND degree.degree_name = \"" + this.degreeName
+                + "\" AND degree.declared_year = " + this.declaredYear
+                + " AND course.is_core=1";
         try {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                getCourseList().add(rs.getString(1));
+                getCourseList().add(new DegreeReq(rs.getString(1), DegreeReq.CORE));
+            }
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("Error in Degree.getReqCourses()");
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+            throw new SQLException();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+    }
+    
+    /**
+     * Get the elective courses for this degree
+     * 
+     * @param conn the database connection
+     * @throws SQLException 
+     */
+    public final void getElectiveCourses(Connection conn) throws SQLException {
+        Statement stmt = null;
+        String sql = "SELECT degree_requirement.course_id FROM degree_requirement "
+                + "INNER JOIN degree ON degree.degree_id=degree_requirement.degree_id, course "
+                + "WHERE course.course_id=degree_requirement.course_id "
+                + "AND degree.degree_name = \"" + this.degreeName
+                + "\" AND degree.declared_year = " + this.declaredYear
+                + " AND course.is_core=0";
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                getCourseList().add(new DegreeReq(rs.getString(1), DegreeReq.ELECTIVE));
             }
         } catch (SQLException ex) {
             // handle any errors
@@ -125,14 +162,14 @@ public class Degree {
     /**
      * @return the degree
      */
-    public Map<String, List<String>> getDegree() {
+    public Map<DegreeReq, List<String>> getDegree() {
         return degree;
     }
 
     /**
      * @return the courseList
      */
-    public List<String> getCourseList() {
+    public List<DegreeReq> getCourseList() {
         return courseList;
     }
 }
