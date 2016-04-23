@@ -6,7 +6,7 @@
 
 (function () {
 
-    var forumcomments = function($scope,$state,DBService,$http,$window) {
+    var forumcomments = function($scope,$state,$http,$window) {
 
        $http.get('/api/forum').then(function (value) {
             $scope.forumQues = value.data;
@@ -14,7 +14,7 @@
 
     };
 
-    forumcomments.$inject = ['$scope','$state','DBService','$http','$window'];
+    forumcomments.$inject = ['$scope','$state','$http','$window'];
 
     angular.module('authApp').controller('forumcomments', forumcomments);
 

@@ -8,7 +8,7 @@
 (function () {
 
 
-    var forumhome = function ($scope, $state, DBService, $http, $window) {
+    var forumhome = function ($scope, $state, $http, $window) {
 
         $scope.forum_s;
         $http.get('/api/fs').then(function (value) {
@@ -36,7 +36,7 @@
 
     };
 
-    forumhome.$inject = ['$scope', '$state', 'DBService', '$http', '$window'];
+    forumhome.$inject = ['$scope', '$state', '$http', '$window'];
 
     angular.module('authApp').controller('forumhome', forumhome);
 

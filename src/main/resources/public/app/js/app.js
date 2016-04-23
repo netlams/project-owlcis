@@ -10,7 +10,7 @@ authApp.config(function ($stateProvider, $urlRouterProvider, $compileProvider) {
 
         $urlRouterProvider.otherwise('/home');
 
-        $stateProvider.state('first', {
+        $stateProvider.state('home', {
             url: '/home',
             templateUrl: 'home.html',
         }).state('third', {
