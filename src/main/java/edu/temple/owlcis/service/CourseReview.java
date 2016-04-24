@@ -39,10 +39,12 @@ public class CourseReview {
         recElectiveID = "";
         electiveSemester = "";
     }
-
+    
     @Override
     public String toString() {
-        return "CourseReview{" + "userID=" + userID + ", courseID=" + courseID + ", reviewText=" + reviewText + ", semester=" + semester + ", helpfulness=" + helpfulness + ", easiness=" + easiness + ", clarity=" + clarity + ", hasRecElective=" + hasRecElective + '}';
+        return "CourseReview{" + "userID=" + userID + ", courseID=" + courseID + ", reviewText=" + reviewText +
+                ", semester=" + semester + ", helpfulness=" + helpfulness + ", easiness=" + easiness + ", clarity=" +
+                clarity + ", hasRecElective=" + hasRecElective + '}';
     }
 
     public String getRecElectiveID() {
