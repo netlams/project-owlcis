@@ -258,12 +258,8 @@ label.star:before {
 }
 
 .text-major-degree {
-    font-size: 18px;
     color: #ec971f;
-    background: -webkit-linear-gradient(#ddd, #ec971f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+    font-size: 1.8em;
 }
 
 footer {
@@ -284,7 +280,7 @@ p span
 }
 
 .modal-small-input {
-/*    width: 5em;*/
+    /*    width: 5em;*/
     background-color: #FAFAD2;
     color: #636363;
     font-size: 12px;

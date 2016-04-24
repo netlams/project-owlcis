@@ -23,23 +23,26 @@ public class Degree {
 
     private String degreeName;
     private int declaredYear;
+    private int requiredElectCnt;
     private Map<DegreeReq, List<String>> degree = new HashMap<>();
     private List<DegreeReq> courseList = new ArrayList<>();
-    
+
     /**
      * Parameterized Constructor.
      * Accepts the degree name and declared to fetch degree requirements
-     * 
+     *
      * @param name the degree name i.e. CS_BS
      * @param year the year
      */
     public Degree(String name, int year) {
         this.degreeName = name;
         this.declaredYear = year;
+        this.requiredElectCnt = 0;
         Database dbc = new Database();
-        
+
         try {
             if (dbc.getError().length() == 0) {
+                getReqElectiveCount(dbc.getConn());
                 // get list of req courses
                 getCoreCourses(dbc.getConn());
                 getElectiveCourses(dbc.getConn());
@@ -55,9 +58,9 @@ public class Degree {
 
     /**
      * Get the required core courses for this degree
-     * 
+     *
      * @param conn the database connection
-     * @throws SQLException 
+     * @throws SQLException
      */
     public final void getCoreCourses(Connection conn) throws SQLException {
         Statement stmt = null;
@@ -86,12 +89,12 @@ public class Degree {
             }
         }
     }
-    
+
     /**
      * Get the elective courses for this degree
-     * 
+     *
      * @param conn the database connection
-     * @throws SQLException 
+     * @throws SQLException
      */
     public final void getElectiveCourses(Connection conn) throws SQLException {
         Statement stmt = null;
@@ -120,18 +123,18 @@ public class Degree {
             }
         }
     }
-    
+
     /**
      * Get the prerequisite courses for each degree requirement.
-     * 
+     *
      * @param conn the database connection
-     * @throws SQLException 
+     * @throws SQLException
      */
     public final void getPrerequisites(Connection conn) throws SQLException {
         Statement stmt = null;
         for (int i = 0; i < getCourseList().size(); i++) {
             String sql = "SELECT prereq_id FROM degree, prerequisite, degree_requirement "
-                    + "WHERE degree.degree_id=degree_requirement.degree_id " 
+                    + "WHERE degree.degree_id=degree_requirement.degree_id "
                     + "AND degree_requirement.course_id=prerequisite.course_id "
                     + "AND degree.degree_name = \"" + this.degreeName
                     + "\" AND degree.declared_year = " + this.declaredYear
@@ -159,6 +162,32 @@ public class Degree {
         }
     }
 
+    public void getReqElectiveCount(Connection conn) throws SQLException {
+        Statement stmt = null;
+        String sql = "SELECT required_elective_count "
+                + "FROM degree WHERE "
+                + "degree_name = \"" + this.degreeName
+                + "\" AND declared_year = " + this.declaredYear;
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                this.requiredElectCnt = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("Error in Degree.getPrerequisites()");
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+            throw new SQLException();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+    }
+
     /**
      * @return the degree
      */
@@ -171,5 +200,12 @@ public class Degree {
      */
     public List<DegreeReq> getCourseList() {
         return courseList;
+    }
+
+    /**
+     * @return the requiredElectCnt
+     */
+    public int getRequiredElectCnt() {
+        return requiredElectCnt;
     }
 }
