@@ -347,7 +347,6 @@ public class ViewReviews {
                             rs.getInt(12),
                             rs.getInt(13)));
                 }
-                System.out.println(list);
             } catch (SQLException ex) {
                 // handle any errors
                 System.out.println("SQLException: " + ex.getMessage());

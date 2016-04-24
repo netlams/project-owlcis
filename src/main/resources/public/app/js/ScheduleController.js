@@ -15,6 +15,17 @@
                 return "Computer Science";
         };
         /**
+         * Pass in abbr. degree name and get its long name
+         */
+        this.getShortName = function (x) {
+            if (x.toUpperCase() === "Computer Science & Math")
+                return "CSM";
+            else if (x.toUpperCase() === "Information Science & Technology")
+                return "IST";
+            else
+                return "CS";
+        };
+        /**
          * Pass in abbr. degree name and get its advisor info 
          */
         this.getAdvising = function (x) {
@@ -46,6 +57,33 @@
         };
     });
 
+    /* Bootstrap Modal Builder Service */
+    app.factory('ModalBuilderService', function () {
+        var factory = {};
+        factory.build = function (id, title, body, btn) {
+            return "<div class='modal fade' id='" + id + "' tabindex='-1' role='dialog' aria-labelledby='msg-label'>"
+                    + "<div class='modal-dialog' role='document'>"
+                    + "<div class='modal-content'>"
+                    + "<div class='modal-header'>"
+                    + "<button type='button' class='close' data-dismiss='modal' aria-label='Close'>"
+                    + "<span aria-hidden='true'>&times;</span>"
+                    + "</button>"
+                    + "<h2 class='modal-title text-center' id='login-msg-label'>" + title + "</h2>"
+                    + "</div>"
+                    + "<div class='modal-body text-center'>"
+                    + body
+                    + "</div>"
+                    + "<div class='modal-footer'>"
+                    + btn
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>";
+        };
+        return factory;
+    });
+
     /** Schedule List View Controller */
     app.controller('scheduleListViewCtrl', ['$scope', 'DTOptionsBuilder', 'DTColumnBuilder', 'DTColumnDefBuilder',
         function ($scope, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder) {
@@ -53,9 +91,9 @@
             // Table options
             vm.dtOptions = {
                 ajax: './api/schedule',
-                dom: 'Bfrti',
+                dom: 'Bfrtip',
                 paginationType: 'simple_numbers',
-                displayLength: 10,
+                displayLength: 16,
                 aaSorting: [],
                 buttons: [
                     'columnsToggle', 'print', 'pdf', 'excel'
@@ -70,7 +108,7 @@
             // reload options
             vm.reloadData = reloadData;
             vm.dtInstance = {};
-            
+
             /**
              * Func to reload
              */
@@ -78,12 +116,13 @@
                 var resetPaging = false;
                 vm.dtInstance.reloadData(null, resetPaging);
             }
-            
+
             // listen for event
             $scope.$on('fetchReload', function (event, msg) {
                 if (msg === "view") {
                     reloadData();
-                };
+                }
+                ;
             });
         }]);
 
@@ -94,7 +133,7 @@
             var vm = this;
             // global timer control
             var resetMsgTimer;
-            
+
             /**
              * Func to fetch schedules
              */
@@ -102,9 +141,9 @@
                 // Edit Mode stuff
                 vm.data = $resource('./api/schedule').query();
                 vm.dtOptions = {
-                    dom: 'frti',
+                    dom: 'frtip',
                     paginationType: 'simple_numbers',
-                    displayLength: 10,
+                    displayLength: 106,
                     aaSorting: []
                 };
                 vm.dtColumnDefs = [
@@ -125,10 +164,10 @@
                 err: null,
                 succ: null
             };
-            
+
             /**
              * gets a schedule from ajax table data
-             */ 
+             */
             function getCourseFromData(i) {
                 return {
                     year: parseInt(vm.data[i].semester.substring(2, 4)),
@@ -150,7 +189,7 @@
                         $scope.addTabFormData.err = "Failed to get course list";
                         console.log("Failed to get course list" + response);
                     });
-            
+
             /**
              * Func to add schedule
              */
@@ -182,7 +221,7 @@
                     return;
                 resetMsgTimer = $interval(resetMsg, 5000);
             };
-            
+
             /**
              * Func to remove a schedule
              */
@@ -217,19 +256,20 @@
                 $interval.cancel(resetMsgTimer);
                 resetMsgTimer = undefined;
             };
-            
+
             // event listener
             $scope.$on('fetchReload', function (event, msg) {
                 if (msg === "edit") {
                     $scope.fetchData();
-                };
+                }
+                ;
             });
         }]);
 
     /* Profile Controller */
     app.controller('scheduleController',
-            ['$scope', '$http', '$filter', 'DegreeInfoService',
-                function ($scope, $http, $filter, DegreeInfoService) {
+            ['$scope', '$http', '$filter', '$compile', '$window', '$interval', 'DegreeInfoService', 'ModalBuilderService',
+                function ($scope, $http, $filter, $compile, $window, $interval, DegreeInfoService, ModalBuilderService) {
                     // default tab choosen
                     $scope.tab = 'view';
                     // change tab to ...
@@ -246,6 +286,10 @@
                         err: null,
                         succ: null
                     };
+                    $scope.flowchartData = {
+                        year: null,
+                        degree: null
+                    };
                     // Fetch Profile info
                     $http.get('./api/profile')
                             .success(function (response) {
@@ -257,11 +301,160 @@
                                 $scope.profileData.advisor = DegreeInfoService.getAdvising($scope.profileData.major);
                                 // get degree name
                                 $scope.profileData.major = DegreeInfoService.getLongName($scope.profileData.major);
+
+                                // for flowchart
+                                $scope.flowchartData.year = parseInt($scope.profileData.gradDate.substring(6, 10)) - 4;
+                                $scope.flowchartData.degree = DegreeInfoService.getShortName($scope.profileData.major) + "_"
+                                        + $scope.profileData.degreeType;
                             })
                             .error(function (response) {
                                 $scope.profileOptions.err = "Failed to get profile data. \n\
                                         Make sure you are logged in.";
                                 console.log(response);
                             });
+
+                    // activate modal msg before making reset call to API backend         
+                    $scope.showResetSchedule = function () {
+                        var id, title, body, btn;
+                        id = 'reset-msg-modal';
+                        title = 'Confirm';
+                        body = "Are you sure you want to <em>reset/delete</em> your entire schedule list?";
+                        btn = "<button class='btn btn-default' data-dismiss='modal'>Cancel</button>"
+                                + "<button data-ng-click='resetSchedule()' id='reset' class='btn btn-danger'>Reset</button>";
+                        if ($('#' + id)) {
+                            $('#' + id).remove();// remove old modal if exists
+                        }
+                        $(document.body)
+                                .prepend($compile(ModalBuilderService.build(id, title, body, btn))($scope));
+                        $('#' + id).modal(); // show
+                    };
+
+                    // function to make reset call to API backend         
+                    $scope.resetSchedule = function () {
+                        $('#reset-msg-modal .modal-footer #reset').prop('disabled', true); // disable this button
+                        var space = "";
+                        var loading = $interval(function () {
+                            $('#reset-msg-modal .modal-body').html("Resetting" + space);
+                            space = space + " .";
+                        }, 200);
+
+                        $http.delete('./api/schedule/reset')
+                                .success(function (response) {
+                                    setTimeout(function () {
+                                        $interval.cancel(loading);
+                                        $('#reset-msg-modal .modal-body').html('Done');
+                                        $('#reset-msg-modal').modal('hide');
+                                        $scope.$broadcast('fetchReload', 'view'); // broadcast event to reload data
+                                        $scope.$broadcast('fetchReload', 'edit'); // broadcast event to reload data
+                                    }, 1000);
+                                    setTimeout(function () {
+                                        $('#reset-msg-modal').remove(); // clean up
+                                    }, 1500);
+                                })
+                                .error(function (response) {
+                                    $interval.cancel(loading);
+                                    $('#reset-msg-modal .modal-body').html('Failed to reset.');
+                                    console.log("Failed to reset. " + response);
+                                });
+                    };
+                    
+                    // activate modal msg before making load schedule call to API backend
+                    $scope.showLoadSchedule = function () {
+                        var id, title, body, btn;
+                        id = 'loadsch-msg-modal';
+                        title = 'Confirm';
+                        body = "Sure, we could load your favorite degree's courses in. Just confirm a few details."
+                                + "<hr><form><div class='form-group'>"
+                                + "<label for='year'>Degree requirements vary by year. Which year you declared or like? </label>"
+                                + "<input type='number' id='year' class='form-control modal-small-input' data-ng-model='flowchartData.year' value='" 
+                                + $scope.flowchartData.year + "'/>"
+                                + "<label for='degree'>Which degree?</label> " 
+                                + "<select class='form-control modal-select-tag' data-ng-model='flowchartData.degree'>"
+                                + "<option value='CS_BS'>CS_BS</option>"
+                                + "<option value='CS_BA'>CS_BA</option>"
+                                + "<option value='IST_BS'>IST_BS</option>"
+                                + "<option value='IST_BA'>IST_BA</option>"
+                                + "<option value='CSM_BS'>CSM_BS</option>"
+                                + "</select></div></form>";
+                        btn = "<button class='btn btn-default' data-dismiss='modal'>Cancel</button>"
+                                + "<button data-ng-click='loadSchedule()' id='load' class='btn btn-danger'>Ready, set, go</button>";
+                        if ($('#' + id)) {
+                            $('#' + id).remove(); // remove old modal if exists
+                        }
+                        $(document.body)
+                                .prepend($compile(ModalBuilderService.build(id, title, body, btn))($scope));
+                        $('#' + id).modal(); // show
+                    };
+                    
+                    // function to make load schedule call to API backend
+                    $scope.loadSchedule = function () {
+                        $('#loadsch-msg-modal .modal-footer #load').prop('disabled', true); // disable this button
+                        var space = "";
+                        var loading = $interval(function () {
+                            $('#loadsch-msg-modal .modal-body').html("Loading" + space);
+                            space = space + " .";
+                        }, 200);
+                        
+                        $http.post('./api/schedule/load', $scope.flowchartData)
+                                .success(function (response) {
+                                    setTimeout(function () {
+                                        $interval.cancel(loading);
+                                        $('#loadsch-msg-modal .modal-body').html('Done');
+                                        $('#loadsch-msg-modal').modal('hide');
+                                        $scope.$broadcast('fetchReload', 'view'); // broadcast event to reload data
+                                        $scope.$broadcast('fetchReload', 'edit'); // broadcast event to reload data
+                                    }, 1000);
+                                    setTimeout(function () {
+                                        $('#loadsch-msg-modal').remove(); // clean up
+                                    }, 1500);
+                                })
+                                .error(function (response) {
+                                    $interval.cancel(loading);
+                                    $('#loadsch-msg-modal .modal-body').html('Failed to load schedule list.');
+                                    console.log("Failed to load schedule list. " + response);
+                                });
+                    };
+
+
+                    // actives modal menu
+                    $scope.showFlowchart = function () {
+                        var id, title, body, btn;
+                        id = 'fc-msg-modal';
+                        title = 'Confirm';
+                        body = "Alright, we're about to generate your very own custom flowchart <i class='fa fa-smile-o' aria-hidden='true'></i>"
+                                + " for the degree requirements. But before we do, we need to confirm a few details. "
+                                + "<hr><form><div class='form-group'>" 
+                                + "<label for='year'>What year did you declared your major?</label>"
+                                + "<input type='number' class='form-control modal-small-input' data-ng-model='flowchartData.year' value='" + $scope.flowchartData.year + "'/>"
+                                + "<label for='degree'>Your degree is </label>"
+                                + "<select class='form-control modal-select-tag' data-ng-model='flowchartData.degree'>"
+                                + "<option value='CS_BS'>CS_BS</option>"
+                                + "<option value='CS_BA'>CS_BA</option>"
+                                + "<option value='IST_BS'>IST_BS</option>"
+                                + "<option value='IST_BA'>IST_BA</option>"
+                                + "<option value='CSM_BS'>CSM_BS</option>"
+                                + "</select></div></form>";
+                        btn = "<button class='btn btn-default' data-dismiss='modal'>Cancel</button>"
+                                + "<button data-ng-click='genFlowchart()' class='btn btn-warning' data-dismiss='modal'>Generate</button>";
+                        $(document.body)
+                                .prepend($compile(ModalBuilderService.build(id, title, body, btn))($scope));
+                        $('#' + id).modal();
+                    };
+
+                    // signal generate flowchart
+                    $scope.genFlowchart = function () {
+                        console.log("from gF() " + $scope.flowchartData.year + " " + $scope.flowchartData.degree);
+                        setCookie('FC_YEAR', $scope.flowchartData.year, 1);
+                        setCookie('FC_DEGREE', $scope.flowchartData.degree, 1);
+                        $window.open("./dummy_flowchart.html", "_blank");
+                    };
+                    
+                    function setCookie(cname, cvalue, exdays) {
+                        var d = new Date();
+                        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                        var expires = "expires=" + d.toUTCString();
+                        document.cookie = cname + "=" + cvalue + "; " + expires;
+                    }
+                    ;
                 }]);
 }());

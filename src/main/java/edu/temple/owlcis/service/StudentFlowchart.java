@@ -5,7 +5,7 @@
  */
 package edu.temple.owlcis.service;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +21,7 @@ public class StudentFlowchart {
      * Constructor
      */
     public StudentFlowchart() {
-        this.list = new LinkedList<>();
+        this.list = new ArrayList<>();
         this.member = new Member();
     }
     

@@ -2,13 +2,13 @@
 <div id="page-schedule" class="container">  
     <!-- Example row of columns -->
     <div class="row">
-        <div class="col-md-4 ">
+        <div class="col-md-3 ">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Major:
                 </div>
                 <div class="panel-body">
-                    <span class="text-major-degree">{{profileData.degreeType}} {{profileData.major}}</span>
+                    <p class="text-major-degree">{{profileData.degreeType}} {{profileData.major}}</p>
                     <a href="#profile" class="btn btn-default pull-right">Update</a>
                 </div>
             </div>
@@ -19,17 +19,17 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-6 col-sm-4">
+                        <div class="col-xs-5 col-sm-5">
                             <a data-ng-href='{{profileData.advisor.link}}' target='_blank'>
                                 <img data-ng-src="{{profileData.advisor.img}}" height="150" alt='Profile pic'/>
                             </a>
                         </div>
-                        <div class="col-xs-6 col-sm-8">
+                        <div class="col-xs-7 col-sm-7">
                             <div><a data-ng-href='{{profileData.advisor.link}}' target='_blank'>
-                                    {{profileData.advisor.name}}
+                                    {{profileData.advisor.name}} <i class="fa fa-external-link" aria-hidden="true"></i>
                                 </a></div>
                             <div>{{profileData.advisor.office}}</div>
-                            <div><a data-ng-href='mailto:{{profileData.advisor.email}}' target='_blank'>
+                            <div class="link-email"><a data-ng-href='mailto:{{profileData.advisor.email}}' target='_blank'>
                                     {{profileData.advisor.email}}
                                 </a></div>
                         </div>
@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     My Schedule List
@@ -128,9 +128,19 @@
                     </form>
                 </div>
             </div>
-            <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding: 5px;">
+            <!--Button Group-->
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
                 <div class="btn-group" role="group">
-                    <a href="/dummy_flowchart.html" target="_blank" class="btn btn-primary">View Flowchart</a>
+                    <a data-ng-click="showResetSchedule()" class="btn btn-warning">Reset Schedule</a>
+                </div>
+                <div class="btn-group" role="group">
+                    <a data-ng-click="showLoadSchedule()" class="btn btn-warning">Load Sample List</a>
+                </div>
+            </div>
+            <!--Button Group-->
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                    <a data-ng-click="showFlowchart()" class="btn btn-primary">View Flowchart</a>
                 </div>
                 <div class="btn-group" role="group">
                     <a href="https://cst.temple.edu/students/advising-and-student-services/online-appointment-scheduler" 

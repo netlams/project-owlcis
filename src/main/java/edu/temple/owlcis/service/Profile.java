@@ -157,12 +157,6 @@ public class Profile {
                         } catch (SQLException sqlEx) {
                         } //ignore
                     }
-                    if (!conn.isClosed()) {
-                        try {
-                            conn.close();
-                        } catch (SQLException sqlEx) {
-                        } //ignore
-                    }
                 }
             }
         }

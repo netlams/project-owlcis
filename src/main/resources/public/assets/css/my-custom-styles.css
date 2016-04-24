@@ -8,6 +8,8 @@
 }
 
 /* Angular animation */
+.ng-leave { animation:0.1s fadeOutDown ease; }
+.ng-enter { animation:0.3s fadeInUp ease; }
 #page-profile .alert.ng-hide-remove { animation:0.8s fadeInUp ease-out; }
 #page-profile .alert.ng-hide-add { animation:0.5s fadeOutDown ease-out; }
 #page-schedule .alert.ng-hide-remove { animation:0.8s fadeInUp ease-out; }
@@ -256,12 +258,8 @@ label.star:before {
 }
 
 .text-major-degree {
-    font-size: 18px;
     color: #ec971f;
-    background: -webkit-linear-gradient(#ddd, #ec971f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+    font-size: 1.8em;
 }
 
 footer {
@@ -275,4 +273,32 @@ p span
 }
 .panel-comment{
     background-color: #444;
+}
+
+.modal-body {
+    font-size: 15px;
+}
+
+.modal-small-input {
+    /*    width: 5em;*/
+    background-color: #FAFAD2;
+    color: #636363;
+    font-size: 12px;
+    text-align: center;
+}
+
+.modal-select-tag {
+    padding: 0.1em;
+    background-color: #FAFAD2;
+    color: #636363;
+    font-size: 12px;
+    text-align: center;
+}
+
+.link-email a:link {
+    color: #355987;
+}
+
+.btn-group .btn-warning {
+    padding: 10px 15px;
 }
