@@ -34,7 +34,10 @@
                 {url: '#reviews', name: 'Course Reviews'},
                 {url: '#schedule', name: 'Schedule'},
                 {url: '#forum', name: 'Forum'}];
-            $scope.modAdvNav = [{url: '#home', name: 'Home'},
+            $scope.advNav = [{url: '#home', name: 'Home'},
+                {url: '#reviews', name: 'Course Reviews'},
+                {url: '#forum', name: 'Forum'}];
+            $scope.modNav = [{url: '#home', name: 'Home'},
                 {url: '#reviews', name: 'Course Reviews'},
                 {url: '#forum', name: 'Forum'},
                 {url: '#moderator', name: 'Moderator'}];
@@ -49,8 +52,10 @@
                         && $scope.email != null) {
                     if ($scope.role === 'member')
                         $scope.navbar = $scope.memberNav;
+                    else if ($scope.role === 'moderator')
+                        $scope.navbar = $scope.modNav;
                     else
-                        $scope.navbar = $scope.modAdvNav;
+                        $scope.navbar = $scope.advNav;
                     return true;
                 } else {
                     return false;

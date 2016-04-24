@@ -8,6 +8,8 @@
 }
 
 /* Angular animation */
+.ng-leave { animation:0.1s fadeOutDown ease; }
+.ng-enter { animation:0.3s fadeInUp ease; }
 #page-profile .alert.ng-hide-remove { animation:0.8s fadeInUp ease-out; }
 #page-profile .alert.ng-hide-add { animation:0.5s fadeOutDown ease-out; }
 #page-schedule .alert.ng-hide-remove { animation:0.8s fadeInUp ease-out; }
@@ -282,10 +284,11 @@ p span
 }
 
 .modal-small-input {
-    width: 5em;
+/*    width: 5em;*/
     background-color: #FAFAD2;
     color: #636363;
-    font-size: 12px
+    font-size: 12px;
+    text-align: center;
 }
 
 .modal-select-tag {
@@ -293,4 +296,13 @@ p span
     background-color: #FAFAD2;
     color: #636363;
     font-size: 12px;
+    text-align: center;
+}
+
+.link-email a:link {
+    color: #355987;
+}
+
+.btn-group .btn-warning {
+    padding: 10px 15px;
 }

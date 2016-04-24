@@ -14,6 +14,9 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -654,7 +657,7 @@ public class Main implements SparkApplication {
                     if (request.cookie("FC_DEGREE") != null) 
                         degree = request.cookie("FC_DEGREE");        
                     
-                    return new Gson().toJson(sb.generateFlowchart(degree, year));
+                    return new Gson().toJson(sb.generateFlowchart(degree, year, false));
                 } catch (NullPointerException ex) {
                     // not valid member
                     response.status(400);
@@ -759,6 +762,32 @@ public class Main implements SparkApplication {
             }
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
+        /**
+         * Reset user schedule list Route
+         */
+        delete(API_LOC + "/schedule/reset", (request, response) -> {
+            User user = request.session().attribute("USER");
+            ScheduleBuilder sch = new ScheduleBuilder(user);
+            Database dbc = new Database();
+            sch.removeAllSchedule(dbc.getConn());
+            return "HTTP 200 - OK";
+        });
+        
+        /**
+         * Load sample schedule list Route
+         */
+        post(API_LOC + "/schedule/load", (request, response) -> {
+            User user = request.session().attribute("USER");
+            JsonElement jelement = new JsonParser().parse(request.body());
+            JsonObject  jobj = jelement.getAsJsonObject();
+            System.out.println("BODY: " + request.body());
+            System.out.println("jojb" + jobj.get("degree").toString()+ jobj.get("year").toString());
+            ScheduleBuilder sch = new ScheduleBuilder(user);
+            Database dbc = new Database();
+            sch.loadDegreeIntoSchedule(jobj.get("degree").getAsString(), jobj.get("year").getAsInt(), dbc.getConn());
+            return "HTTP 200 - OK";
         });
 
         /**

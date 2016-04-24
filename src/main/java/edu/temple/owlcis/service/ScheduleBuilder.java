@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -244,6 +245,67 @@ public class ScheduleBuilder {
     }
 
     /**
+     * Delete all schedules user have
+     *
+     * @param conn
+     * @return
+     * @throws SQLException
+     */
+    public boolean removeAllSchedule(Connection conn) throws SQLException {
+        PreparedStatement stmt = null;
+        String sql;
+
+        if (conn != null) {
+            try {
+                sql = "DELETE FROM takes "
+                        + "WHERE mem_id = ? ";
+                stmt = conn.prepareStatement(sql);
+
+                //Set parameters
+                stmt.setInt(1, this.profile.getMember().getId());
+                //Execute query
+                stmt.executeUpdate();
+                return true;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                    } //ignore
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean loadDegreeIntoSchedule(String degree, int year, Connection conn) {
+        System.out.println("FROM LOAD: " + degree + " " + year);
+        StudentFlowchart fc = this.generateFlowchart(degree, year, true);
+
+        for (int i = 0; i < fc.getList().size(); i++) {
+            LinkedList<Schedule> semesterList = (LinkedList) fc.getList().get(i);
+            int semesterYear = i+10; 
+            for (Schedule sch : semesterList) {
+                try {
+                    sch.setSemester("FA" + String.valueOf(semesterYear));
+                    this.addSchedule(sch, conn);
+                } catch (Exception ex) {
+                    System.out.println("Error in ScheduleBuilder.loadDegreeIntoSchedule() " + ex.getMessage());
+                }
+            }
+            System.out.println("got smester list");
+        }
+
+        return false;
+    }
+
+    /**
      * Purpose: generate a flowchart based off of a generated schedule
      * Post-conditions: a flowchart is generated and displayed on the webpage
      * for the user
@@ -254,12 +316,12 @@ public class ScheduleBuilder {
      * @param y
      * @param d
      */
-    public StudentFlowchart generateFlowchart(String d, int y) {
+    public StudentFlowchart generateFlowchart(String d, int y, boolean randomizeElect) {
         /**
          * 04/22 Testing stuff
          */
 //        Map<DegreeReq, List<String>> csbsDegree = new HashMap<>();
-        Map<DegreeReq, List<String>> csbsDegree = new Degree(d , y).getDegree();
+        Map<DegreeReq, List<String>> csbsDegree = new Degree(d, y).getDegree();
 //        csbsDegree.put(new DegreeReq("CIS 1001", DegreeReq.CORE), Collections.emptyList());
 //        csbsDegree.put(new DegreeReq("CIS 1068", DegreeReq.CORE), Arrays.asList("MATH 1022"));
 //        csbsDegree.put(new DegreeReq("CIS 1166", DegreeReq.CORE), Arrays.asList("MATH 1022"));
@@ -392,7 +454,9 @@ public class ScheduleBuilder {
         semesterCnt = 1; // reset count to beginning
         needPass = true; // control while loop
         // strip out the electives 
-        remainingDegreeCourseList = remainingDegreeCourseList.stream().filter(c -> c.isCore()).collect(Collectors.toCollection(LinkedList::new));
+        remainingDegreeCourseList = remainingDegreeCourseList.stream()
+                .filter(c -> c.isCore())
+                .collect(Collectors.toCollection(LinkedList::new));
         if (matchedDegreeCourseList.size() > 0) {
             remainingDegreeCourseList.addAll(matchedDegreeCourseList); // combine the remainding stuff
         }
@@ -446,32 +510,66 @@ public class ScheduleBuilder {
                 if (previousList != null) {
                     System.out.println("NOT NULL " + previousList);
                     allowedList.addAll(previousList);
-                } 
+                }
                 flowchart.put(semesterCnt.toString(), allowedList);
                 semesterCnt++;
             }
         }
 
-        // add the min. electives
-        int reqElectiveCount = 4;
-        semesterCnt = semesterCnt - 2;
-        while (electiveCnt < reqElectiveCount) {
-            System.out.println("Elective cnt: " + electiveCnt);
-            List<Schedule> previousList = flowchart.get(semesterCnt.toString());
-            System.out.println("The prev List: " + previousList);
-            previousList.add(new Schedule("CIS ELECTIVE"));
-            previousList.add(new Schedule("CIS ELECTIVE"));
-            flowchart.put(semesterCnt.toString(), previousList);
-            semesterCnt++;
-            electiveCnt = electiveCnt +2;
+        // don't add real elective courses
+        if (!randomizeElect) {
+            // add the min. electives
+            int reqElectiveCount = 4;
+            semesterCnt = semesterCnt - 2;
+            while (electiveCnt < reqElectiveCount) {
+                System.out.println("Elective cnt: " + electiveCnt);
+                List<Schedule> previousList = flowchart.get(semesterCnt.toString());
+                System.out.println("The prev List: " + previousList);
+                previousList.add(new Schedule("CIS ELECTIVE"));
+                previousList.add(new Schedule("CIS ELECTIVE"));
+                flowchart.put(semesterCnt.toString(), previousList);
+                semesterCnt++;
+                electiveCnt = electiveCnt + 2;
 
+            }
+        } else { // pick random elective courses to add
+            // add the min. electives
+            int reqElectiveCount = 4;
+            semesterCnt = semesterCnt - 4;
+
+            LinkedList<DegreeReq> electList = csbsDegree
+                    .entrySet()
+                    .stream()
+                    .map(Map.Entry::getKey)
+                    .filter(c -> c.isElective())
+                    .collect(Collectors.toCollection(LinkedList::new));
+
+            Random random = new Random();
+            LinkedList<Integer> tracker = new LinkedList<>();
+
+            while (electiveCnt < reqElectiveCount) {
+                System.out.println("Elective cnt: " + electiveCnt);
+                int rand = random.nextInt(electList.size()); // get random index
+                while (tracker.contains(rand)) { // we only want unique electives
+                    rand = random.nextInt(electList.size());
+                }
+                tracker.add(rand);  // track this index
+                DegreeReq randomElective = electList.get(rand); // retrieve elective course
+                System.out.println("The random elective: " + randomElective);
+                List<Schedule> previousList = flowchart.get(semesterCnt.toString());
+                System.out.println("The prev List: " + previousList);
+                previousList.add(new Schedule(randomElective.toString()));
+                flowchart.put(semesterCnt.toString(), previousList);
+                semesterCnt++;
+                electiveCnt++;
+
+            }
         }
-
 //        System.out.println("allowedList: " + allowedList);
         System.out.println("remainders: " + matchedDegreeCourseList);
         // ******** ^comparsion end
 
-        List<List> returnList = new LinkedList<List>(flowchart.values());
+        List<List> returnList = new ArrayList<>(flowchart.values());
         this.profile.getMember().setMajor(d);
         StudentFlowchart flow = new StudentFlowchart(returnList, this.profile.getMember());
         return flow;

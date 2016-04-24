@@ -73,7 +73,7 @@
                 $http.get('/api/commentreview').then(function (cmnts) {
                     $scope.comnts = cmnts.data;
 
-                    console.log($scope.comnts);
+//                    console.log($scope.comnts);
                 });
             })();
             // process the form

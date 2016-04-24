@@ -26,10 +26,10 @@
                         </div>
                         <div class="col-xs-6 col-sm-8">
                             <div><a data-ng-href='{{profileData.advisor.link}}' target='_blank'>
-                                    {{profileData.advisor.name}}
+                                    {{profileData.advisor.name}} <i class="fa fa-external-link" aria-hidden="true"></i>
                                 </a></div>
                             <div>{{profileData.advisor.office}}</div>
-                            <div><a data-ng-href='mailto:{{profileData.advisor.email}}' target='_blank'>
+                            <div class="link-email"><a data-ng-href='mailto:{{profileData.advisor.email}}' target='_blank'>
                                     {{profileData.advisor.email}}
                                 </a></div>
                         </div>
@@ -128,9 +128,19 @@
                     </form>
                 </div>
             </div>
-            <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding: 5px;">
+            <!--Button Group-->
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
                 <div class="btn-group" role="group">
-                    <a data-ng-click="flowchart('hi')" class="btn btn-primary">View Flowchart</a>
+                    <a data-ng-click="showResetSchedule()" class="btn btn-warning">Reset Schedule</a>
+                </div>
+                <div class="btn-group" role="group">
+                    <a data-ng-click="showLoadSchedule()" class="btn btn-warning">Load Sample List</a>
+                </div>
+            </div>
+            <!--Button Group-->
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                    <a data-ng-click="showFlowchart()" class="btn btn-primary">View Flowchart</a>
                 </div>
                 <div class="btn-group" role="group">
                     <a href="https://cst.temple.edu/students/advising-and-student-services/online-appointment-scheduler" 
