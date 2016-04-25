@@ -17,9 +17,9 @@ public class Database {
     
     private Connection connection = null;
     private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String dbUrl = "jdbc:mysql://localhost:3307/owlcis";
-    private static final String username = "user";
-    private static final String pwrd = "temple2016";
+    private static final String dbUrl = "jdbc:mysql://localhost:3307/owlcis"; // configure me
+    private static final String username = "user"; // configure me
+    private static final String pwrd = "temple2016"; // configure me
     private StringBuilder err = new StringBuilder("");
     
     /**
