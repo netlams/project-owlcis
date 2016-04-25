@@ -283,11 +283,12 @@ public class ScheduleBuilder {
                     this.addSchedule(sch, conn);
                 } catch (Exception ex) {
                     System.out.println("Error in ScheduleBuilder.loadDegreeIntoSchedule() " + ex.getMessage());
+                    return false;
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
