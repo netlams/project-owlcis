@@ -7,20 +7,7 @@ and open the template in the editor.
 
 
 <body>
-    <div>
-        <script>
-  (function() {
-    var cx = '012746559795982319316:k25o3kaboda';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
-<gcse:search>
-    </div>
+
 
     <div class="wrapper">
 
@@ -41,20 +28,13 @@ and open the template in the editor.
                 <div class="row">
                     <div class="col-lg-4 search hidden-xs hidden-sm col-md-3">
                         <div class="wrap">
-                            <!-- action="#" method="post"
+
                             <form  class="form" data-ng-submit="forumsearch()">
                                 <div class="pull-left txt"><input type="text" name ="search" id="search" data-ng-model = "forum_s.search" class="form-control" placeholder="Search Questions"></div>
                                 <div class="pull-right"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></div>
                                 <div class="clearfix"></div>
-                            </form>-->
-                         <gcse:search>
-                             <form  class="form" data-ng-submit="forumsearch()">
-                                <div class="pull-left txt"><input type="text" name ="search" id="search" data-ng-model = "forum_s.search" class="form-control" placeholder="Search Questions"></div>
-                                <div class="pull-right"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></div>
-                                <div class="clearfix"></div>
                             </form>
-                          </gcse:search>  
-                            
+
                         </div>
                     </div>
                     <div class="col-lg-4 col-xs-12 col-sm-5 col-md-4 avt">
@@ -109,7 +89,7 @@ and open the template in the editor.
                         <!-- POST -->
                         <form>
                             <div class="post" ng-repeat= "Ques in forum">
-                               
+
                                 <div class="wrap-ut pull-left">
                                     <div class="userinfo pull-left">
                                         <div class="avatar">
@@ -118,28 +98,28 @@ and open the template in the editor.
                                         </div>
 
                                     </div>
-                                    
-                                   
-                                
+
+
+
                                     <div class="posttext pull-left" >
                                         <h2 ng-click="like(Ques.post_id)"><a href="#/comments">{{Ques.search_keywords}}</a> </h2>
-                                  
+
                                     </div>
-                                      
-                                       
+
+
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="postinfo pull-left">
                                     <div class="comments">
-                                        
-                                            
+
+
                                     </div>
-                                    
+
                                     <div class="views">Posted by:{{Ques.f_name}}{{Ques.l_name}} </div>
                                     <div class="time"><i class="fa fa-clock-o"></i> {{Ques.time_stamp}}</div>
-                                   
+
                                 </div>
-                               
+
                                 <div class="clearfix"></div>
                             </div><!-- POST -->
                         </form>
@@ -217,7 +197,7 @@ and open the template in the editor.
     <script src="js/bootstrap.min.js"></script>
 
 
-    <!-- LOOK THE DOCUMENTATION FOR MORE INFORMATIONS -->
+    <!-- LOOK THE DOCUMENTATION FOR MORE INFORMATIONS 
     <script type="text/javascript">
                                                         var revapi;
                                                        jQuery(document).ready(function () {
@@ -233,7 +213,7 @@ and open the template in the editor.
                                                         });	//ready
     </script>
 
-    <!-- END REVOLUTION SLIDER   </form> -->
+    END REVOLUTION SLIDER   </form> -->
 
 </body>
 </html>
