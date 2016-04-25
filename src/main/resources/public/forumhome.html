@@ -19,7 +19,7 @@ and open the template in the editor.
     s.parentNode.insertBefore(gcse, s);
   })();
 </script>
-<gcse:search></gcse:search>
+<gcse:search>
     </div>
 
     <div class="wrapper">
@@ -41,12 +41,20 @@ and open the template in the editor.
                 <div class="row">
                     <div class="col-lg-4 search hidden-xs hidden-sm col-md-3">
                         <div class="wrap">
-                            <!-- action="#" method="post"-->
+                            <!-- action="#" method="post"
                             <form  class="form" data-ng-submit="forumsearch()">
                                 <div class="pull-left txt"><input type="text" name ="search" id="search" data-ng-model = "forum_s.search" class="form-control" placeholder="Search Questions"></div>
                                 <div class="pull-right"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></div>
                                 <div class="clearfix"></div>
+                            </form>-->
+                         <gcse:search>
+                             <form  class="form" data-ng-submit="forumsearch()">
+                                <div class="pull-left txt"><input type="text" name ="search" id="search" data-ng-model = "forum_s.search" class="form-control" placeholder="Search Questions"></div>
+                                <div class="pull-right"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></div>
+                                <div class="clearfix"></div>
                             </form>
+                          </gcse:search>  
+                            
                         </div>
                     </div>
                     <div class="col-lg-4 col-xs-12 col-sm-5 col-md-4 avt">
