@@ -16,6 +16,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.regex.Matcher;
 import static jdk.nashorn.internal.runtime.JSType.toInt32;
 import spark.Request;
 import spark.Response;
@@ -32,6 +33,7 @@ public class Main implements SparkApplication {
      * A constant string to containing the backend system URL
      */
     public static final String API_LOC = "/api";
+    public String postid;
 
     /**
      * Executes the backend logic of the app
@@ -546,7 +548,7 @@ public class Main implements SparkApplication {
             Forum_post post = new Forum_post();
             post.setUserId(user.getId());
             post.setUserEnteredQues(request.body());
-           // post.setUserId();
+            // post.setUserId();
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
@@ -697,6 +699,63 @@ public class Main implements SparkApplication {
             response.status(200);
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
+        });
+
+        //Forum comment post route
+        post(API_LOC + "/fvc", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            User user = request.session().attribute("USER");
+            Forum_comment c = new Forum_comment();
+            c.setUserId(user.getId());
+            c.setUserEnteredAns(request.body());
+            c.setPostId(postid);
+            // post.setUserId();
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+
+                    if (c.insertAllForum_comment(dbc.getConn())) {
+                        //response.status(200);
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+
+        //forum home to post text, and post it
+        post(API_LOC + "/forumcom", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            postid = request.body();
+            Forum_ques s = new Forum_ques();
+            s.setPost_id(request.body());
+            List list = s.getQuestion();
+            response.status(200);
+            System.out.println(gson.toJson(list));
+            return gson.toJson(list);
+            //return ret;
+        });
+
+        //forum home to post text, and post it
+        get(API_LOC + "/forumcom", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            Forum_ques s = new Forum_ques();
+            s.setPost_id(postid);
+            List list = s.getQuestion();
+            response.status(200);
+
+            System.out.println(gson.toJson(list));
+            return gson.toJson(list);
+            //return ret;
         });
 
     }

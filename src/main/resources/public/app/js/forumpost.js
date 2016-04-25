@@ -17,7 +17,7 @@
             $scope.forumQues = value.data;
         });
         
-            $scope.Formprocess = function () {
+            $scope.process = function () {
 
                 $http.post('/api/fv', $scope.Dataform.f)
                         .then(function (response) {

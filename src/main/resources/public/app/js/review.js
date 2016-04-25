@@ -39,6 +39,7 @@
                         .then(function (response) {
                             $scope.example2 = response.data;
                             $scope.thumbsup = $scope.example2[0].thumbsup;
+                           console.log("Sending this" + $scope.example2.reviewid);
 
                         }, function (response) {
                             console.log("Sending this" + $scope.Dataform.selectedID);

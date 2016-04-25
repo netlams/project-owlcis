@@ -7,7 +7,20 @@ and open the template in the editor.
 
 
 <body>
-
+    <div>
+        <script>
+  (function() {
+    var cx = '012746559795982319316:k25o3kaboda';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+    </div>
 
     <div class="wrapper">
 
@@ -88,6 +101,7 @@ and open the template in the editor.
                         <!-- POST -->
                         <form>
                             <div class="post" ng-repeat= "Ques in forum">
+                               
                                 <div class="wrap-ut pull-left">
                                     <div class="userinfo pull-left">
                                         <div class="avatar">
@@ -96,22 +110,28 @@ and open the template in the editor.
                                         </div>
 
                                     </div>
-                                    <div class="posttext pull-left">
-                                        <h2><a href="#/comments">{{Ques.search_keywords}}</a></h2>
+                                    
+                                   
+                                
+                                    <div class="posttext pull-left" >
+                                        <h2 ng-click="like(Ques.post_id)"><a href="#/comments">{{Ques.search_keywords}}</a> </h2>
+                                  
                                     </div>
+                                      
+                                       
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="postinfo pull-left">
                                     <div class="comments">
-                                        <div class="commentbg">
-                                            560
-                                            <div class="mark"></div>
-                                        </div>
-
+                                        
+                                            
                                     </div>
-                                    <div class="views"><i class="fa fa-eye"></i> 1,568</div>
+                                    
+                                    <div class="views">Posted by:{{Ques.f_name}}{{Ques.l_name}} </div>
                                     <div class="time"><i class="fa fa-clock-o"></i> {{Ques.time_stamp}}</div>
+                                   
                                 </div>
+                               
                                 <div class="clearfix"></div>
                             </div><!-- POST -->
                         </form>
@@ -125,7 +145,7 @@ and open the template in the editor.
                             <form>
                                 <div class="divline"></div>
                                 <div class="blocktxt" ng-repeat = "UserQues in forumQues|limitTo:10">
-                                    <a href="#">{{UserQues.search_keywords}}</a>
+                                    <a href="#/comments">{{UserQues.search_keywords}}</a>
                                 </div>
 
 

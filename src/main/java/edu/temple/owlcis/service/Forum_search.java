@@ -22,17 +22,27 @@ public class Forum_search {
     private String search_keywords;
     private String time_stamp;
     public int user_id;
+     public String post_id1;
+    private int post_id;
+    private String f_name;
+    private String l_name;
 
     public Forum_search() {
 
         this.search_keywords = "";
         this.time_stamp = "";
+        this.post_id = 0;
+        this.f_name ="";
+        this.l_name="";
     }
 
-    public Forum_search(String question, String time) {
+    public Forum_search(String question, String time, int id,String f,String l) {
 
         this.search_keywords = question;
         this.time_stamp = time;
+        this.post_id = id;
+        this.f_name= f;
+        this.l_name =l;
     }
 
     public String getUserEnteredQues() {
@@ -52,7 +62,11 @@ public class Forum_search {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = " SELECT post_text,time_stamp FROM owlcis.forum_post where post_text like '%" + search_keywords + "%' ORDER BY time_stamp DESC";
+                //String sql = " SELECT post_text,time_stamp,post_id FROM owlcis.forum_post where post_text like '%" + search_keywords + "%' ORDER BY time_stamp DESC";
+                String sql = "SELECT fp.post_text,fp.time_stamp,fp.post_id,substring(u.f_name,1,1),substring(u.l_name,1,1) " +
+                                "FROM owlcis.forum_post fp " +
+                                "JOIN owlcis.user u on u.user_id = fp.user_id " +
+                                "where fp.post_text like '%" + search_keywords + "%' ORDER BY fp.time_stamp DESC";
 
                 stmt = dbc.getConn().createStatement();
                 rs = stmt.executeQuery(sql);
@@ -67,7 +81,7 @@ public class Forum_search {
                     Date date = new Date(timestamp.getTime());
                     //System.out.println("Date: " + date);
 
-                    list.add(new Forum_search(rs.getString(1), date.toString()));
+                    list.add(new Forum_search(rs.getString(1), date.toString(),rs.getInt(3),rs.getString(4),rs.getString(5)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -115,7 +129,7 @@ public class Forum_search {
             Statement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "SELECT owlcis.forum_post.post_text,time_stamp FROM owlcis.forum_post where user_id = '" + user_id + "' order by owlcis.forum_post.time_stamp DESC";
+                String sql = "SELECT owlcis.forum_post.post_text,time_stamp,post_id,user_id,is_question FROM owlcis.forum_post where user_id = '" + user_id + "' order by owlcis.forum_post.time_stamp DESC";
 
                 stmt = dbc.getConn().createStatement();
                 rs = stmt.executeQuery(sql);
@@ -123,7 +137,7 @@ public class Forum_search {
 
                 // add to list
                 while (rs.next()) {
-                    list.add(new Forum_search(rs.getString(1), rs.getString(2)));
+                    list.add(new Forum_search(rs.getString(1), rs.getString(2),rs.getInt(3),rs.getString(4),rs.getString(5)));
                 }
             } catch (SQLException ex) {
                 // handle any errors
@@ -161,12 +175,22 @@ public class Forum_search {
         return null;
     }
 
+    
+    
+    
     public String getTimeStamp() {
         return time_stamp;
     }
 
     public void setTimeStamp(String time) {
         this.time_stamp = time;
+    }
+    public String getf_name() {
+        return f_name;
+    }
+
+    public void setf_name(String n) {
+        this.f_name = n;
     }
 
 }
