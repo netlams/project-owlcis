@@ -193,7 +193,7 @@ public class CommentReview {
 
                 stmt = dbc.getConn().createStatement();
                 rs = stmt.executeQuery(sql);
-                System.out.println("Get All COmments Method Query executed.");
+//                System.out.println("Get All COmments Method Query executed.");
 
                 // add to list
                 while (rs.next()) {
@@ -207,7 +207,7 @@ public class CommentReview {
                             rs.getString(7),
                             rs.getInt(8)));
                 }
-                System.out.println(list);
+//                System.out.println(list);
             } catch (SQLException ex) {
                 // handle any errors
                 System.out.println("SQLException: " + ex.getMessage());

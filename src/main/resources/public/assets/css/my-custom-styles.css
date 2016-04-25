@@ -233,7 +233,11 @@ label.star:before {
 #page-schedule .buttons-excel,
 #page-schedule .buttons-copy {
     color: white;
+    background: #ec971f;
     background-image: -webkit-linear-gradient(#ec971f, #ec971f); 
+    background: -o-linear-gradient(#ec971f, #ec971f); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#ec971f, #ec971f); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#ec971f, #ec971f); /* Standard syntax */
 }
 
 #page-schedule .buttons-print:hover, 
@@ -241,7 +245,11 @@ label.star:before {
 #page-schedule .buttons-excel:hover,
 #page-schedule .buttons-copy:hover {
     color: white;
+    background: #d58512;
     background-image: -webkit-linear-gradient(#ec971f, #d58512);
+    background: -o-linear-gradient(#ec971f, #d58512); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#ec971f, #d58512); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#ec971f, #d58512); /* Standard syntax */
 }
 
 .smaller-icon {
@@ -259,7 +267,7 @@ label.star:before {
 
 .text-major-degree {
     color: #ec971f;
-    font-size: 1.8em;
+    font-size: 1.5em;
 }
 
 footer {

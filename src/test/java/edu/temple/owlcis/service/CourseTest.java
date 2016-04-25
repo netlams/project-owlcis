@@ -54,19 +54,20 @@ public class CourseTest {
         try {
 
             CourseReview test_review = new CourseReview();
-            test_review.setUserID(3);
+            test_review.setUserID(12);
             test_review.setCourseID("CIS 2168");
             test_review.setSemester("FA08");
             test_review.setHelpfulness(5);
             test_review.setEasiness(5);
             test_review.setClarity(5);
-            test_review.setReviewText("It is an amazing class. I would highly recommend to take this course with Dr. Lakempear. It taught me great details of programming");
+            String reviewText = "It is an amazing class. I would highly recommend to take this course with Dr. Lakempear. It taught me great details of programming";
+            test_review.setReviewText(reviewText);
 
             test_review.setHasRecElective(true);
             test_review.setElectiveSemester("SP15");
             test_review.setRecElectiveID("CIS 4360");
-            System.out.println("reached here for inserting review");
-
+//            System.out.println("reached here for inserting review");
+            test_review.deleteReview(dbc.getConn(), reviewText);
             boolean actual = test_review.insertReview(dbc.getConn());
             assertTrue("Should return true for inserting review", actual);
 
