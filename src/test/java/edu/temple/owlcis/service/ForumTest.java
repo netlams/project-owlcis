@@ -2,7 +2,7 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- */
+ 
 package edu.temple.owlcis.service;
 
 import java.sql.Connection;
@@ -16,18 +16,18 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
+*/
 /**
  *
  * @author Ricky
- */
+ 
 public class ForumTest {
    
     private Database dbc;
 
     /**
      * Set up: Init Database object and Open database connection
-     */
+     
     @Before
     public Connection setUp() {
         Connection conn = null;
@@ -50,7 +50,7 @@ public class ForumTest {
         }
     }
     
-    /* Use case where a Post text gets stored into BD */
+    /* Use case where a Post text gets stored into BD 
     
      @Test
     public void shouldReturnTrueForInsertions() throws SQLException {
@@ -60,7 +60,7 @@ public class ForumTest {
         assertTrue("Should Return True", actual);
     }
     
-     /* Use case replyToQuestion should not accept a Post with null attributes*/
+     /* Use case replyToQuestion should not accept a Post with null attributes
     
     public void shouldReturnFalseForNullInsertions() throws SQLException {
         Forum_comment com = new Forum_comment();
@@ -69,7 +69,7 @@ public class ForumTest {
         assertTrue("Should Return True", actual);
     }
     
-    /* Use case createQuestion should not accept a Post with null attributes*/
+    /* Use case createQuestion should not accept a Post with null attributes
     
     public void shouldReturnFalseForNullInsertionsPost() throws SQLException {
         Forum_post empty = new Forum_post();
@@ -78,7 +78,7 @@ public class ForumTest {
         assertTrue("Should Return True", actual);
     }
     
-    /*Use case getAllQuestions should return a List of 0 or more Post object*/
+    /*Use case getAllQuestions should return a List of 0 or more Post object
      public List shouldReturnList() throws SQLException {
         Forum_search getlist = new Forum_search();
         
@@ -87,7 +87,7 @@ public class ForumTest {
         return list;
     }
      
-     /*Use case getPostByQuestion should return a List of 0 or more Post object*/
+     /*Use case getPostByQuestion should return a List of 0 or more Post object
     public List shouldgetPostByQuestion () throws SQLException {
         Forum_search getlist = new Forum_search();
         getlist.setUserEnteredQues("example");
@@ -97,3 +97,4 @@ public class ForumTest {
     }
     
 }
+*/
