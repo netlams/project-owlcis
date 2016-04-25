@@ -17,9 +17,9 @@ public class Database {
     
     private Connection connection = null;
     private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String dbUrl = "jdbc:mysql://localhost:3307/owlcis";
-    private static final String username = "user";
-    private static final String pwrd = "temple2016";
+    private static final String dbUrl = "jdbc:mysql://localhost:3307/owlcis"; // configure me
+    private static final String username = "user"; // configure me
+    private static final String pwrd = "temple2016"; // configure me
     private StringBuilder err = new StringBuilder("");
     
     /**
@@ -29,7 +29,7 @@ public class Database {
         try {
             Class.forName(driver).newInstance();
             this.connection = DriverManager.getConnection(dbUrl, username, pwrd);
-            System.out.println("Database connection established");
+//            System.out.println("Database connection established");
         } catch (SQLException ex) {
             // handle any errors
             err.append("Error encountered!\n");
@@ -76,7 +76,7 @@ public class Database {
         } else {
             try {
                 this.connection = DriverManager.getConnection(dbUrl, username, pwrd);
-                System.out.println("Database connection established");
+//                System.out.println("Database connection established");
                 return this.connection;
             } catch (SQLException ex) {
                 // handle any errors
@@ -106,7 +106,7 @@ public class Database {
         try {
             //it will forcefully close any open connection in Database.
             this.connection.close();
-            System.out.println("Connection closed");
+//            System.out.println("Connection closed");
         } catch (Exception ex) {
             System.out.println("Error: Connection not open: " + ex.getMessage() + ". Are you tunneled in yet?");
         }
