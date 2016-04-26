@@ -14,127 +14,89 @@ and open the template in the editor.
                     <div class="col-lg-8 col-md-8">
 
                         <!-- POST -->
-                        <div class="post beforepagination">
-                            <div class="topwrap">
-                                <div class="userinfo pull-left">
-                                    <div class="avatar">
-                                        <img src="assets/img/logo/avatar.jpg" alt="" />
-                                        <div class="status green">&nbsp;</div>
+                        <form class="form" data-ng-submit="like()">
+                            <div class="post beforepagination">
+                                <div class="topwrap">
+                                    <div class="userinfo pull-left">
+                                        <div class="avatar">
+                                            <img src="assets/img/logo/avatar.jpg" alt="" />
+                                            <div class="status green">&nbsp;</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="posttext pull-left">
-                                    <h2>Question goes here</h2>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>                              
-                            <div class="postinfobot">
+                                    <div class="posttext pull-left">
+                                        <h2>Question goes here: {{forumcom.post_text}} </h2>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>                              
+                                <div class="postinfobot">
 
-                                <div class="likeblock pull-left">
-                                    <a href="#" class="up"><i class="fa fa-thumbs-o-up"></i>25</a>
-                                    <a href="#" class="down"><i class="fa fa-thumbs-o-down"></i>3</a>
+
+
+
+
+
+
+                                    <div class="clearfix"></div>
                                 </div>
+                            </div><!-- POST -->
 
-                                <div class="posted pull-left"><i class="fa fa-clock-o"></i> Posted on : 20 Nov @ 9:30am</div>
-
-                                <div class="next pull-right">        
-                                    <a href="#"><i class="fa fa-flag"></i></a>
+                            <div class="paginationf">
+                                <div class="pull-left"><a href="#" class="prevnext"><i class="fa fa-angle-left"></i></a></div>
+                                <div class="pull-left">
+                                    <ul class="paginationforum">
+                                        <li class="hidden-xs"><a href="#">1</a></li>
+                                        <li class="hidden-xs"><a href="#">2</a></li>
+                                        <li class="hidden-xs"><a href="#">3</a></li>
+                                        <li class="hidden-xs"><a href="#">4</a></li>
+                                        <li><a href="#">5</a></li>
+                                        <li><a href="#">6</a></li>
+                                        <li><a href="#" class="active">7</a></li>
+                                        <li><a href="#">8</a></li>
+                                        <li class="hidden-xs"><a href="#">9</a></li>
+                                        <li class="hidden-xs"><a href="#">10</a></li>
+                                        <li class="hidden-xs hidden-md"><a href="#">11</a></li>
+                                        <li class="hidden-xs hidden-md"><a href="#">12</a></li>
+                                        <li class="hidden-xs hidden-sm hidden-md"><a href="#">13</a></li>
+                                        <li><a href="#">20</a></li>
+                                    </ul>
                                 </div>
-
+                                <div class="pull-left"><a href="#" class="prevnext last"><i class="fa fa-angle-right"></i></a></div>
                                 <div class="clearfix"></div>
                             </div>
-                        </div><!-- POST -->
 
-                        <div class="paginationf">
-                            <div class="pull-left"><a href="#" class="prevnext"><i class="fa fa-angle-left"></i></a></div>
-                            <div class="pull-left">
-                                <ul class="paginationforum">
-                                    <li class="hidden-xs"><a href="#">1</a></li>
-                                    <li class="hidden-xs"><a href="#">2</a></li>
-                                    <li class="hidden-xs"><a href="#">3</a></li>
-                                    <li class="hidden-xs"><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li><a href="#">6</a></li>
-                                    <li><a href="#" class="active">7</a></li>
-                                    <li><a href="#">8</a></li>
-                                    <li class="hidden-xs"><a href="#">9</a></li>
-                                    <li class="hidden-xs"><a href="#">10</a></li>
-                                    <li class="hidden-xs hidden-md"><a href="#">11</a></li>
-                                    <li class="hidden-xs hidden-md"><a href="#">12</a></li>
-                                    <li class="hidden-xs hidden-sm hidden-md"><a href="#">13</a></li>
-                                    <li><a href="#">20</a></li>
-                                </ul>
-                            </div>
-                            <div class="pull-left"><a href="#" class="prevnext last"><i class="fa fa-angle-right"></i></a></div>
-                            <div class="clearfix"></div>
-                        </div>
+                            <!-- POST   <form class="form" data-ng-submit="like()"> -->
+
+                            <div class="post"  ng-repeat= "A in forumcom">
+                                <div class="topwrap">
+                                    <div class="userinfo pull-left">
+                                        <div class="avatar">
+                                            <img src="assets/img/logo/avatar.jpg" alt="" />
+                                            <div class="status green">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                    <div class="posttext pull-left">
+                                        <p> {{A.comment_text}}</p>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>                              
+                                <div class="postinfobot">
+
+
+
+                                    <div class="posted pull-left"><i class="fa fa-clock-o"></i> Posted on : {{A.time_stamp}}</div>
+
+                                    <div class="pull-right">Posted by:{{A.f_name}}{{A.l_name}}</div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div><!-- POST -->
+                        </form>
+                        <!-- POST -->
 
                         <!-- POST -->
                         <div class="post">
-                            <div class="topwrap">
-                                <div class="userinfo pull-left">
-                                    <div class="avatar">
-                                        <img src="assets/img/logo/avatar.jpg" alt="" />
-                                        <div class="status green">&nbsp;</div>
-                                    </div>
-                                </div>
-                                <div class="posttext pull-left">
-                                    <p>Comment 1</p>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>                              
-                            <div class="postinfobot">
 
-                                <div class="likeblock pull-left">
-                                    <a href="#" class="up"><i class="fa fa-thumbs-o-up"></i>10</a>
-                                    <a href="#" class="down"><i class="fa fa-thumbs-o-down"></i>1</a>
-                                </div>
-
-                                <div class="posted pull-left"><i class="fa fa-clock-o"></i> Posted on : 20 Nov @ 9:45am</div>
-
-                                <div class="next pull-right">                   
-                                    <a href="#"><i class="fa fa-flag"></i></a>
-                                </div>
-
-                                <div class="clearfix"></div>
-                            </div>
-                        </div><!-- POST -->
-
-                        <!-- POST -->
-                        <div class="post">
-                            <div class="topwrap">
-                                <div class="userinfo pull-left">
-                                    <div class="avatar">
-                                        <img src="assets/img/logo/avatar.jpg" alt="" />
-                                        <div class="status green">&nbsp;</div>
-                                    </div>
-                                </div>
-                                <div class="posttext pull-left">
-                                    <p>Comment 2</p>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>                              
-                            <div class="postinfobot">
-
-                                <div class="likeblock pull-left">
-                                    <a href="#" class="up"><i class="fa fa-thumbs-o-up"></i>10</a>
-                                    <a href="#" class="down"><i class="fa fa-thumbs-o-down"></i>1</a>
-                                </div>
-
-                                <div class="posted pull-left"><i class="fa fa-clock-o"></i> Posted on : 20 Nov @ 9:45am</div>
-
-                                <div class="next pull-right">                   
-                                    <a href="#"><i class="fa fa-flag"></i></a>
-                                </div>
-
-                                <div class="clearfix"></div>
-                            </div>
-                        </div><!-- POST -->
-
-
-
-                        <!-- POST -->
-                        <div class="post">
-                            <form action="#" class="form" method="post">
+                            <form  class="form newtopic"  data-ng-submit="Formprocess()">
                                 <div class="topwrap">
                                     <div class="userinfo pull-left">
                                         <div class="avatar">
@@ -145,7 +107,7 @@ and open the template in the editor.
                                     <div class="posttext pull-left">
                                         <div class="textwraper">
                                             <div class="postreply">Post a Reply</div>
-                                            <textarea name="reply" id="reply" placeholder="Type your message here"></textarea>
+                                            <textarea name="reply" id="reply" placeholder="Type your message here" data-ng-model ="Commentform.reply"></textarea>
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
