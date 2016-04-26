@@ -783,12 +783,15 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             JsonElement jelement = new JsonParser().parse(request.body());
             JsonObject  jobj = jelement.getAsJsonObject();
-            System.out.println("BODY: " + request.body());
-            System.out.println("jojb" + jobj.get("degree").toString()+ jobj.get("year").toString());
             ScheduleBuilder sch = new ScheduleBuilder(user);
             Database dbc = new Database();
-            sch.loadDegreeIntoSchedule(jobj.get("degree").getAsString(), jobj.get("year").getAsInt(), dbc.getConn());
-            return "HTTP 200 - OK";
+            if (sch.loadDegreeIntoSchedule(jobj.get("degree").getAsString(), jobj.get("year").getAsInt(), dbc.getConn())) {
+                response.status(200);
+                return "HTTP 200 - OK";
+            } else { 
+                response.status(500);
+                return "OWLCIS failed: HTTP 500 SERVER ERROR";
+            }
         });
 
         /**

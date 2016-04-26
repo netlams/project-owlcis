@@ -26,6 +26,33 @@
             return defer.promise;
         };
     });
+    /* Bootstrap Modal Builder Service */
+    app.factory('ModalBuilderService', function () {
+        var factory = {};
+        factory.build = function (id, title, body, btn) {
+            return "<div class='modal fade' id='" + id + "' tabindex='-1' role='dialog' aria-labelledby='msg-label'>"
+                    + "<div class='modal-dialog' role='document'>"
+                    + "<div class='modal-content'>"
+                    + "<div class='modal-header'>"
+                    + "<button type='button' class='close' data-dismiss='modal' aria-label='Close'>"
+                    + "<span aria-hidden='true'>&times;</span>"
+                    + "</button>"
+                    + "<h2 class='modal-title text-center' id='login-msg-label'>" + title + "</h2>"
+                    + "</div>"
+                    + "<div class='modal-body text-center'>"
+                    + body
+                    + "</div>"
+                    + "<div class='modal-footer'>"
+                    + btn
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>";
+        };
+        return factory;
+    });
+
     /* Login Controller */
     app.controller('loginController', ['$scope', '$state', 'CookieService',
         function ($scope, $state, CookieService) {
@@ -65,7 +92,8 @@
         }]);
     /* Signup Controller */
     app.controller('signupController', ['$scope', '$state', '$http', '$window', 'DeptService', 'CookieService',
-        function ($scope, $state, $http, $window, DeptService, CookieService) {
+        'ModalBuilderService', '$filter', '$compile', '$interval',
+        function ($scope, $state, $http, $window, DeptService, CookieService, ModalBuilderService, $filter, $compile, $interval) {
             $scope.foundEmail = CookieService.getCookie('EMAIL');
             $scope.formData = {
                 deptId: null,
@@ -77,11 +105,34 @@
                 availDegreeOptions: [{name: 'BS'}, {name: 'BA'}, {name: 'Master'}, {name: 'Ph.D.'}],
                 err: null,
             };
-            
+
             DeptService.getDeptList()
                     .then(function (data) {
                         $scope.formData.availDeptOptions = data;
                     });
+
+            // activate modal msg before making load schedule call to API backend
+            $scope.showMsg = function () {
+                var id, title, body, btn;
+                id = 'msg-modal';
+                title = 'New User';
+                body = "Welcome to OWLCIS. <i class='fa fa-smile-o' aria-hidden='true'></i> Get started " 
+                        + " by visiting our Course Reviews page or Schedule page to build your schedule list. "
+                        + "You can update your info anytime at the Profile page. ";
+                btn = "<button class='btn btn-default' data-ng-click='msgConfirmed()' data-dismiss='modal'>Got it</button>";
+                if ($('#' + id)) {
+                    $('#' + id).remove(); // remove old modal if exists
+                }
+                $(document.body)
+                        .prepend($compile(ModalBuilderService.build(id, title, body, btn))($scope));
+                $('#' + id).modal(); // show
+            };
+
+            $scope.msgConfirmed = function () {
+                setTimeout(function () {
+                    $window.location.href = '/';
+                }, 3000);
+            };
 
             // process the form
             $scope.processForm = function () {
@@ -91,9 +142,17 @@
                             console.log(response.data);
                             if (response.status == 203) {
                                 $scope.formData.succ = 'Successfully signed up. Redirecting you in 3 seconds ...';
-                                setTimeout(function () {
-                                    $window.location.href = '/';
-                                }, 3000);
+                                if ($scope.formData.role == "member") {
+                                    setTimeout(function () {
+                                        $scope.showMsg();
+                                    }, 200);
+                                } else {
+                                    setTimeout(function () {
+                                        $window.location.href = '/';
+                                    }, 3000);
+                                }
+
+
                             }
                         }, function (response) {
                             $scope.formData.err = "Cannot sign up at the moment.\n\

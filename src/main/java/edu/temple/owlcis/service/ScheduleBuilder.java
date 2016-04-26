@@ -272,7 +272,8 @@ public class ScheduleBuilder {
         StudentFlowchart fc = this.generateFlowchart(degree, year, true);
         int fallSemesterCnt = Integer.parseInt(String.valueOf(year).substring(2));
         int springSemesterCnt = fallSemesterCnt + 1;
-
+        if (fc == null)
+            return false;
         for (int i = 0; i < fc.getList().size(); i++) {
             LinkedList<Schedule> semesterList = (LinkedList) fc.getList().get(i);
 
@@ -303,12 +304,15 @@ public class ScheduleBuilder {
      * @param d
      */
     public StudentFlowchart generateFlowchart(String d, int y, boolean randomizeElect) {
+        int safeCounter = 0;
         /**
          * Testing stuff
          */
         // ********* csbsDegree requirements
         Degree degree = new Degree(d, y);
         Map<DegreeReq, List<String>> csbsDegree = degree.getDegree();
+        if (csbsDegree.size() == 0)
+            return null;
         ArrayList<DegreeReq> courseList = new ArrayList<>();
         courseList.add(new DegreeReq("CIS 1001", DegreeReq.CORE));
         courseList.add(new DegreeReq("CIS 1166", DegreeReq.CORE));
@@ -358,6 +362,9 @@ public class ScheduleBuilder {
 
         boolean needPass = true; // controls the number of pass (if !needPass, then cancel while loop)
         while (needPass || matchedDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
+            safeCounter++;
+            if (safeCounter > 200) 
+                return null;
             List<DegreeReq> newPass = matchedDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
             List<Schedule> allowedList = new LinkedList<>();
@@ -408,6 +415,9 @@ public class ScheduleBuilder {
 
         // remaining req
         while (needPass || !remainingDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
+            safeCounter++;
+            if (safeCounter > 200) 
+                return null;
             int coursePerSemesterCnt = 0; // track length (we don't want to overload course work per semester)
             List<DegreeReq> newPass = remainingDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass

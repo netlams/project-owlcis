@@ -365,7 +365,7 @@
                         title = 'Confirm';
                         body = "Sure, we could load your favorite degree's courses in. Just confirm a few details."
                                 + "<hr><form><div class='form-group'>"
-                                + "<label for='year'>Degree requirements vary by year. Which year you declared or like? </label>"
+                                + "<label for='year'>Degree requirements vary by year. Which year did you declared, or like?  (try 2012)</label>"
                                 + "<input type='number' id='year' class='form-control modal-small-input' data-ng-model='flowchartData.year' value='" 
                                 + $scope.flowchartData.year + "'/>"
                                 + "<label for='degree'>Which degree?</label> " 
@@ -411,7 +411,7 @@
                                 .error(function (response) {
                                     $interval.cancel(loading);
                                     $('#loadsch-msg-modal .modal-body').html('Failed to load schedule list.');
-                                    console.log("Failed to load schedule list. " + response);
+                                    console.log("Failed to load your selected degree. Try CS_BS, 2012 " + response);
                                 });
                     };
 
@@ -424,7 +424,7 @@
                         body = "Alright, we're about to generate your very own custom flowchart <i class='fa fa-smile-o' aria-hidden='true'></i>"
                                 + " for the degree requirements. But before we do, we need to confirm a few details. "
                                 + "<hr><form><div class='form-group'>" 
-                                + "<label for='year'>What year did you declared your major?</label>"
+                                + "<label for='year'>What year did you declared your major? (try 2012)</label>"
                                 + "<input type='number' class='form-control modal-small-input' data-ng-model='flowchartData.year' value='" + $scope.flowchartData.year + "'/>"
                                 + "<label for='degree'>Your degree is </label>"
                                 + "<select class='form-control modal-select-tag' data-ng-model='flowchartData.degree'>"
