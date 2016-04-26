@@ -5,39 +5,33 @@
         <meta charset="UTF-8">
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Temple's OWLCIS - the app you want">
+        <meta name="description" content="Temple University's OWLCIS - the app made by Temple students for Temple students! 
+              OWLCIS is a web application designed specifically for Temple University’s Computer and 
+              Information Science (CIS) students. It acts as a central location for students to find out real 
+              information about CIS courses, written by students themselves. In addition, we offer specialized tools to 
+              let students plan out an ideal schedule and generate a printable flow chart map based on your degree.">
         <meta name="author" content="Team Rachel, Dau, Dhruvin, Mounya, Jeff">
         <meta name="google-signin-client_id" content="221190717599-nkm4ci5r8eipdiqjbn8n0rr2m4tnvb78.apps.googleusercontent.com">
-        <meta name="google-site-verification" content="IysJRDlQFOtB4_3TrL4sWM_l9MnVqKIfue8cytYN0eU"/>
-        <script src="app/plugin/angular/angular.min.js"></script>
-        <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
-        <script src="app/plugin/angular-animate/angular-animate.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-filter/0.4.7/angular-filter.js"></script>
-        <script src="app/js/app.js"></script>
-        <script src="app/js/FirstController.js"></script>
-        <script src="app/js/SecondController.js"></script>
-        <script src="app/js/ThirdController.js"></script>
-        <script src="app/js/ScheduleController.js"></script>
-        <script src="app/js/LoginAndSignupController.js"></script>
-        <script src="app/js/forumhome.js"></script>
-        <script src="app/js/forumpost.js"></script>
-        <script src="app/js/forumcomments.js"></script>
-        <script src="app/js/review.js"></script>
-        <script src="app/js/ViewCourseReviews.js"></script>
-        <script src="app/js/ProfileController.js"></script>
-        <script src="app/js/DBService.js"></script>
-
+        <meta name="google-site-verification" content="93NcRZt1zb8o-jwT4wOgtshaNh8WKwdcOb2FeGWYVtI" />
+        
         <link rel="shortcut icon" href="assets/img/logo/owl.PNG">
         <!-- CSS -->
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <!--<link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"> 
         <link href="assets/css/animate.min.css" rel="stylesheet" type="text/css">
         <link href="assets/css/main.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
         <link href="assets/css/ie.css" rel="stylesheet" type="text/css">
         <link href="assets/css/footernav.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="screen" />
         <link href="assets/css/custom.css" rel="stylesheet">
+        <link href="assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="assets/css/sweetalert2.min.css">
+
+        <!--CSS For DataTable Plugin-->
+        <link href="assets/js/plugins/datatables/angular-datatables.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/js/plugins/datatables/datatables.bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/js/plugins/datatables-buttons/css/buttons.dataTables.css" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,7 +39,6 @@
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
           <![endif]-->
-
         <!-- GOOGLE FONTS -->
         <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="assets/css/font-awesome.forum.css">
@@ -68,8 +61,8 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a href="#first" class="navbar-brand">
-                            <img src="assets/img/logo/tu.PNG" alt="University Logo">
+                        <a href="#home" class="navbar-brand">
+                            <img src="assets/img/logo/tu.PNG" alt="Temple University Logo">
                         </a>
                     </div>
                     <!-- MAIN NAVIGATION -->
@@ -79,14 +72,14 @@
                                 <a href="{{link.url}}">{{link.name}}</a>
                             </li>
 
-                            <li id="appLoginMsg">
-                                <p class="navbar-text" data-ng-hide="loginStatus">Sign in using your Temple University Email</p>
-                                <p class="navbar-text" data-ng-show="loginStatus">Welcome, {{fname}} [{{role}}]</p>
-                                <button type="button" class="btn btn-default" data-ng-show="loginStatus" onClick="signOut()">Sign out?</button>
+                            <li id="appLoginMsg" class='nav-login'>
+                                <p class="navbar-text" data-ng-if="!loginStatus">Sign in using your Temple University Email</p>
+                                <p class="navbar-text" data-ng-if="loginStatus">Welcome, {{fname}} [{{role}}]</p>
+                                <button type="button" class="btn btn-default" data-ng-if="loginStatus" onClick="signOut()">Sign out?</button>
                             </li>
-                            <li>
-                                <div id="google-signin-btn" data-toggle="tooltip" 
-                                     data-placement="bottom" title="Browser cookies must be enabled" 
+                            <li class='nav-login'>
+                                <div id="google-signin-btn" data-toggle="tooltip"
+                                     data-placement="bottom" title="Browser cookies must be enabled"
                                      data-ng-hide="loginStatus"></div>
                             </li>
                         </ul>
@@ -117,14 +110,43 @@
 
         <!-- JAVASCRIPTS -->
         <script src="assets/js/jquery-2.1.1.min.js"></script>
+        <script src="assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="app/plugin/angular/angular.min.js"></script>
+        <script src="assets/js/plugins/datatables/angular-datatables.js"></script>
+        <script src="assets/js/plugins/datatables/angular-datatables.bootstrap.min.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/dataTables.buttons.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/angular-datatables.buttons.min.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/buttons.bootstrap.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/buttons.colVis.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/buttons.flash.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/buttons.foundation.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/buttons.html5.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/buttons.jqueryui.js"></script>
+        <script src="assets/js/plugins/datatables-buttons/js/buttons.print.js"></script>
+        <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="//code.angularjs.org/1.4.1/angular-resource.min.js"></script>
+        <script src="app/plugin/angular-animate/angular-animate.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-filter/0.4.7/angular-filter.js"></script>
+        <script src="//code.angularjs.org/1.0.3/angular-sanitize.js"></script>
+        <script src="app/plugin/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="app/js/app.js"></script>
+        <script src="app/js/ThirdController.js"></script>
+        <script src="app/js/ScheduleController.js"></script>
+        <script src="app/js/LoginAndSignupController.js"></script>
+        <script src="app/js/forumhome.js"></script>
+        <script src="app/js/forumpost.js"></script>
+        <script src="app/js/forumcomments.js"></script>
+        <script src="app/js/moderator.js"></script>
+        <script src="app/js/review.js"></script>
+        <script src="app/js/ViewCourseReviews.js"></script>
+        <script src="app/js/ProfileController.js"></script>
+
         <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/plugins/slick/slick.min.js"></script>
-        <script src="assets/js/plugins/stellar/jquery.stellar.min.js"></script>
-        <script src="assets/js/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
-        <script src="assets/js/plugins/autohidingnavbar/jquery.bootstrap-autohidingnavbar.min.js"></script>
-        <script src="assets/js/repute-scripts.js"></script>
         <script src="//apis.google.com/js/platform.js?onload=renderGButton" async defer></script>
         <script src="//apis.google.com/js/api:client.js"></script>
         <script src="js/main.js"></script>
+
+        <script src="assets/js/sweetalert2.min.js"></script>
+
     </body>
 </html>

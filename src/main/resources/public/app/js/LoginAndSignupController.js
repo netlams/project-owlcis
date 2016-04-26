@@ -19,7 +19,7 @@
     app.service('DeptService', function ($q, $http) {
         this.getDeptList = function () {
             var defer = $q.defer();
-            $http.get('/api/depts', {cache: 'true'})
+            $http.get('./api/depts', {cache: 'true'})
                     .success(function (data) {
                         defer.resolve(data);
                     });
@@ -34,9 +34,13 @@
                 {url: '#reviews', name: 'Course Reviews'},
                 {url: '#schedule', name: 'Schedule'},
                 {url: '#forum', name: 'Forum'}];
-            $scope.modAdvNav = [{url: '#home', name: 'Home'},
+            $scope.advNav = [{url: '#home', name: 'Home'},
                 {url: '#reviews', name: 'Course Reviews'},
                 {url: '#forum', name: 'Forum'}];
+            $scope.modNav = [{url: '#home', name: 'Home'},
+                {url: '#reviews', name: 'Course Reviews'},
+                {url: '#forum', name: 'Forum'},
+                {url: '#moderator', name: 'Moderator'}];
             $scope.fname = CookieService.getCookie('FNAME');
             $scope.role = CookieService.getCookie('ROLE');
             $scope.email = CookieService.getCookie('EMAIL');
@@ -48,8 +52,10 @@
                         && $scope.email != null) {
                     if ($scope.role === 'member')
                         $scope.navbar = $scope.memberNav;
+                    else if ($scope.role === 'moderator')
+                        $scope.navbar = $scope.modNav;
                     else
-                        $scope.navbar = $scope.modAdvNav;
+                        $scope.navbar = $scope.advNav;
                     return true;
                 } else {
                     return false;
@@ -58,7 +64,6 @@
             $scope.loginStatus = $scope.checkLogin();
         }]);
     /* Signup Controller */
-
     app.controller('signupController', ['$scope', '$state', '$http', '$window', 'DeptService', 'CookieService',
         function ($scope, $state, $http, $window, DeptService, CookieService) {
             $scope.foundEmail = CookieService.getCookie('EMAIL');
@@ -74,13 +79,11 @@
 
             // process the form
             $scope.processForm = function () {
-                $http.post('/signup', $scope.formData)
+                $http.post('./signup', $scope.formData)
                         .then(function (response) {
                             console.log("Signup status: " + response.status);
                             console.log(response.data);
                             if (response.status == 203) {
-//                                alert("Successfully Added");
-//                                $window.location.href = '/';
                                 $scope.formData.succ = 'Successfully signed up. Redirecting you in 3 seconds ...';
                                 setTimeout(function () {
                                     $window.location.href = '/';

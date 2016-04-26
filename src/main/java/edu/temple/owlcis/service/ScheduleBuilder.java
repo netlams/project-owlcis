@@ -1,17 +1,20 @@
 /**
  * CIS4398 Projects
  * Spring 2016
- * 2/25/2016
+ * 4/24/2016
  */
 package edu.temple.owlcis.service;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -29,69 +32,262 @@ import java.util.stream.Collectors;
 public class ScheduleBuilder {
 
     //Global variables
-    private Member member; //the username of the student who created the schedule (e.g., tue11223@temple.edu)
-
-    public ScheduleBuilder() {
-        this.member = new Member();
-    }
+    private Profile profile;//the user of the student who created the schedule (e.g., tue11223@temple.edu)
 
     /**
-     * the constructor for the ScheduleBuilder object
-     *
-     * @param m the member
+     * Default constructor.
      */
-    public ScheduleBuilder(Member m) {
-        this.member = m;
+    public ScheduleBuilder() {
+        this.profile = new Profile();
     }
 
     /**
-     * Purpose: add courses to a schedule Pre-conditions: the schedule does not
-     * contain the course to be added Post-conditions: the schedule contains the
-     * course
+     * Parameterized constructor for the ScheduleBuilder object.
+     * takes user from sesssion and cast to member
      *
-     * @param courseID the ID of the course to be added to the schedule
+     * @param u the user
+     */
+    public ScheduleBuilder(User u) throws Exception, NullPointerException {
+        this();
+        this.profile = new Profile(new Member(u));
+        loadMember();
+        this.profile.setCompleted((short) 0);
+    }
+
+    /**
+     * Check if the user is a member by trying to fetch his/her profile.
+     *
+     * @return True if member; otherwise throw exceptions
+     * @throws Exception if any errors
+     * @throws NullPointerException if non-existing member
+     */
+    public boolean loadMember() throws Exception, NullPointerException {
+        Database dbc = new Database();
+        // Database connection OK
+        if (dbc.getError().length() == 0) {
+            try {
+                if (!profile.fetchProfile(dbc.getConn())) {
+                    throw new NullPointerException();
+                }
+                return true;
+            } catch (Exception ex) {
+                throw new Exception();
+            } finally {
+                if (!dbc.getConn().isClosed()) {
+                    dbc.closeConn();
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Get user's schedule.
+     * 
+     * @param conn
+     * @return LinkedList of user schedules
+     * @throws SQLException if any database error
+     */
+    public LinkedList getSchedule(Connection conn) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet results = null;
+        String sql;
+        LinkedList<Schedule> list = new LinkedList<>();
+
+        if (conn != null) {
+            try {
+                /* Querying takes table ....................... */
+                sql = "SELECT takes.course_id, takes.semester, course_title "
+                        + "FROM takes INNER JOIN course "
+                        + "ON takes.course_id=course.course_id where mem_id=? "
+                        + "ORDER BY SUBSTR(takes.semester FROM 3 FOR 4), "
+                        + "takes.semester DESC";
+                stmt = conn.prepareStatement(sql);
+                //Set param
+                stmt.setInt(1, this.getProfile().getMember().getId());
+                //Execute query
+                results = stmt.executeQuery();
+
+                while (results.next()) {
+                    Schedule schedule
+                            = new Schedule(results.getString("takes.course_id"),
+                                    results.getString("course_title"),
+                                    results.getString("semester"));
+                    list.add(schedule);
+                }
+
+                return list;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (results != null) {
+                    try {
+                        results.close();
+                    } catch (SQLException sqlEx) {
+                    } //ignore
+                }
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                        ;
+                    } 
+                }
+            }
+        }
+        return null; //will only return false if connection is null
+    }
+
+    /**
+     * Purpose: add schedule.
+     * Pre-conditions: the schedule does not contain the course to be added 
+     * Post-conditions: the schedule contains the course
+     *
+     * @param sch
+     * @param conn
      * @return true if the course was successfully added to the schedule; false
      * if it was not added
+     * @throws java.sql.SQLException if any database error
      */
-    public boolean addCourse(String courseID) {
-        return true;
+    public boolean addSchedule(Schedule sch, Connection conn) throws SQLException {
+        this.getProfile().setTakenCourses(this.getSchedule(conn));
+        try {
+            if (this.getProfile().addTakenCourse(sch, conn)) {
+                return true;
+            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+            throw new SQLException(ex);
+        }
+        return false;
     }
 
     /**
-     * Purpose: delete courses from a schedule Pre-conditions: the schedule
-     * contains the course to be deleted Post-conditions: the schedule does not
-     * contain the course
+     * Purpose: delete schedule from a schedule.
+     * Pre-conditions: the schedule contains the course to be deleted.
+     * Post-conditions: the schedule does not contain the course
      *
-     * @param courseID the ID of the course to be deleted from the schedule
+     * @param sch
+     * @param conn
      * @return true if the course was successfully deleted from the schedule;
      * false if it was not deleted
+     * @throws java.sql.SQLException if any database error
      */
-    public boolean deleteCourse(String courseID) {
-        return true;
+    public boolean removeSchedule(Schedule sch, Connection conn) throws SQLException {
+        PreparedStatement stmt = null;
+        String sql;
+
+        if (conn != null) {
+            try {
+                sql = "DELETE FROM takes "
+                        + "WHERE mem_id = ? "
+                        + "AND course_id = ? "
+                        + "AND semester = ? ";
+                stmt = conn.prepareStatement(sql);
+
+                //Set parameters
+                stmt.setInt(1, this.getProfile().getMember().getId());
+                stmt.setString(2, sch.getCourseID().toUpperCase());
+                stmt.setString(3, sch.getSemester().toUpperCase());
+
+                //Execute query
+                stmt.executeUpdate();
+
+                return true;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                        ;
+                    } 
+                }
+            }
+        }
+        return false;
     }
 
     /**
-     * Purpose: save a schedule to the database Post-conditions: the database
-     * contains the schedule
-     *
-     * @return true if schedule was successfully inserted into database; false
-     * if schedule was not inserted
-     */
-    public boolean insertIntoDB() {
-        //NOTE: the creation date and time will be determined here
-        return true;
-    }
-
-    /**
-     * Purpose: remove a schedule from the database Pre-conditions: the database
-     * has a previously saved schedule to be removed Post-conditions: the
-     * database does not contain any saved schedule associated with the current
-     * user
-     *
+     * Delete all schedules user have in the database. 
+     * Pre-conditions: the database has a previously saved schedule to be removed 
+     * Post-conditions: the database does not contain any saved schedule 
+     * associated with the current user
+     * 
+     * @param conn
      * @return true if schedule was successfully removed from database; false if
      * schedule was not removed
+     * @throws SQLException
      */
-    public boolean removeFromDB() {
+    public boolean removeAllSchedule(Connection conn) throws SQLException {
+        PreparedStatement stmt = null;
+        String sql;
+
+        if (conn != null) {
+            try {
+                sql = "DELETE FROM takes "
+                        + "WHERE mem_id = ? ";
+                stmt = conn.prepareStatement(sql);
+
+                //Set parameters
+                stmt.setInt(1, this.getProfile().getMember().getId());
+                //Execute query
+                stmt.executeUpdate();
+                return true;
+            } catch (SQLException ex) {
+                //Handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                throw new SQLException(ex);
+            } finally {
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException sqlEx) {
+                    } //ignore
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Load sample schedule list for specified degree into user's schedule
+     * @param degree the degree name
+     * @param year the declared year
+     * @param conn
+     * @return true if success; otherwise false
+     */
+    public boolean loadDegreeIntoSchedule(String degree, int year, Connection conn) {
+        StudentFlowchart fc = this.generateFlowchart(degree, year, true);
+        int fallSemesterCnt = Integer.parseInt(String.valueOf(year).substring(2));
+        int springSemesterCnt = fallSemesterCnt + 1;
+
+        for (int i = 0; i < fc.getList().size(); i++) {
+            LinkedList<Schedule> semesterList = (LinkedList) fc.getList().get(i);
+
+            String semester = ((i % 2) == 0) ? "FA" + (fallSemesterCnt++) : "SP" + (springSemesterCnt++);
+            for (Schedule sch : semesterList) {
+                try {
+                    sch.setSemester(semester);
+                    this.addSchedule(sch, conn);
+                } catch (Exception ex) {
+                    System.out.println("Error in ScheduleBuilder.loadDegreeIntoSchedule() " + ex.getMessage());
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
@@ -100,78 +296,53 @@ public class ScheduleBuilder {
      * Post-conditions: a flowchart is generated and displayed on the webpage
      * for the user
      *
-     * @return StudentFlowchart if flowchart was successfully generated; false if flowchart
+     * @return StudentFlowchart if flowchart was successfully generated; false
+     * if flowchart
      * was not generated
+     * @param y
+     * @param d
      */
-    public StudentFlowchart generateFlowchart() {
+    public StudentFlowchart generateFlowchart(String d, int y, boolean randomizeElect) {
         /**
-         * DUMMY TEST
+         * Testing stuff
          */
         // ********* csbsDegree requirements
-        Map<String, List<String>> csbsDegree = new HashMap<>();
-        //set up
-        //prereq
-        List<String> math1022 = new ArrayList<>();
-        math1022.add("MATH 1022");
-        //map set up (REQUIREMENTS)
-        csbsDegree.put("CIS 1068", math1022);
-        csbsDegree.put("CIS 1166", math1022);
-        csbsDegree.put("CIS 2033", Arrays.asList("CIS 1068", "MATH 1041"));
-        csbsDegree.put("CIS 2107", Arrays.asList("CIS 1068"));
-        csbsDegree.put("CIS 2166", Arrays.asList("CIS 1166", "CIS 1068", "MATH 1041"));
-        csbsDegree.put("CIS 2168", Arrays.asList("CIS 1166", "CIS 1068", "MATH 1022"));
-        csbsDegree.put("CIS 2308", Arrays.asList("CIS 2107", "CIS 2168"));
-        csbsDegree.put("CIS 3207", Arrays.asList("CIS 1166", "CIS 2107", "CIS 2168"));
-        csbsDegree.put("CIS 3223", Arrays.asList("CIS 2166", "MATH 1042"));
-        csbsDegree.put("CIS 3238", Arrays.asList("CIS 2166", "CIS 3207"));
-        csbsDegree.put("CIS 4398", Arrays.asList("CIS 2166", "CIS 3238"));
-        csbsDegree.put("MATH 1022", Collections.emptyList());
-        csbsDegree.put("MATH 1041", math1022);
-        csbsDegree.put("MATH 1042", Arrays.asList("MATH 1041"));
-        csbsDegree.put("CIS 1001", Collections.emptyList());
+        Degree degree = new Degree(d, y);
+        Map<DegreeReq, List<String>> csbsDegree = degree.getDegree();
+        ArrayList<DegreeReq> courseList = new ArrayList<>();
+        courseList.add(new DegreeReq("CIS 1001", DegreeReq.CORE));
+        courseList.add(new DegreeReq("CIS 1166", DegreeReq.CORE));
+        courseList.add(new DegreeReq("HIST 3333", DegreeReq.CORE));
 
-        System.out.println("degree: " + csbsDegree);
+//        System.out.println("degree: " + csbsDegree);
         // ******** ^done for csbsDegree req
 
         // ******** sample student desired course list
-        ArrayList<String> courseList = new ArrayList<>();
         Map<String, Integer> completedList = new TreeMap<>();
-//        completedList.put("MATH 1022", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
-//        completedList.put("MATH 1022", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
-//        completedList.put("CIS 1001", 0); // testing, when I add 1022 it allowed 1166 and 1068 on first pass
-        courseList.add("CIS 1001");
-        courseList.add("CIS 2308");
-        courseList.add("CIS 2107");
-        courseList.add("CIS 1166");
-        courseList.add("CIS 1068");
-        courseList.add("MATH 1022");
-        courseList.add("HIST 1001"); // irrelevant course
 
         // *** 04/09 - A real student schedule costs of schedules (cid and semstr)
         HashMap<String, Schedule> studentScheduleMap = new HashMap<>();
         ArrayList<Schedule> scheduleFromDB = new ArrayList<>();
         scheduleFromDB.add(new Schedule("CIS 1001", "FA15"));
-        scheduleFromDB.add(new Schedule("CIS 2308", "SP16"));
-        scheduleFromDB.add(new Schedule("CIS 2107", "SP16"));
+//        scheduleFromDB.add(new Schedule("CIS 2308", "SP16"));
+//        scheduleFromDB.add(new Schedule("CIS 2107", "SP16"));
         scheduleFromDB.add(new Schedule("CIS 1166", "FA15"));
         scheduleFromDB.add(new Schedule("CIS 1068", "FA15"));
-        scheduleFromDB.add(new Schedule("MATH 1022", "FA15"));
-        scheduleFromDB.add(new Schedule("HIST 1001", "SP16"));
+//        scheduleFromDB.add(new Schedule("MATH 1022", "FA15"));
+//        scheduleFromDB.add(new Schedule("HIST 1001", "SP16"));
         for (int i = 0; i < scheduleFromDB.size(); i++) {
             studentScheduleMap.put(scheduleFromDB.get(i).getCourseID(),
                     new Schedule(scheduleFromDB.get(i).getCourseID(), scheduleFromDB.get(i).getSemester()));
         }
-        System.out.println("Map of student schedule: " + studentScheduleMap);
+//        System.out.println("Map of student schedule: " + studentScheduleMap);
         // ******** ^done sample course list
 
         // ******** comparsion start
-        //list of all courses that are relevant (those that matters for the csbsDegree)
-        LinkedList<String> matchedDegreeCourseList = courseList
+        LinkedList<DegreeReq> matchedDegreeCourseList = courseList
                 .stream()
                 .filter(c -> csbsDegree.containsKey(c))
                 .collect(Collectors.toCollection(LinkedList::new));
-        //list of leftover requirements
-        LinkedList<String> remainingDegreeCourseList = csbsDegree
+        LinkedList<DegreeReq> remainingDegreeCourseList = csbsDegree
                 .entrySet()
                 .stream()
                 .map(Map.Entry::getKey)
@@ -179,29 +350,37 @@ public class ScheduleBuilder {
                 .collect(Collectors.toCollection(LinkedList::new));
         //map of student schedule to be made into FLOWCHART!!
         TreeMap<String, List<Schedule>> flowchart = new TreeMap<>();
-        System.out.println("matched courses: " + matchedDegreeCourseList);
-        System.out.println("remaining courses: " + remainingDegreeCourseList);
+//        System.out.println("matched courses: " + matchedDegreeCourseList);
+//        System.out.println("remaining courses: " + remainingDegreeCourseList);
 
         Integer semesterCnt = 1;
+        int electiveCnt = 0;
+
         boolean needPass = true; // controls the number of pass (if !needPass, then cancel while loop)
-        while (needPass || !matchedDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
-            List<String> newPass = matchedDegreeCourseList.stream().collect(Collectors.toList());
+        while (needPass || matchedDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
+            List<DegreeReq> newPass = matchedDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
             List<Schedule> allowedList = new LinkedList<>();
-            for (String course : newPass) {
-                System.out.println("Comparing " + course + ", req: " + csbsDegree.get(course).toString());
+            for (DegreeReq course : newPass) {
+//                System.out.println("Comparing " + course.toString() + ", req: " + csbsDegree.get(course).toString());
                 if (csbsDegree.get(course).isEmpty()) {
-                    allowedList.add(studentScheduleMap.get(course)); //allowed to student schedule
-                    completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                    allowedList.add(studentScheduleMap.get(course.toString())); //allowed to student schedule
+                    completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                     matchedDegreeCourseList.remove(course);//no longer needed to review this next pass, so take out
+                    if (course.isElective()) {
+                        electiveCnt++; // increment elective count
+                    }
                 } else {
                     for (String prereq : csbsDegree.get(course)) { // get the prerequisites for this course
                         if (completedList.containsKey(prereq)) { //does student's history meet prereq?
                             int takenSemester = completedList.get(prereq); // when did student took this? (for non-concurrent requirement)
                             if (takenSemester < semesterCnt) { //if taken at an older/earlier semester
-                                allowedList.add(studentScheduleMap.get(course));//meets the prerequirsite, so allowed to student schedule
-                                completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                                allowedList.add(studentScheduleMap.get(course.toString()));//meets the prerequirsite, so allowed to student schedule
+                                completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                                 matchedDegreeCourseList.remove(course);//no longer needed to review this
+                                if (course.isElective()) {
+                                    electiveCnt++; // increment elective count
+                                }
                             }
                         }
                     }
@@ -209,40 +388,51 @@ public class ScheduleBuilder {
             }
             needPass = (newPass.size() == matchedDegreeCourseList.size()) ? false : true;
 //            flowchart.put(semesterCnt.toString(), allowedList);
-            System.out.println("\n FINISHED PASS #" + semesterCnt + ", need pass? " + needPass);
-            System.out.println("->" + allowedList);
+//            System.out.println("\n FINISHED PASS #" + semesterCnt + ", need pass? " + needPass);
+//            System.out.println("->" + allowedList);
             if (needPass) {
                 flowchart.put(semesterCnt.toString(), allowedList);
                 semesterCnt++;
             }
         }
 
-        needPass = true;
+        semesterCnt = 1; // reset count to beginning
+        needPass = true; // control while loop
+        // strip out the electives 
+        remainingDegreeCourseList = remainingDegreeCourseList.stream()
+                .filter(c -> c.isCore())
+                .collect(Collectors.toCollection(LinkedList::new));
+        if (matchedDegreeCourseList.size() > 0) {
+            remainingDegreeCourseList.addAll(matchedDegreeCourseList); // combine the remainding stuff
+        }
+
         // remaining req
         while (needPass || !remainingDegreeCourseList.isEmpty()) { // loop this based on the number courses in matched list
-            List<String> newPass = remainingDegreeCourseList.stream().collect(Collectors.toList());
+            int coursePerSemesterCnt = 0; // track length (we don't want to overload course work per semester)
+            List<DegreeReq> newPass = remainingDegreeCourseList.stream().collect(Collectors.toList());
             //list to keep track of what is allowed on each pass
             List<Schedule> allowedList = new LinkedList<>();
-            for (String course : newPass) {
-                System.out.println("NICE BOY " + course + ", req: " + csbsDegree.get(course).toString());
+            for (DegreeReq course : newPass) {
+//                System.out.println("NICE BOY " + course.toString() + ", req: " + csbsDegree.get(course).toString());
                 if (csbsDegree.get(course).isEmpty()) {
-                    allowedList.add(new Schedule(course)); //allowed to student schedule
-                    completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                    allowedList.add(new Schedule(course.toString())); //allowed to student schedule
+                    completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                     remainingDegreeCourseList.remove(course);//no longer needed to review this next pass, so take out
                 } else if (csbsDegree.get(course).size() == 1) {
                     String prereq = csbsDegree.get(course).get(0);  // get the prerequisites for this course
                     if (completedList.containsKey(prereq)) { //does student's history meet prereq?
                         int takenSemester = completedList.get(prereq); // when did student took this? (for non-concurrent requirement)
                         if (takenSemester < semesterCnt) { //if taken at an older/earlier semester
-                            allowedList.add(new Schedule(course));//meets the prerequirsite, so allowed to student schedule
-                            completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                            allowedList.add(new Schedule(course.toString()));//meets the prerequirsite, so allowed to student schedule
+                            completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                             remainingDegreeCourseList.remove(course);//no longer needed to review this
+                            coursePerSemesterCnt++;
                         }
                     }
                 } else {
                     boolean flag = true;
                     for (String prereq : csbsDegree.get(course)) {
-                        System.out.println("\tTEST: " + prereq);
+//                        System.out.println("\tTEST: " + prereq);
                         //does student's history meet prereq?
                         if (flag && !completedList.containsKey(prereq)) {
                             flag = false;
@@ -252,68 +442,121 @@ public class ScheduleBuilder {
                         }
                     }
                     if (flag) {
-                        allowedList.add(new Schedule(course));//meets the prerequirsite, so allowed to student schedule
-                        completedList.put(course, semesterCnt);//add to current semester, will be moving to next semester for next pass
+                        allowedList.add(new Schedule(course.toString()));//meets the prerequirsite, so allowed to student schedule
+                        completedList.put(course.toString(), semesterCnt);//add to current semester, will be moving to next semester for next pass
                         remainingDegreeCourseList.remove(course);//no longer needed to review this
+                        coursePerSemesterCnt++;
+                    }
+                    if (coursePerSemesterCnt >= 4) { // try to keep it under 4 courses per semester
+                        break;
                     }
                 }
             }
             needPass = (newPass.size() == remainingDegreeCourseList.size()) ? false : true;
 
-            System.out.println("\n FINISHED PASS #" + semesterCnt + ", need pass? " + needPass);
-            System.out.println("->" + allowedList);
+//            System.out.println("\n FINISHED PASS #" + semesterCnt + ", need pass? " + needPass);
+//            System.out.println("->" + allowedList);
             if (needPass) {
-                flowchart.put(semesterCnt.toString(), allowedList);
-                semesterCnt++;
+                List<Schedule> previousList = flowchart.get(semesterCnt.toString());
+                if (previousList != null) {
+//                    System.out.println("Previously have some courses... ");
+                    allowedList.addAll(previousList);
+                }
+                    flowchart.put(semesterCnt.toString(), allowedList);
+                    semesterCnt++;
             }
         }
 
-//        System.out.println("allowedList: " + allowedList);
-        System.out.println("remainders: " + matchedDegreeCourseList);
+        int reqElectiveCount = degree.getRequiredElectCnt(); // get required count
+        int maxSemester = semesterCnt - 1;
+        semesterCnt = semesterCnt - ((reqElectiveCount-1)/(electiveCnt+1)); // rewind some semesters
+        // don't add real elective courses
+        if (!randomizeElect) {
+            // add the min. electives
+            while (electiveCnt < reqElectiveCount) {
+//                System.out.println("Elective cnt: " + electiveCnt);
+                List<Schedule> previousList = flowchart.get(semesterCnt.toString());
+                if (previousList.size() >= 4 && semesterCnt < maxSemester) { // check how many courses already in
+                    semesterCnt++;
+                    previousList = flowchart.get(semesterCnt.toString());
+                }
+                previousList.add(new Schedule("CIS ELECTIVE"));
+                electiveCnt++;
+//                System.out.println("added");
+                if (electiveCnt == reqElectiveCount) {
+                    flowchart.put(semesterCnt.toString(), previousList);
+                    break; // fulfilled all electives
+                }
+                if (previousList.size() >= 4 && semesterCnt < maxSemester) { // check how many courses already in
+                    semesterCnt++;
+                    previousList = flowchart.get(semesterCnt.toString());
+                }
+                if (!d.equals("CSM_BS")) {
+                    previousList.add(new Schedule("CIS ELECTIVE"));
+                } else {
+                    previousList.add(new Schedule("MATH ELECTIVE"));
+                }
+                electiveCnt++;
+//                System.out.println("added");
+                flowchart.put(semesterCnt.toString(), previousList);
+                if (semesterCnt < maxSemester) 
+                    semesterCnt++;
+            }
+        } else { // pick random elective courses to add
+            // add the min. electives
+            LinkedList<DegreeReq> electList = csbsDegree
+                    .entrySet()
+                    .stream()
+                    .map(Map.Entry::getKey)
+                    .filter(c -> c.isElective())
+                    .collect(Collectors.toCollection(LinkedList::new));
+
+            Random random = new Random();
+            LinkedList<Integer> tracker = new LinkedList<>();
+
+            while (electiveCnt < reqElectiveCount) {
+//                System.out.println("Elective cnt: " + electiveCnt);
+                int rand = random.nextInt(electList.size()); // get random index
+                while (tracker.contains(rand)) { // we only want unique electives
+                    rand = random.nextInt(electList.size());
+                }
+                tracker.add(rand);  // track this index
+                DegreeReq randomElective = electList.get(rand); // retrieve elective course
+//                System.out.println("The random elective: " + randomElective);
+                List<Schedule> previousList = flowchart.get(semesterCnt.toString());
+                if (previousList.size() >= 4 && semesterCnt < maxSemester) { // check how many courses already in
+                    semesterCnt++;
+                    previousList = flowchart.get(semesterCnt.toString());
+                }
+                previousList.add(new Schedule(randomElective.toString()));
+                flowchart.put(semesterCnt.toString(), previousList);
+                electiveCnt++;
+                if (semesterCnt < maxSemester) {
+                    semesterCnt++;
+                }
+            }
+        }
+
+//        System.out.println("remainders: " + matchedDegreeCourseList);
         // ******** ^comparsion end
-        
-        List<List> returnList = new LinkedList<List>(flowchart.values());
-        StudentFlowchart flow = new StudentFlowchart(returnList, this.member);
+
+        List<List> returnList = new ArrayList<>(flowchart.values());
+        this.getProfile().getMember().setMajor(d);
+        StudentFlowchart flow = new StudentFlowchart(returnList, this.getProfile().getMember());
         return flow;
-//        return returnList;
-
-        /**
-         * ^ DUMMY TEST
-         */
-//
-//        StudentFlowchart flow = new StudentFlowchart();
-//        // query 'takes' db, ORDFER BY semester (FA, SP, SU)
-//            // take each row and store in StudentSemester; increment semesterCnt
-//        // add to list
-//        Schedule element = new Schedule(new String("MATH 0701"), new String("FL15"));
-//        Schedule algebra = new Schedule(new String("MATH 1021"), new String("SP16"));
-//        Schedule precal = new Schedule(new String("MATH 1022"), new String("FL16"));
-//        Schedule intro = new Schedule(new String("CIS 1001"), new String("FL15"));
-//        Schedule abst = new Schedule(new String("CIS 1068"), new String("FL15"));
-//        Schedule mathc = new Schedule(new String("CIS 1166"), new String("FL15"));
-//        System.out.println("ELEMENT    "+element.toString());
-//        CourseNode tree = new CourseNode("Start", "null");
-//        tree.addCourse(element);
-//        tree.getChildren().get(0).addCourse(algebra);
-//        tree.getChildren().get(0).getChildren().get(0).addCourse(precal);
-//        tree.addCourse(intro);
-//        tree.getChildren().get(1).addCourse(abst);
-//        tree.getChildren().get(1).getChildren().get(0).addCourse(mathc);
-//
-//        flow.getSemesterList().add(tree);
-//
-//        ArrayList<HeaderItem> list = new ArrayList<>();
-//        list.add(new HeaderItem("FA15", 1));
-//        list.add(new HeaderItem("SP16", 2));
-//        list.add(new HeaderItem("FA16", 3));
-//        flow.setHeader(list);
-////        flow.setSemesterList(tree);
-//        return flow;
     }
 
-    public List getSchedule() {
-
-        return null;
+    /**
+     * @return the profile
+     */
+    public Profile getProfile() {
+        return profile;
     }
 
+    /**
+     * @param profile the profile to set
+     */
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 }

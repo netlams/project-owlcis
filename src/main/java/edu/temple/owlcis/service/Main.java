@@ -1,5 +1,5 @@
 /**
- * CIS4398 Projects Spring 2016 2/25/2016
+ * CIS4398 Projects Spring 2016 4/25/2016
  */
 package edu.temple.owlcis.service;
 
@@ -14,12 +14,14 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import static jdk.nashorn.internal.runtime.JSType.toInt32;
-import spark.Request;
-import spark.Response;
 
 /**
  * The Main class contains the init method for OWLCIS, executing the backend
@@ -32,7 +34,7 @@ public class Main implements SparkApplication {
     /**
      * A constant string to containing the backend system URL
      */
-    public static final String API_LOC = "/api";
+    public static final String API_LOC = "api";
     public String postid;
 
     /**
@@ -71,24 +73,43 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
-        /* Increment Thumbs-up Count */
-        post(API_LOC + "/incthumbsup", (Request request, Response response) -> {
-            String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
-            int revid = toInt32(rb); //integer form of review id
-            System.out.println(rb);
-            System.out.println(revid);
-            ThumbRatings tr = new ThumbRatings(revid);
-
+        /** Increment Thumbs-up Count */
+        post(API_LOC + "/incthumbsup", (request, response) -> {
+            Pattern p = Pattern.compile("\\d+");
+            //Matcher m = p.matcher(request.body());
+            System.out.println("Body: " + request.body());
+            String reviewd = request.body().substring(1, request.body().indexOf(','));
+            System.out.print("Review id in main" + reviewd);
+            Matcher m = p.matcher(reviewd);
+            int revid = -1;
+            int upid = 0;
+            String up = request.body().substring(request.body().indexOf(',') + 1, request.body().length() - 1);
+            System.out.println("Thumsbs up" + up);
+            /* String rb = request.body();
+             int mylenth = rb.length();
+             int up = toInt32(rb.substring(mylenth-1));
+             */
+            if (m.find()) {
+                revid = toInt32(m.group());
+                System.out.println("review id: " + revid);
+            }
+            Matcher t = p.matcher(up);
+            if (t.find()) {
+                upid = toInt32(t.group());
+                System.out.println("thumbs up in matcher" + upid);
+            }
+            ThumbRatings tr = new ThumbRatings(revid, upid, 0);
             Database dbc = new Database();
 
             if (dbc.getError().length() == 0) {
                 try {
-                    if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
-                        if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
-                            response.status(201);
-                            return "HTTP 201 - CREATED";
-                        }
+                    /*if (tr.setThumbsUp(dbc.getConn())) { //retrieve current thumbs-up count from db
+                     */
+                    if (tr.incThumbsUp(dbc.getConn())) { //attempt to increment thumbs-up
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
                     }
+
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
@@ -99,19 +120,49 @@ public class Main implements SparkApplication {
 
         /* Increment Thumbs-down Count */
         post(API_LOC + "/incthumbsdown", (request, response) -> {
-            String rb = request.body().replaceAll("\\D+", ""); //extracts numbers from body to get review id in string
-            int revid = toInt32(rb); //integer form of review id
-            ThumbRatings tr = new ThumbRatings(revid);
+            Pattern p = Pattern.compile("\\d+");
+            //Matcher m = p.matcher(request.body());
+            System.out.println("Body: " + request.body());
+            String reviewd = request.body().substring(1, request.body().indexOf(','));
+            System.out.print("Review id in main" + reviewd);
+            int revid = -1;
+            Matcher m = p.matcher(reviewd);
+            if (m.find()) {
+                revid = toInt32(m.group());
+                //System.out.println("review id: " + revid);
+            }
+
+            int upid = 0;
+            String up = request.body().substring(request.body().indexOf(',') + 1, request.body().lastIndexOf(','));
+            System.out.println("Thumbs Up in Main " + up);
+            Matcher t = p.matcher(up);
+            if (t.find()) {
+                upid = toInt32(t.group());
+                System.out.println("thumbs up in matcher " + upid);
+            }
+
+            int downid = 0;
+            String down = request.body().substring(request.body().lastIndexOf(',') + 1, request.body().length() - 1);
+            System.out.println("Thumsbs down in main" + down);
+            Matcher u = p.matcher(down);
+            if (u.find()) {
+                downid = toInt32(u.group());
+                System.out.println("thumbs down in matcher" + downid);
+            }
+
+            ThumbRatings tr = new ThumbRatings(revid, upid, downid);
 
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
-                    if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
-                        if (tr.incThumbsDown(dbc.getConn())) { //attempt to call method to inc thumbs-up
-                            response.status(201);
-                            return "HTTP 201 - CREATED";
-                        }
+                    /*if (tr.setThumbsUp(dbc.getConn()) && tr.setThumbsDown(dbc.getConn())) { //retrieve thumbs-up and down counts from db
+                     */
+                    if (tr.incThumbsDown(dbc.getConn())) { //attempt to call method to inc thumbs-up
+                        response.status(201);
+
+                        return "HTTP 201 - CREATED";
                     }
+
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
@@ -128,9 +179,6 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 // setting up member to fetch
                 Member member = new Member();
                 member.setId(user.getId());
@@ -170,9 +218,6 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 // get post data
                 Gson gson = new Gson();
                 Member member = gson.fromJson(request.body(), Member.class);
@@ -202,9 +247,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -233,9 +275,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -269,9 +308,6 @@ public class Main implements SparkApplication {
             if (user != null) {
                 Member member = new Member(user);
                 Profile profile = new Profile(member);
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
                 Database dbc = new Database();
                 if (dbc.getError().length() == 0) {
                     try {
@@ -611,32 +647,49 @@ public class Main implements SparkApplication {
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
             if (user != null) {
-                // refresh session
-                request.session(true);
-                request.session().attribute("USER", user);
-                // setting up member to fetch
-                Member member = new Member();
-                member.setId(user.getId());
-                Profile profile = new Profile(member);
+                try {
+                    ScheduleBuilder sb = new ScheduleBuilder(user);
+                    response.status(200);
+                    response.type("application/json");
+                    int year = 2012;
+                    if (request.cookie("FC_YEAR") != null) 
+                        year = Integer.parseInt(request.cookie("FC_YEAR"));
+                    String degree = "CS_BS";
+                    if (request.cookie("FC_DEGREE") != null) 
+                        degree = request.cookie("FC_DEGREE");        
+                    
+                    return new Gson().toJson(sb.generateFlowchart(degree, year, false));
+                } catch (NullPointerException ex) {
+                    // not valid member
+                    response.status(400);
+                    System.out.println("Error: " + ex.getMessage());
+                    return "HTTP 400 - Bad Request";
+                } catch (Exception ex) {
+                    response.status(500);
+                    System.out.println("Error: " + ex.getMessage());
+                    return "HTTP 500 - Internal Server Error";
+                }
+            }
+            response.status(401);
+            return "HTTP 401 - Unauthorized";
+        });
+
+        /**
+         * Get Schedule Courses Route
+         */
+        get(API_LOC + "/schedule", (request, response) -> {
+            User user = request.session().attribute("USER");
+            // check if there's a logged-in session
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
                 Database dbc = new Database();
-                // Database connection OK
                 if (dbc.getError().length() == 0) {
                     try {
-                        if (profile.fetchProfile(dbc.getConn())) {
-                            // found member
-                            ScheduleBuilder model = new ScheduleBuilder(profile.getMember());
-                            response.status(200);
-                            response.type("application/json");
-                            return new Gson().toJson(model.generateFlowchart());
-                        } else {
-                            // not valid member
-                            response.status(400);
-                            return "HTTP 400 - Bad Request";
-                        }
+                        response.status(200);
+                        response.type("application/json");
+                        return new Gson().toJson(sb.getSchedule(dbc.getConn()));
                     } catch (Exception ex) {
-                        response.status(500);
                         System.out.println("Error: " + ex.getMessage());
-                        return "HTTP 500 - Internal Server Error";
                     } finally {
                         if (!dbc.getConn().isClosed()) {
                             dbc.closeConn();
@@ -644,11 +697,101 @@ public class Main implements SparkApplication {
                     }
                 }
             }
-            response.status(401);
-            return "HTTP 401 - Unauthorized";
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
-        /*
+        /**
+         * post forum Route
+         */
+        post(API_LOC + "/schedule/add", (request, response) -> {
+            User user = request.session().attribute("USER");
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        if (sb.addSchedule(schedule, dbc.getConn())) { //attempt to add new taken course
+                            response.status(201);
+                            return "HTTP 201 - CREATED";
+                        } else {
+                            response.status(400);
+                            return "HTTP 400 - BAD REQUEST";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
+                    }
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+
+        /**
+         * post forum Route
+         */
+        post(API_LOC + "/schedule/remove", (request, response) -> {
+            User user = request.session().attribute("USER");
+            if (user != null) {
+                ScheduleBuilder sb = new ScheduleBuilder(user);
+                Database dbc = new Database();
+                if (dbc.getError().length() == 0) {
+                    try {
+                        Gson gson = new Gson();
+                        Schedule schedule = gson.fromJson(request.body(), Schedule.class);
+                        if (sb.removeSchedule(schedule, dbc.getConn())) { //attempt to add new taken course
+                            response.status(200);
+                            return "HTTP 200 - OK";
+                        } else {
+                            response.status(400);
+                            return "HTTP 400 - BAD REQUEST";
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    } finally {
+                        if (!dbc.getConn().isClosed()) {
+                            dbc.closeConn();
+                        }
+                    }
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
+        /**
+         * Reset user schedule list Route
+         */
+        delete(API_LOC + "/schedule/reset", (request, response) -> {
+            User user = request.session().attribute("USER");
+            ScheduleBuilder sch = new ScheduleBuilder(user);
+            Database dbc = new Database();
+            sch.removeAllSchedule(dbc.getConn());
+            return "HTTP 200 - OK";
+        });
+        
+        /**
+         * Load sample schedule list Route
+         */
+        post(API_LOC + "/schedule/load", (request, response) -> {
+            User user = request.session().attribute("USER");
+            JsonElement jelement = new JsonParser().parse(request.body());
+            JsonObject  jobj = jelement.getAsJsonObject();
+            System.out.println("BODY: " + request.body());
+            System.out.println("jojb" + jobj.get("degree").toString()+ jobj.get("year").toString());
+            ScheduleBuilder sch = new ScheduleBuilder(user);
+            Database dbc = new Database();
+            sch.loadDegreeIntoSchedule(jobj.get("degree").getAsString(), jobj.get("year").getAsInt(), dbc.getConn());
+            return "HTTP 200 - OK";
+        });
+
+        /**
          * ViewCourseReviews GET Route
          */
         get(API_LOC + "/viewlastreviews", (request, response) -> {
@@ -665,7 +808,7 @@ public class Main implements SparkApplication {
             }
         });
 
-        /*
+        /**
          * CourseCount GET Route
          */
         get(API_LOC + "/coursecount", (request, response) -> {
@@ -686,6 +829,48 @@ public class Main implements SparkApplication {
         });
 
         /**
+         * Comment Reviews GET Route
+         */
+        get(API_LOC + "/commentreview", (request, response) -> {
+            try {
+                CommentReview rev = new CommentReview();
+                List list = rev.getAllComment();
+                response.type("application/json");
+                response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
+        });
+
+        /**
+         * Post Comment in review
+         */
+        post(API_LOC + "/postcomment", (request, response) -> {
+            Gson gson = new Gson();
+            User user = request.session().attribute("USER");
+            CommentReview testComment = gson.fromJson(request.body(), CommentReview.class);
+            System.out.println("CommentReview in MAin for Insert" + testComment);
+            testComment.setUserID(user.getId());
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (testComment.insertComment(dbc.getConn())) {
+
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+
+        /**
          * post forum Route
          */
         post(API_LOC + "/fs", (request, response) -> {
@@ -699,6 +884,24 @@ public class Main implements SparkApplication {
             response.status(200);
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
+        });
+        
+        /**
+         * get EVERY review route
+         */
+        get(API_LOC + "/viewallreviews", (request, response) -> {
+            try {
+                ViewReviews rev = new ViewReviews();
+                List list = rev.getEveryReview();
+                //List list = Forum_search.getAllForum_search();
+                response.type("application/json");
+                response.status(200);
+
+                return new Gson().toJson(list);
+            } catch (Exception ex) {
+                response.status(500);
+                return "Error " + ex.getMessage();
+            }
         });
 
         //Forum comment post route
@@ -715,8 +918,35 @@ public class Main implements SparkApplication {
             Database dbc = new Database();
             if (dbc.getError().length() == 0) {
                 try {
-
                     if (c.insertAllForum_comment(dbc.getConn())) {
+                    //response.status(200);
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });    
+                    
+        
+
+         /**
+         * Delete Review Route
+         */
+        post(API_LOC + "/review/delete", (request, response) -> {
+
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            CourseReview rev = new CourseReview();
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+
+                    if (rev.deleteReview(dbc.getConn(), request.body())) {
                         //response.status(200);
                         response.status(201);
                         return "HTTP 201 - CREATED";
@@ -728,7 +958,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-
+        
         //forum home to post text, and post it
         post(API_LOC + "/forumcom", (request, response) -> {
             String ret = "";
@@ -758,5 +988,30 @@ public class Main implements SparkApplication {
             //return ret;
         });
 
+         /**
+         * Delete Post Route
+         */
+        post(API_LOC + "/post/delete", (request, response) -> {
+
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            Forum_post post = new Forum_post();
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+
+                    if (post.deletePost(dbc.getConn(), request.body())) {
+                        //response.status(200);
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
     }
 }

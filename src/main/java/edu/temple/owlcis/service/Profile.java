@@ -20,22 +20,24 @@ public class Profile {
     //Global variables
     private Member member;
     private LinkedList<Schedule> takenCourses;
+    private short completed;
+    
+    /**
+     * Constructor
+     */
+    public Profile() {
+        this.member = new Member();
+        this.takenCourses = new LinkedList<>();
+        this.completed = 1;
+    }
 
     /**
      * Constructor that sets all variables to empty
      */
     public Profile(Member mem) {
+        this();
         member = mem;
         takenCourses = new LinkedList<>();
-    }
-
-    /**
-     * getter for takenCourses list
-     *
-     * @return takenCourses linked list
-     */
-    public LinkedList getTakenCourses() {
-        return this.takenCourses;
     }
 
     /**
@@ -128,14 +130,15 @@ public class Profile {
 
             if (conn != null) {
                 try {
-                    sql = "INSERT INTO takes (mem_id, course_id, semester) "
-                            + "VALUES (?,?,?)";
+                    sql = "INSERT INTO takes (mem_id, course_id, semester, completed) "
+                            + "VALUES (?,?,?,?)";
                     stmt = conn.prepareStatement(sql);
 
                     //Set parameters
                     stmt.setInt(1, this.getMember().getId());
                     stmt.setString(2, sch.getCourseID().toUpperCase());
                     stmt.setString(3, sch.getSemester().toUpperCase());
+                    stmt.setInt(4, completed);
 
                     //Execute query
                     stmt.executeUpdate();
@@ -151,12 +154,6 @@ public class Profile {
                     if (stmt != null) {
                         try {
                             stmt.close();
-                        } catch (SQLException sqlEx) {
-                        } //ignore
-                    }
-                    if (!conn.isClosed()) {
-                        try {
-                            conn.close();
                         } catch (SQLException sqlEx) {
                         } //ignore
                     }
@@ -179,13 +176,15 @@ public class Profile {
                 sql = "DELETE FROM takes "
                         + "WHERE mem_id = ? "
                         + "AND course_id = ? "
-                        + "AND semester = ?";
+                        + "AND semester = ? "
+                        + "AND completed = ?";
                 stmt = conn.prepareStatement(sql);
 
                 //Set parameters
                 stmt.setInt(1, this.getMember().getId());
                 stmt.setString(2, sch.getCourseID().toUpperCase());
                 stmt.setString(3, sch.getSemester().toUpperCase());
+                stmt.setInt(4, completed);
 
                 //Execute query
                 stmt.executeUpdate();
@@ -225,13 +224,16 @@ public class Profile {
         if (conn != null) {
             try {
                 /* Querying takes table ....................... */
-                sql = "SELECT takes.course_id, semester, course_title "
+                sql = "SELECT takes.course_id, takes.semester, course_title "
                         + "FROM takes INNER JOIN course "
                         + "ON takes.course_id=course.course_id where mem_id=? "
-                        + "ORDER BY SUBSTR(semester FROM 3 FOR 4), semester DESC";
+                        + "AND completed = ? "
+                        + "ORDER BY SUBSTR(takes.semester FROM 3 FOR 4), "
+                        + "takes.semester DESC";
                 stmt = conn.prepareStatement(sql);
                 //Set param
                 stmt.setInt(1, this.getMember().getId());
+                stmt.setInt(2, completed);
                 //Execute query
                 results = stmt.executeQuery();
 
@@ -241,7 +243,6 @@ public class Profile {
                                     results.getString("course_title"),
                                     results.getString("semester"));
                     takenCourses.add(schedule);
-                    schedule.toString();
                 }
 
                 return true;
@@ -347,5 +348,39 @@ public class Profile {
     public void setMember(Member member) {
         this.member = member;
     }
-
+    
+    /**
+     * 
+     * @return completed
+     */
+    public short getCompleted() {
+        return completed;
+    }
+    
+    /**
+     * 
+     * @param completed set completed value
+     */
+    public void setCompleted(short completed) {
+        this.completed = completed;
+    }
+    
+    /**
+     * getter for takenCourses list
+     *
+     * @return takenCourses linked list
+     */
+    public LinkedList getTakenCourses() {
+        return this.takenCourses;
+    }
+    
+    /**
+     * 
+     * @param takenCourses 
+     */
+    public void setTakenCourses(LinkedList<Schedule> takenCourses) {
+        this.takenCourses = takenCourses;
+    }
+    
+    
 }

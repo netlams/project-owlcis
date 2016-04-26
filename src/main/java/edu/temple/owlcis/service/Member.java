@@ -45,7 +45,12 @@ public class Member extends User {
         this.setGradDate("2016-05-12");
         this.setDegreeType("BS");
     }
-
+    
+    /**
+     * Parameterized Constructor for Member object
+     * 
+     * @param user the general user to extract data from
+     */
     public Member(User user) {
         this();
         this.setId(user.getId());
@@ -57,10 +62,10 @@ public class Member extends User {
     /**
      * Parameterized Constructor for Member object
      *
-     * @param f the first name to give to this object
-     * @param l the last name to give to this object
      * @param i the id to give to this object
      * @param e the email to give to this object
+     * @param f the first name to give to this object
+     * @param l the last name to give to this object
      * @param m the major to give to this object
      * @param sa the status to give this object (Student or Alumni)
      * @param gd the graduation date to give this object

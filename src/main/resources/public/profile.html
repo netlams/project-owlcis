@@ -1,5 +1,5 @@
 <!-- PAGE CONTENT -->
-<div class="page-content">
+<div id="page-profile" class="page-content">
     <div class="container center-block">
         <div class="row">
             <div class="panel panel-default">
@@ -59,7 +59,8 @@
                         <!--Submit-->
                         <div class="form-group">
                             <div class="row">
-                                <p class="alert alert-success fade in col-md-6 col-md-offset-3 text-center" data-ng-show="profileOptions.succ">{{profileOptions.succ}}</p>
+                                <p class="alert alert-success fade in col-md-6 col-md-offset-3 text-center" data-ng-show="profileOptions.succ">{{profileOptions.succ}}
+                                    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
                                 <p class="alert alert-danger fade in col-md-6 col-md-offset-3 text-center" data-ng-show="profileOptions.err">{{profileOptions.err}}
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 </p>

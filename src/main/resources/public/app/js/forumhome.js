@@ -8,7 +8,7 @@
 (function () {
 
 
-    var forumhome = function ($scope, $state, DBService, $http, $window) {
+    var forumhome = function ($scope, $state, $http, $window) {
 
         $scope.forum_s;
         $http.get('/api/fs').then(function (value) {
@@ -27,7 +27,7 @@
         $scope.forumsearch = function () {
             $http.post('/api/fs', $scope.forum_s.search)
                     .then(function (response) {
-                        window.alert($scope.forum_s.search);
+//                        window.alert($scope.forum_s.search);
                         
                         $scope.forum = response.data;
                         
@@ -41,11 +41,11 @@
               
                 $scope.postid = post_id;
                
-                   window.alert($scope.postid);
+//                   window.alert($scope.postid);
                    
                 $http.post('/api/forumcom', $scope.postid)
                     .then(function (response) {
-                        window.alert($scope.postid);
+//                        window.alert($scope.postid);
                        
                         $scope.forumcom = response.data;
                      
@@ -62,7 +62,7 @@
 
     };
 
-    forumhome.$inject = ['$scope', '$state', 'DBService', '$http', '$window'];
+    forumhome.$inject = ['$scope', '$state', '$http', '$window'];
 
     angular.module('authApp').controller('forumhome', forumhome);
 
