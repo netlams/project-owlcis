@@ -14,6 +14,8 @@
     /* Display JSON list */
     app.controller('review', ['$scope', '$state', '$http', '$window', 'CourseList',
         function ($scope, $state, $http, $window, CourseList) {
+            $scope.thisreview = "Select a course to view reviews about";
+            
             $http.get('/api/viewreviews').then(function (value) {
                 $scope.example2 = value.data;
             });
@@ -78,7 +80,7 @@
             })();
             // process the form
             $scope.Formprocess = function () {
-
+                $scope.thisreview = "";
                 $http.post('/api/viewreviews', $scope.Dataform.selectedID)
                         .then(function (response) {
                             $scope.example2 = response.data;

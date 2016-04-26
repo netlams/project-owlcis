@@ -9,103 +9,107 @@
 
 
                 <div class="panel-body" style=" color: black; font-size: 16px;">
-                    <div class="form-horizontal">
+                    <form class="form-horizontal" name="reviewForm" data-ng-submit="send_fields()" >
                         <div class="form-group" ng-controller="PromiseCtrl">
 
                             <label class="col-md-2 control-label">Courses:</label>
-                            <div class="col-md-10">
-                                <!-- <select  name="selectedID" id="selectedID" ng-change="select_course(this.value)" 
-                                          data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
-                                     <option value="">Select Course</option>
-                                     <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
-                                 </select>                             
-                                -->
-                                <div class="col-md-10">                      
-                                    <select  name="selectedID" id="selectedID" class="form-control" data-ng-model ="Dataform2.selectedID"  data-ng-required="true">
-                                        <option value="">Select Course</option>
-                                        <option data-ng-repeat="y in Dataform2.course_ID">{{y.course_id}}</option>
-                                    </select>
-                                </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <select  name="selectedID" id="selectedID" class="form-control" data-ng-model ="Dataform2.selectedID"  data-ng-required="true">
+                                    <option value="">Select Course</option>
+                                    <option data-ng-repeat="y in Dataform2.course_ID">{{y.course_id}}</option>
+                                </select>
                             </div>
 
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-2 control-label">Semester</label>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" ng-model="semester" placeholder="Enter in Following format: ex. SP16">
+                            <div class="col-xs-6 col-sm-6 col-md-3">
+                                <select name='season' class="form-control" data-ng-model="season" data-ng-required="true">
+                                    <option value="">-Select-</option>
+                                    <option value='FA'>Fall</option>
+                                    <option value='SP'>Spring</option>
+                                    <option value='SU'>Summer</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-3">
+                                <input name='year' type='number' class="form-control" max='99' min='00' data-ng-model="year" data-ng-required="true"/>
                             </div>
 
                         </div> 
                         <div class="form-group">
                             <label class="col-md-2 control-label" >Comment</label>
                             <div class="col-md-10">
-                                <textarea class="form-control" ng-model="reviewText" placeholder="Comment about the course based on requirement, feedback" rows="4"></textarea>
+                                <textarea class="form-control" ng-model="reviewText" maxlength="2000" and minlength="100" data-ng-required="true" 
+                                          placeholder="Comment about the course based on requirement, feedback (Minimum 100 characters)" rows="4"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Helpfulness</label>
-                            <form action="" >
-                                <input class="star star-1" id="star-01" ng-model="helpfulness" type="radio" value="5" name="star"/>
+                            <div class="pull-left" >
+                                <input class="star star-1" id="star-01" ng-model="helpfulness" type="radio" value="5" name="star-hp"/>
                                 <label class="star star-1" for="star-01"></label>
-                                <input class="star star-2" id="star-02" ng-model="helpfulness" type="radio" value="4" name="star"/>
+                                <input class="star star-2" id="star-02" ng-model="helpfulness" type="radio" value="4" name="star-hp"/>
                                 <label class="star star-2" for="star-02"></label>
-                                <input class="star star-3" id="star-03" ng-model="helpfulness" type="radio" value="3" name="star"/>
+                                <input class="star star-3" id="star-03" ng-model="helpfulness" type="radio" value="3" name="star-hp"/>
                                 <label class="star star-3" for="star-03"></label>
-                                <input class="star star-4" id="star-04" ng-model="helpfulness" type="radio" value="2" name="star"/>
+                                <input class="star star-4" id="star-04" ng-model="helpfulness" type="radio" value="2" name="star-hp"/>
                                 <label class="star star-4" for="star-04"></label>
-                                <input class="star star-5" id="star-05" ng-model="helpfulness" type="radio" value="1" name="star"/>
+                                <input class="star star-5" id="star-05" ng-model="helpfulness" type="radio" value="1" name="star-hp"/>
                                 <label class="star star-5"  for="star-5"></label>
-                            </form>
+                            </div>
                         </div>
                         <div class="form-group">
 
                             <label class="col-md-2 control-label">Easiness</label>
-                            <form action="">
+                            <div class="pull-left">
 
-                                <input class="star star-1" id="star-1" ng-model="easiness" type="radio" value="5" name="star"/>
+                                <input class="star star-1" id="star-1" ng-model="easiness" type="radio" value="5" name="star-ez"/>
                                 <label class="star star-1" for="star-1"></label>
-                                <input class="star star-2" id="star-2" ng-model="easiness" type="radio" value="4" name="star"/>
+                                <input class="star star-2" id="star-2" ng-model="easiness" type="radio" value="4" name="star-ez"/>
                                 <label class="star star-2" for="star-2"></label>
-                                <input class="star star-3" id="star-3" ng-model="easiness" type="radio" value="3" name="star"/>
+                                <input class="star star-3" id="star-3" ng-model="easiness" type="radio" value="3" name="star-ez"/>
                                 <label class="star star-3" for="star-3"></label>
-                                <input class="star star-4" id="star-4" ng-model="easiness" type="radio" value="2" name="star"/>
+                                <input class="star star-4" id="star-4" ng-model="easiness" type="radio" value="2" name="star-ez"/>
                                 <label class="star star-4" for="star-4"></label>
-                                <input class="star star-5" id="star-5" ng-model="easiness" type="radio" value="1" name="star"/>
+                                <input class="star star-5" id="star-5" ng-model="easiness" type="radio" value="1" name="star-ez"/>
                                 <label class="star star-5" for="star-5"></label>
 
-                            </form>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Clarity</label>
-                            <form action="">
-                                <input class="star star-1" id="star-6" type="radio"  ng-model="clarity" value="5" name="star"/>
+                            <div class="pull-left">
+                                <input class="star star-1" id="star-6" type="radio"  ng-model="clarity" value="5" name="star-cl"/>
                                 <label class="star star-1" for="star-6"></label>
-                                <input class="star star-2" id="star-7" type="radio"  ng-model="clarity" value="4" name="star"/>
+                                <input class="star star-2" id="star-7" type="radio"  ng-model="clarity" value="4" name="star-cl"/>
                                 <label class="star star-2" for="star-7"></label>
-                                <input class="star star-3" id="star-8" type="radio"  ng-model="clarity" value="3" name="star"/>
+                                <input class="star star-3" id="star-8" type="radio"  ng-model="clarity" value="3" name="star-cl"/>
                                 <label class="star star-3" for="star-8"></label>
-                                <input class="star star-4" id="star-9" type="radio"  ng-model="clarity" value="2" name="star"/>
+                                <input class="star star-4" id="star-9" type="radio"  ng-model="clarity" value="2" name="star-cl"/>
                                 <label class="star star-4" for="star-9"></label>
-                                <input class="star star-5" id="star-10" type="radio" ng-model="clarity" value="1" name="star"/>
+                                <input class="star star-5" id="star-10" type="radio" ng-model="clarity" value="1" name="star-cl"/>
                                 <label class="star star-5" for="star-10"></label>
-                            </form>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Recommended Elective (Optional)</label>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" ng-model="recElectiveID" placeholder="When did you take it?">
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <select  name="selectedID" id="selectedID" class="form-control" data-ng-model ="recElectiveID"  data-ng-required="true">
+                                    <option value="">Select Course</option>
+                                    <option data-ng-repeat="y in Dataform2.course_ID">{{y.course_id}}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-horizontal text-center">								
-                            <input type="submit" class="btn btn-primary" ng-click="send_fields()" value="Submit">
+                            <input type="submit" data-ng-class="reviewForm.$invalid ? 'btn btn-primary disabled' : 'btn btn-primary'" value="Submit" data-ng-disabled="reviewForm.$invalid">
                         </div>		
 
                         <pre ng-bind-html="message">
                         
                         </pre>
 
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -72,7 +72,7 @@
                             <div class="col-sm-2">
                                 <select name="deptId" id="deptId" data-ng-model="formData.deptId" class="form-control" data-ng-required="formData.role == 'advisor'">
                                     <option value="">-Select a Dept-</option>
-                                    <option data-ng-repeat="option in formData.availMajorOptions" value="{{option.id}}">{{option.name}}</option>
+                                    <option data-ng-repeat="option in formData.availDeptOptions" value="{{option.id}}">{{option.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             </div>
 
                             <div class="col-sm-2 col-sm-offset-5">
-                                <input type="submit" class="btn btn-primary" value="Sign me up!" data-ng-disabled="signupForm.$invalid">
+                                <input type="submit" data-ng-class="signupForm.$invalid ? 'btn btn-primary disabled' : 'btn btn-primary'"  value="Sign me up!" data-ng-disabled="signupForm.$invalid">
                             </div>
                         </div>
                     </form>

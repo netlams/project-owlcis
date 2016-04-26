@@ -73,9 +73,15 @@
                 availMajorOptions: [{shortname: 'CS', name: 'Computer Science'},
                     {shortname: 'CSM', name: 'Computer Science & Math'},
                     {shortname: 'IST', name: 'Information Science & Technology'}],
+                availDeptOptions: null,
                 availDegreeOptions: [{name: 'BS'}, {name: 'BA'}, {name: 'Master'}, {name: 'Ph.D.'}],
                 err: null,
             };
+            
+            DeptService.getDeptList()
+                    .then(function (data) {
+                        $scope.formData.availDeptOptions = data;
+                    });
 
             // process the form
             $scope.processForm = function () {

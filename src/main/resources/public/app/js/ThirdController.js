@@ -3,12 +3,13 @@
     var app = angular.module('authApp');
 
     /* Display JSON list */
-    app.controller('thirdController', ['$scope', '$state', '$http', '$window', 'CourseList',
-        function ($scope, $state, $http, $window, CourseList) {
+    app.controller('thirdController', ['$scope', '$state', '$http', '$window', 'CourseList', '$filter',
+        function ($scope, $state, $http, $window, CourseList, $filter) {
             $scope.semester = '';
             $scope.reviewText = '';
             $scope.courseID = '';
             $scope.recElectiveID = '';
+            $scope.year = parseInt($filter('date')(new Date(), 'yy-MM-dd').substring(0, 2)); // get the 2-digit year
             $scope.starh = {
                 name: ''
             };
@@ -47,7 +48,7 @@
                     'userID': $scope.userID,
                     'courseID': $scope.Dataform2.selectedID,
                     'reviewText': $scope.reviewText,
-                    'semester': $scope.semester,
+                    'semester': $scope.season + $scope.year,
                     'helpfulness': $scope.helpfulness,
                     'easiness': $scope.easiness,
                     'clarity': $scope.clarity,

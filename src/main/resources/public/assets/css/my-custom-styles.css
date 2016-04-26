@@ -10,6 +10,7 @@
 /* Angular animation */
 .ng-leave { animation:0.1s fadeOutDown ease; }
 .ng-enter { animation:0.3s fadeInUp ease; }
+.ng-animate.disabled-remove { animation:0.8s tada ease; }
 #page-profile .alert.ng-hide-remove { animation:0.8s fadeInUp ease-out; }
 #page-profile .alert.ng-hide-add { animation:0.5s fadeOutDown ease-out; }
 #page-schedule .alert.ng-hide-remove { animation:0.8s fadeInUp ease-out; }
@@ -309,4 +310,15 @@ p span
 
 .btn-group .btn-warning {
     padding: 10px 15px;
+}
+
+input[type="submit"] {
+    -webkit-transition: width 2s, height 1s, background-color 1s, -webkit-transform 1s;
+    transition: width 1s, height 1s, background-color 1s, transform 1s;
+}
+
+.btn.disabled {
+    color: lightgrey;
+    background-color: white;
+    border: 2px solid lightgrey; 
 }
