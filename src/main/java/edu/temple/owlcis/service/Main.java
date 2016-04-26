@@ -1,5 +1,5 @@
 /**
- * CIS4398 Projects Spring 2016 2/25/2016
+ * CIS4398 Projects Spring 2016 4/25/2016
  */
 package edu.temple.owlcis.service;
 
@@ -35,6 +35,7 @@ public class Main implements SparkApplication {
      * A constant string to containing the backend system URL
      */
     public static final String API_LOC = "api";
+    public String postid;
 
     /**
      * Executes the backend logic of the app
@@ -827,7 +828,7 @@ public class Main implements SparkApplication {
             }
         });
 
-        /*
+        /**
          * Comment Reviews GET Route
          */
         get(API_LOC + "/commentreview", (request, response) -> {
@@ -884,7 +885,7 @@ public class Main implements SparkApplication {
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
         });
-
+        
         /**
          * get EVERY review route
          */
@@ -902,6 +903,35 @@ public class Main implements SparkApplication {
                 return "Error " + ex.getMessage();
             }
         });
+
+        //Forum comment post route
+        post(API_LOC + "/fvc", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            User user = request.session().attribute("USER");
+            Forum_comment c = new Forum_comment();
+            c.setUserId(user.getId());
+            c.setUserEnteredAns(request.body());
+            c.setPostId(postid);
+            // post.setUserId();
+            Database dbc = new Database();
+            if (dbc.getError().length() == 0) {
+                try {
+                    if (c.insertAllForum_comment(dbc.getConn())) {
+                    //response.status(200);
+                        response.status(201);
+                        return "HTTP 201 - CREATED";
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            response.status(500);
+            return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });    
+                    
+        
 
          /**
          * Delete Review Route
@@ -927,6 +957,35 @@ public class Main implements SparkApplication {
             }
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
+        });
+        
+        //forum home to post text, and post it
+        post(API_LOC + "/forumcom", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            System.out.println("Starting . " + request.body());
+            postid = request.body();
+            Forum_ques s = new Forum_ques();
+            s.setPost_id(request.body());
+            List list = s.getQuestion();
+            response.status(200);
+            System.out.println(gson.toJson(list));
+            return gson.toJson(list);
+            //return ret;
+        });
+
+        //forum home to post text, and post it
+        get(API_LOC + "/forumcom", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            Forum_ques s = new Forum_ques();
+            s.setPost_id(postid);
+            List list = s.getQuestion();
+            response.status(200);
+
+            System.out.println(gson.toJson(list));
+            return gson.toJson(list);
+            //return ret;
         });
 
          /**

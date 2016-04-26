@@ -17,12 +17,13 @@
                 <div class="row">
                     <div class="col-lg-4 search hidden-xs hidden-sm col-md-3">
                         <div class="wrap">
-                            <!-- action="#" method="post"-->
+
                             <form  class="form" data-ng-submit="forumsearch()">
                                 <div class="pull-left txt"><input type="text" name ="search" id="search" data-ng-model = "forum_s.search" class="form-control" placeholder="Search Questions"></div>
                                 <div class="pull-right"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></div>
                                 <div class="clearfix"></div>
                             </form>
+
                         </div>
                     </div>
                     <div class="col-lg-4 col-xs-12 col-sm-5 col-md-4 avt">
@@ -77,6 +78,7 @@
                         <!-- POST -->
                         <form>
                             <div class="post" ng-repeat= "Ques in forum">
+
                                 <div class="wrap-ut pull-left">
                                     <div class="userinfo pull-left">
                                         <div class="avatar">
@@ -85,22 +87,28 @@
                                         </div>
 
                                     </div>
-                                    <div class="posttext pull-left">
-                                        <h2><a href="#/comments">{{Ques.search_keywords}}</a></h2>
+
+
+
+                                    <div class="posttext pull-left" >
+                                        <h2 ng-click="like(Ques.post_id)"><a href="#/comments">{{Ques.search_keywords}}</a> </h2>
+
                                     </div>
+
+
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="postinfo pull-left">
                                     <div class="comments">
-                                        <div class="commentbg">
-                                            560
-                                            <div class="mark"></div>
-                                        </div>
+
 
                                     </div>
-                                    <div class="views"><i class="fa fa-eye"></i> 1,568</div>
+
+                                    <div class="views">Posted by:{{Ques.f_name}}{{Ques.l_name}} </div>
                                     <div class="time"><i class="fa fa-clock-o"></i> {{Ques.time_stamp}}</div>
+
                                 </div>
+
                                 <div class="clearfix"></div>
                             </div><!-- POST -->
                         </form>
@@ -114,7 +122,7 @@
                             <form>
                                 <div class="divline"></div>
                                 <div class="blocktxt" ng-repeat = "UserQues in forumQues|limitTo:10">
-                                    <a href="#">{{UserQues.search_keywords}}</a>
+                                    <a href="#/comments">{{UserQues.search_keywords}}</a>
                                 </div>
 
 
@@ -154,14 +162,4 @@
 
 
         </section>
-
-        <!-- FOOTER -->
-        <footer style="margin-bottom: 30px; padding-top: 10px;">
-            <!-- COPYRIGHT -->
-            <div class="text-center copyright navbar-fixed-bottom">
-                &copy;2016 The Develovers. All Rights Reserved.
-            </div>
-            <!-- END COPYRIGHT -->
-        </footer>
-
     </div>

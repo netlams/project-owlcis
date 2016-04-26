@@ -20,19 +20,45 @@
             $scope.forumQues = value.data;
             console.log(value)
         });
+        $http.get('/api/forumcom').then(function (value) {
+            $scope.forumcom = value.data;
+        });
 
         $scope.forumsearch = function () {
             $http.post('/api/fs', $scope.forum_s.search)
                     .then(function (response) {
-                        //window.alert("hello");
-                        //console.log(response.data);
-                        //console.log($scope.forum_s.search);
+//                        window.alert($scope.forum_s.search);
+                        
                         $scope.forum = response.data;
+                        
+                       
                     }, function (response) {
-                        console.log("Sending this  " + $scope.forum_s.search);
                     });
 
         };
+        
+         $scope.like = function (post_id) {
+              
+                $scope.postid = post_id;
+               
+//                   window.alert($scope.postid);
+                   
+                $http.post('/api/forumcom', $scope.postid)
+                    .then(function (response) {
+//                        window.alert($scope.postid);
+                       
+                        $scope.forumcom = response.data;
+                     
+                    }, function (response) {
+                        console.log("Sending this  " + $scope.postid);
+                    });
+
+             
+            };
+
+        
+        
+        
 
     };
 
