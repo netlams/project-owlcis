@@ -98,7 +98,7 @@
                 // draw owlcis logo image
                 title.append('image')
                         .attr('xlink:href', './assets/img/google/owlcislogo.png')
-                        .attr('x', 50)
+                        .attr('x', 20)
                         .attr('y', 0)
                         .attr('height', '50px')
                         .attr('width', '80px');
@@ -250,10 +250,14 @@
             }
             
             /* http request to retrieve data */
-            d3.json('./api/testflow', function (error, data) {
+            d3.json('./api/flowchart', function (error, data) {
 //                loadLoadingAnim();
                 if (error) {
-                    alert("not logged in");
+                    alert("Erorr generating flowhcart");
+                    return console.warn(error);
+                }
+                if (data === null) {
+                    alert("Erorr generating flowhcart");
                     return console.warn(error);
                 }
                 render(data);

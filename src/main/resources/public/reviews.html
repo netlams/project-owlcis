@@ -1,106 +1,111 @@
-<div class="rows" ng-controller="review"> 
-    <h3 class="widget-title">Looking for reviews?</h3>
-    <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
-        <div class="form-group">
-            <label for="course-list">Courses:</label>
-            <select  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
-                <option value="">Select Course</option>
-                <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary" >Search</button>
-        <a href="#course" class="btn btn-primary">Post Review</a>
-    </form>
-    <div class="text-center" >
-        <form class="form-horizontal" >
+<!-- PAGE CONTENT -->
+<div class="page-content">
+    <div class="container center-block">
+        <div class="rows" ng-controller="review"> 
+            <h3 class="widget-title">Looking for reviews?</h3>
+            <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
+                <div class="form-group">
+                    <label for="course-list">Courses:</label>
+                    <select  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
+                        <option value="">Select Course</option>
+                        <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" >Search</button>
+                <a href="#course" class="btn btn-primary">Post Review</a>
+            </form>
+            <div class="text-center" >
+                <form class="form-horizontal" >
 
-            <h1 class="widget-title">Course Review</h1>        
-            {{thisreview}}
+                    <h1 class="widget-title">Course Review</h1>        
+                    {{thisreview}}
 
 
 
 
 
-            <div class="col-md-12">
-                <div class="list-group-item" >
-                    <div class="row" ng-repeat="x in example2">
-                        <div class="col-md-2" style="float: left; font-weight: 16px;">
-                            <br style="float:left;"> {{x.courseid}}
-                            <br style="float:left;"> {{x.reviewid}}
-                            <br style="float:left;"> Helpfulness: {{x.helpfulness}}
-                            <br style="float:left;"> Easiness: {{x.easiness}}
-                            <br style="float:left;"> Clarity: {{x.clarity}}
-                        </div>
-                        <div class="col-md-10">
-                            <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
+                    <div class="col-md-12">
+                        <div class="list-group-item" >
+                            <div class="row" ng-repeat="x in example2">
+                                <div class="col-md-2" style="float: left; font-weight: 16px;">
+                                    <br style="float:left;"> {{x.courseid}}
+                                    <br style="float:left;"> {{x.reviewid}}
+                                    <br style="float:left;"> Helpfulness: {{x.helpfulness}}
+                                    <br style="float:left;"> Easiness: {{x.easiness}}
+                                    <br style="float:left;"> Clarity: {{x.clarity}}
+                                </div>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
 
-                            <div class="postinfobot">
-                                <div class="likeblock pull-left">
-                                    <a href="#" class="up">
-                                        <i  class="fa fa-thumbs-o-up" ng-init="thumbupcount = x.thumbsup" ng-click="like(x.reviewid, x.thumbsup);
+                                    <div class="postinfobot">
+                                        <div class="likeblock pull-left">
+                                            <a href="#" class="up">
+                                                <i  class="fa fa-thumbs-o-up" ng-init="thumbupcount = x.thumbsup" ng-click="like(x.reviewid, x.thumbsup);
                                                     thumbupcount = thumbupcount + 1">
-                                            {{thumbupcount}}
+                                                    {{thumbupcount}}
 
-                                        </i></a>
-                                    <!--Like: {{json_object}} -->
+                                                </i></a>
+                                            <!--Like: {{json_object}} -->
 
-                                </div>
+                                        </div>
 
-                                <div class="likeblock pull-left">
-                                    <a href="#" class="down">
-                                        <i class="fa fa-thumbs-o-down" 
-                                           ng-click="dislike(x.reviewid, x.thumbsup, x.thumbsdown);
-                                           ">
-                                            {{x.thumbsdown}}
-                                        </i></a>
-                                    <!--Dislike:{{json_object_down}} -->
+                                        <div class="likeblock pull-left">
+                                            <a href="#" class="down">
+                                                <i class="fa fa-thumbs-o-down" 
+                                                   ng-click="dislike(x.reviewid, x.thumbsup, x.thumbsdown);
+                                                   ">
+                                                    {{x.thumbsdown}}
+                                                </i></a>
+                                            <!--Dislike:{{json_object_down}} -->
 
-                                </div>
-                                <div class="prev pull-left">
-                                    <div ng-show="user_role != 'member'">
-                                        <a ng-click="repcmnt(event, x.reviewid, x.thumbsup, x.thumbsdown);" href="#">
-                                            <i class="fa fa-reply"></i></a>
+                                        </div>
+                                        <div class="prev pull-left">
+                                            <div ng-show="user_role != 'member'">
+                                                <a ng-click="repcmnt(event, x.reviewid, x.thumbsup, x.thumbsdown);" href="#">
+                                                    <i class="fa fa-reply"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="posted pull-left">
+                                            <i class="fa fa-clock-o"></i>
+                                            Posted:
+                                            {{x.f_name}} {{x.l_name}}
+                                            {{x.time_stamp}}</div>
+                                    </div>    
+
+                                    <div style="clear:both;"></div>
+                                    <div class="panel-heading">
+                                        <p align="left">Comments</p>
+                                        <div class="panel panel-default-comment" 
+                                             ng-repeat="cmnt in comnts = (comnts| filter:{reviewID:x.reviewid} : true )">
+
+                                            <p  align="left">
+                                                <span>{{cmnt.f_name}}.{{cmnt.l_name}}:</span> 
+
+                                                <span>{{cmnt.comment_text}}</span>
+
+                                                <span>Posted On: {{cmnt.time_stamp}}</span>
+                                            </p>
+
+
+                                        </div>
+                                    </div>
+                                    <div ng-show="!(comnts | filter:{reviewID:x.reviewid}).length" >
+                                        <div class="box-comments-user">
+                                            <p align="left"><span>No Comments have been Posted.</span></p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="posted pull-left">
-                                    <i class="fa fa-clock-o"></i>
-                                    Posted:
-                                    {{x.f_name}} {{x.l_name}}
-                                    {{x.time_stamp}}</div>
-                            </div>    
-
-                            <div style="clear:both;"></div>
-                            <div class="panel-heading">
-                                <p align="left">Comments</p>
-                                <div class="panel panel-default-comment" 
-                                     ng-repeat="cmnt in comnts = (comnts| filter:{reviewID:x.reviewid} : true )">
-
-                                    <p  align="left">
-                                        <span>{{cmnt.f_name}}.{{cmnt.l_name}}:</span> 
-
-                                        <span>{{cmnt.comment_text}}</span>
-
-                                        <span>Posted On: {{cmnt.time_stamp}}</span>
-                                    </p>
 
 
-                                </div>
+
                             </div>
-                            <div ng-show="!(comnts | filter:{reviewID:x.reviewid}).length" >
-                                <div class="box-comments-user">
-                                    <p align="left"><span>No Comments have been Posted.</span></p>
-                                </div>
-                            </div>
+
+
+
                         </div>
-
-
-
                     </div>
-
-
-
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>

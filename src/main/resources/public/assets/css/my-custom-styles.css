@@ -7,6 +7,15 @@
     margin-bottom: 9px;
 }
 
+#app {
+    visibility: hidden; // wait until load
+}
+
+#home-branding.jumbotron {
+    height: 90vh;
+    background: url(http://www.temple.edu/takecharge/downloads/desktopbackground.jpg);
+}
+
 /* Angular animation */
 .ng-leave { animation:0.1s fadeOutDown ease; }
 .ng-enter { animation:0.3s fadeInUp ease; }
