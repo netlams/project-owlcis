@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="posttext pull-left">
                                     <!-- <h2><a href="/#/comments">{{x.search_keywords}}</a></h2>-->
-                                    <h2 ng-click="like(x.post_id)"><a href="#/comments">{{x.search_keywords}}</a> </h2>
+                                    <h2 ng-click="like(x.post_id, x.search_keywords)"><a href="#/comments">{{x.search_keywords}}</a> </h2>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -106,7 +106,7 @@
                             <div class="divline"></div>
                             <div class="blocktxt" ng-repeat="z in forumQues">
                                 <!--<a href="#">{{z.search_keywords}}</a>-->
-                                <h4 ng-click="like(z.post_id)"><a href="#/comments">{{z.search_keywords}}</a> </h4>
+                                <h4 ng-click="like(z.post_id, z.search_keywords)"><a href="#/comments">{{z.search_keywords}}</a> </h4>
                             </div>
                         </div>
                     </div>

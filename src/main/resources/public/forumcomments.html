@@ -54,28 +54,15 @@ and open the template in the editor.
         </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="container-fluid">
             <section class="content">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-8 col-md-8">
 
-                            <!-- POST -->
-                            <form class="form" data-ng-submit="like()">
+                            <!-- POST   <form class="form" data-ng-submit="like()">-->
+
+                            <form class="form">
                                 <div class="post beforepagination">
                                     <div class="topwrap">
                                         <div class="userinfo pull-left">
@@ -92,18 +79,9 @@ and open the template in the editor.
                                     <div class="postinfobot">
 
 
-
-
-
-
-
                                         <div class="clearfix"></div>
                                     </div>
                                 </div><!-- POST -->
-
-
-
-                                <!-- POST   <form class="form" data-ng-submit="like()"> -->
 
                                 <div class="post"  ng-repeat= "A in forumcom">
                                     <div class="topwrap">
@@ -130,6 +108,7 @@ and open the template in the editor.
                                     </div>
                                 </div><!-- POST -->
                             </form>
+
                             <!-- POST -->
 
                             <!-- POST -->
@@ -164,24 +143,24 @@ and open the template in the editor.
 
 
                         </div>
+
                         <div class="col-lg-4 col-md-4">
                             <!-- -->
                             <div class="sidebarblock">
                                 <h3>My Questions</h3>
-                                <div class="divline"></div>
-                                <div class="blocktxt" ng-repeat = "UserQues in forumQues|limitTo:10">
-                                    <!--  <a href="#">{{UserQues.search_keywords}}</a>-->
-                                    <h4 ng-click="like(UserQues.post_id)"><a href="#/comments">{{UserQues.search_keywords}}</a> </h4>
-                                </div>
-                                <div class="divline"></div>
+                                <form>
+                                    <div class="divline"></div>
+                                    <div class="blocktxt" ng-repeat = "UserQues in forumQues|limitTo:10">
+                                        <!--  <a href="#">{{UserQues.search_keywords}}</a>-->
+                                        <h4 ng-click="like(UserQues.post_id, UserQues.search_keywords)"><a href="#/comments">{{UserQues.search_keywords}}</a> </h4>
+                                    </div>
+                                    <div class="divline"></div>
+                                </form>
                             </div>
                         </div>
+
                     </div>
                 </div>
-
-
-
-
 
             </section>
 

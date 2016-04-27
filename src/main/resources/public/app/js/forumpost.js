@@ -16,7 +16,9 @@
         $http.get('/api/forum').then(function (value) {
             $scope.forumQues = value.data;
         });
-
+        $http.get('/api/forumComQ').then(function (value) {
+            $scope.CommentQues = value.data;
+        });
         $scope.Formprocess = function () {
 
             $http.post('/api/fv', $scope.Dataform.f)
@@ -27,22 +29,21 @@
                     });
         };
 
-        $scope.like = function (post_id) {
+        $scope.like = function (post_id, ques) {
 
             $scope.postid = post_id;
-
-//                   window.alert($scope.postid);
-
-            $http.post('/api/forumcom', $scope.postid)
+            $scope.ques = ques;
+            $scope.json_object = {
+                'post_id': post_id,
+                'ques': ques,
+            };
+            $scope.myjson = $scope.json_object;
+            $http.post('/api/forumcom', $scope.myjson)
                     .then(function (response) {
-//                        window.alert($scope.postid);
-
-                        $scope.forumcom = response.data;
 
                     }, function (response) {
                         console.log("Sending this  " + $scope.postid);
                     });
-
 
         };
 
