@@ -47,15 +47,15 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Helpfulness</label>
                             <div class="pull-left" >
-                                <input class="star star-1" id="star-01" ng-model="helpfulness" type="radio" value="5" name="star-hp"/>
+                                <input class="star star-1" id="star-01" ng-model="helpfulness" type="radio" value="5" name="star-hp" data-ng-required="true"/>
                                 <label class="star star-1" for="star-01"></label>
-                                <input class="star star-2" id="star-02" ng-model="helpfulness" type="radio" value="4" name="star-hp"/>
+                                <input class="star star-2" id="star-02" ng-model="helpfulness" type="radio" value="4" name="star-hp" data-ng-required="true"/>
                                 <label class="star star-2" for="star-02"></label>
-                                <input class="star star-3" id="star-03" ng-model="helpfulness" type="radio" value="3" name="star-hp"/>
+                                <input class="star star-3" id="star-03" ng-model="helpfulness" type="radio" value="3" name="star-hp" data-ng-required="true"/>
                                 <label class="star star-3" for="star-03"></label>
-                                <input class="star star-4" id="star-04" ng-model="helpfulness" type="radio" value="2" name="star-hp"/>
+                                <input class="star star-4" id="star-04" ng-model="helpfulness" type="radio" value="2" name="star-hp" data-ng-required="true"/>
                                 <label class="star star-4" for="star-04"></label>
-                                <input class="star star-5" id="star-05" ng-model="helpfulness" type="radio" value="1" name="star-hp"/>
+                                <input class="star star-5" id="star-05" ng-model="helpfulness" type="radio" value="1" name="star-hp" data-ng-required="true"/>
                                 <label class="star star-5"  for="star-5"></label>
                             </div>
                         </div>
@@ -64,15 +64,15 @@
                             <label class="col-md-2 control-label">Easiness</label>
                             <div class="pull-left">
 
-                                <input class="star star-1" id="star-1" ng-model="easiness" type="radio" value="5" name="star-ez"/>
+                                <input class="star star-1" id="star-1" ng-model="easiness" type="radio" value="5" name="star-ez" data-ng-required="true"/>
                                 <label class="star star-1" for="star-1"></label>
-                                <input class="star star-2" id="star-2" ng-model="easiness" type="radio" value="4" name="star-ez"/>
+                                <input class="star star-2" id="star-2" ng-model="easiness" type="radio" value="4" name="star-ez" data-ng-required="true"/>
                                 <label class="star star-2" for="star-2"></label>
-                                <input class="star star-3" id="star-3" ng-model="easiness" type="radio" value="3" name="star-ez"/>
+                                <input class="star star-3" id="star-3" ng-model="easiness" type="radio" value="3" name="star-ez" data-ng-required="true"/>
                                 <label class="star star-3" for="star-3"></label>
-                                <input class="star star-4" id="star-4" ng-model="easiness" type="radio" value="2" name="star-ez"/>
+                                <input class="star star-4" id="star-4" ng-model="easiness" type="radio" value="2" name="star-ez" data-ng-required="true"/>
                                 <label class="star star-4" for="star-4"></label>
-                                <input class="star star-5" id="star-5" ng-model="easiness" type="radio" value="1" name="star-ez"/>
+                                <input class="star star-5" id="star-5" ng-model="easiness" type="radio" value="1" name="star-ez" data-ng-required="true"/>
                                 <label class="star star-5" for="star-5"></label>
 
                             </div>
@@ -80,22 +80,22 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Clarity</label>
                             <div class="pull-left">
-                                <input class="star star-1" id="star-6" type="radio"  ng-model="clarity" value="5" name="star-cl"/>
+                                <input class="star star-1" id="star-6" type="radio"  ng-model="clarity" value="5" name="star-cl" data-ng-required="true"/>
                                 <label class="star star-1" for="star-6"></label>
-                                <input class="star star-2" id="star-7" type="radio"  ng-model="clarity" value="4" name="star-cl"/>
+                                <input class="star star-2" id="star-7" type="radio"  ng-model="clarity" value="4" name="star-cl" data-ng-required="true"/>
                                 <label class="star star-2" for="star-7"></label>
-                                <input class="star star-3" id="star-8" type="radio"  ng-model="clarity" value="3" name="star-cl"/>
+                                <input class="star star-3" id="star-8" type="radio"  ng-model="clarity" value="3" name="star-cl" data-ng-required="true"/>
                                 <label class="star star-3" for="star-8"></label>
-                                <input class="star star-4" id="star-9" type="radio"  ng-model="clarity" value="2" name="star-cl"/>
+                                <input class="star star-4" id="star-9" type="radio"  ng-model="clarity" value="2" name="star-cl" data-ng-required="true"/>
                                 <label class="star star-4" for="star-9"></label>
-                                <input class="star star-5" id="star-10" type="radio" ng-model="clarity" value="1" name="star-cl"/>
+                                <input class="star star-5" id="star-10" type="radio" ng-model="clarity" value="1" name="star-cl" data-ng-required="true"/>
                                 <label class="star star-5" for="star-10"></label>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Recommended Elective (Optional)</label>
                             <div class="col-xs-12 col-sm-12 col-md-6">
-                                <select  name="selectedID" id="selectedID" class="form-control" data-ng-model ="recElectiveID"  data-ng-required="true">
+                                <select  name="selectedID" id="selectedID" class="form-control" data-ng-model ="recElectiveID">
                                     <option value="">Select Course</option>
                                     <option data-ng-repeat="y in Dataform2.course_ID">{{y.course_id}}</option>
                                 </select>
