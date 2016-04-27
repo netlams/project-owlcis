@@ -8,7 +8,9 @@ package edu.temple.owlcis.service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -86,7 +88,13 @@ public class Forum_ques {
 
                 // add to list
                 while (rs.next()) {
-                    list.add(new Forum_ques(rs.getString(1), rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
+                    String text = rs.getString(3);
+                    Timestamp timestamp = Timestamp.valueOf(text);
+                    //System.out.println("Timestamp: " + timestamp);
+                    Date date = new Date(timestamp.getTime());
+                    //System.out.println("Date: " + date);
+                    
+                    list.add(new Forum_ques(rs.getString(1), rs.getString(2),date.toString(),rs.getString(4),rs.getString(5),rs.getString(6)));
                 }
             } catch (SQLException ex) {
                 // handle any errors

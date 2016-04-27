@@ -15,21 +15,47 @@
             $scope.forumcom = value.data;
         });
         
+        $http.get('/api/forumComQ').then(function (value) {
+            $scope.CommentQues = value.data;
+        });
         
-        
+           //window.alert($scope.CommentQues.data);
         
         
         $scope.Formprocess = function () {
 
                 $http.post('/api/fvc', $scope.Commentform.reply)
                         .then(function (response) {
-                           console.log("Sending this  " + $scope.Commentform.reply);
-                            console.log("Sending this  " + $scope.Commentform.reply);
+                            $window.location.href = '/#/forum';
+                           //console.log("Sending this  " + $scope.Commentform.reply);
+                            //console.log("Sending this  " + $scope.Commentform.reply);
                            // $window.location.href = '/#/forum';
                         }, function (response) {
                             console.log("Sending this  " + $scope.Commentform.reply);
                         });
             };
+            $scope.like = function (post_id) {
+              
+                $scope.postid = post_id;
+               
+//                   window.alert($scope.postid);
+                   
+                $http.post('/api/forumcom', $scope.postid)
+                    .then(function (response) {
+//                        window.alert($scope.postid);
+                       
+                        $scope.forumcom = response.data;
+                     
+                    }, function (response) {
+                        console.log("Sending this  " + $scope.postid);
+                    });
+                    
+                    
+                    
+
+             
+            };
+            
         
         
         

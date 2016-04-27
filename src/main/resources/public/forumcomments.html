@@ -5,173 +5,188 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<body class="topic">
 
-    <div class="container-fluid">
-        <section class="content">
+<body class="topic">
+    <div class="wrapper">
+        <!-- Slider -->
+        <div class="tp-banner-container">
+            <nav class="navbar navbar-default navbar-dark " role="navigation">
+                <div class="container">
+
+
+                </div>
+            </nav>
+        </div>
+
+        <!-- //Slider -->
+
+        <div class="headernav">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 col-md-8">
+                    <div class="col-lg-4 col-xs-12 col-sm-5 col-md-4 avt">
+                        <!-- <div class="wrap">-->
+                        <div class="stnt pull-right">
+                            <form  action="/#/forum" method="post" class="form">
+                                <!-- <div class="pull-left txt">-->
+                                <input type="submit" class="btn btn-primary" value="Forum Home">
+                                <!-- </div>-->
+                                <!-- <div class="pull-right"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></div>-->
 
-                        <!-- POST -->
-                        <form class="form" data-ng-submit="like()">
-                            <div class="post beforepagination">
-                                <div class="topwrap">
-                                    <div class="userinfo pull-left">
-                                        <div class="avatar">
-                                            <img src="assets/img/logo/avatar.jpg" alt="" />
-                                            <div class="status green">&nbsp;</div>
+                            </form>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <!--</div>-->
+                    </div>
+                    <div class="col-lg-4 col-xs-12 col-sm-5 col-md-4 avt">
+                        <div class="stnt pull-left">
+
+                            <form action="/#/post" method="post" class="form">
+                                <input type="submit" class="btn btn-primary" value="Ask a Question">
+                            </form>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="container-fluid">
+            <section class="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8">
+
+                            <!-- POST -->
+                            <form class="form" data-ng-submit="like()">
+                                <div class="post beforepagination">
+                                    <div class="topwrap">
+                                        <div class="userinfo pull-left">
+                                            <div class="avatar">
+                                                <img src="assets/img/logo/avatar.jpg" alt="" />
+                                                <div class="status red">&nbsp;</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="posttext pull-left">
-                                        <h2>Question goes here: {{forumcom.post_text}} </h2>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>                              
-                                <div class="postinfobot">
-
-
-
-
-
-
-
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div><!-- POST -->
-
-                            <div class="paginationf">
-                                <div class="pull-left"><a href="#" class="prevnext"><i class="fa fa-angle-left"></i></a></div>
-                                <div class="pull-left">
-                                    <ul class="paginationforum">
-                                        <li class="hidden-xs"><a href="#">1</a></li>
-                                        <li class="hidden-xs"><a href="#">2</a></li>
-                                        <li class="hidden-xs"><a href="#">3</a></li>
-                                        <li class="hidden-xs"><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li><a href="#">6</a></li>
-                                        <li><a href="#" class="active">7</a></li>
-                                        <li><a href="#">8</a></li>
-                                        <li class="hidden-xs"><a href="#">9</a></li>
-                                        <li class="hidden-xs"><a href="#">10</a></li>
-                                        <li class="hidden-xs hidden-md"><a href="#">11</a></li>
-                                        <li class="hidden-xs hidden-md"><a href="#">12</a></li>
-                                        <li class="hidden-xs hidden-sm hidden-md"><a href="#">13</a></li>
-                                        <li><a href="#">20</a></li>
-                                    </ul>
-                                </div>
-                                <div class="pull-left"><a href="#" class="prevnext last"><i class="fa fa-angle-right"></i></a></div>
-                                <div class="clearfix"></div>
-                            </div>
-
-                            <!-- POST   <form class="form" data-ng-submit="like()"> -->
-
-                            <div class="post"  ng-repeat= "A in forumcom">
-                                <div class="topwrap">
-                                    <div class="userinfo pull-left">
-                                        <div class="avatar">
-                                            <img src="assets/img/logo/avatar.jpg" alt="" />
-                                            <div class="status green">&nbsp;</div>
+                                        <div class="posttext pull-left" >
+                                            <h2>{{CommentQues}}</h2>
                                         </div>
-                                    </div>
-                                    <div class="posttext pull-left">
-                                        <p> {{A.comment_text}}</p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>                              
-                                <div class="postinfobot">
+                                        <div class="clearfix"></div>
+                                    </div>                              
+                                    <div class="postinfobot">
 
 
 
-                                    <div class="posted pull-left"><i class="fa fa-clock-o"></i> Posted on : {{A.time_stamp}}</div>
 
-                                    <div class="pull-right">Posted by:{{A.f_name}}{{A.l_name}}</div>
 
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div><!-- POST -->
-                        </form>
-                        <!-- POST -->
 
-                        <!-- POST -->
-                        <div class="post">
 
-                            <form  class="form newtopic"  data-ng-submit="Formprocess()">
-                                <div class="topwrap">
-                                    <div class="userinfo pull-left">
-                                        <div class="avatar">
-                                            <img src="assets/img/logo/avatar.jpg" alt="" />
-                                            <div class="status green">&nbsp;</div>
-                                        </div>
-                                    </div>
-                                    <div class="posttext pull-left">
-                                        <div class="textwraper">
-                                            <div class="postreply">Post a Reply</div>
-                                            <textarea name="reply" id="reply" placeholder="Type your message here" data-ng-model ="Commentform.reply"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>                              
-                                <div class="postinfobot">
-                                    <div class="pull-right postreply">
-                                        <div class="pull-left"><button type="submit" class="btn btn-primary">Post Reply</button></div>
                                         <div class="clearfix"></div>
                                     </div>
+                                </div><!-- POST -->
 
-                                    <div class="clearfix"></div>
-                                </div>
+
+
+                                <!-- POST   <form class="form" data-ng-submit="like()"> -->
+
+                                <div class="post"  ng-repeat= "A in forumcom">
+                                    <div class="topwrap">
+                                        <div class="userinfo pull-left">
+                                            <div class="avatar">
+                                                <img src="assets/img/logo/avatar.jpg" alt="" />
+                                                <div class="status green">&nbsp;</div>
+                                            </div>
+                                        </div>
+                                        <div class="posttext pull-left">
+                                            <p> {{A.comment_text}}</p>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>                              
+                                    <div class="postinfobot">
+
+
+
+                                        <div class="posted pull-left"><i class="fa fa-clock-o"></i> Posted on : {{A.time_stamp}}</div>
+
+                                        <div class="pull-right">Posted by:{{A.f_name}}{{A.l_name}}</div>
+
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div><!-- POST -->
                             </form>
-                        </div><!-- POST -->
+                            <!-- POST -->
+
+                            <!-- POST -->
+                            <div class="post">
+
+                                <form  class="form newtopic"  data-ng-submit="Formprocess()">
+                                    <div class="topwrap">
+                                        <div class="userinfo pull-left">
+                                            <div class="avatar">
+                                                <img src="assets/img/logo/avatar.jpg" alt="" />
+                                                <div class="status green">&nbsp;</div>
+                                            </div>
+                                        </div>
+                                        <div class="posttext pull-left">
+                                            <div class="textwraper">
+                                                <div class="postreply">Post a Reply</div>
+                                                <textarea name="reply" id="reply" placeholder="Type your message here" data-ng-model ="Commentform.reply"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>                              
+                                    <div class="postinfobot">
+                                        <div class="pull-right postreply">
+                                            <div class="pull-left"><button type="submit" class="btn btn-primary">Post Reply</button></div>
+                                            <div class="clearfix"></div>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </form>
+                            </div><!-- POST -->
 
 
-                    </div>
-                    <div class="col-lg-4 col-md-4">
-                        <!-- -->
-                        <div class="sidebarblock">
-                            <h3>My Questions</h3>
-                            <div class="divline"></div>
-                            <div class="blocktxt" ng-repeat = "UserQues in forumQues|limitTo:10">
-                                <a href="#">{{UserQues.search_keywords}}</a>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <!-- -->
+                            <div class="sidebarblock">
+                                <h3>My Questions</h3>
+                                <div class="divline"></div>
+                                <div class="blocktxt" ng-repeat = "UserQues in forumQues|limitTo:10">
+                                    <!--  <a href="#">{{UserQues.search_keywords}}</a>-->
+                                    <h4 ng-click="like(UserQues.post_id)"><a href="#/comments">{{UserQues.search_keywords}}</a> </h4>
+                                </div>
+                                <div class="divline"></div>
                             </div>
-                            <div class="divline"></div>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="pull-left"><a href="#" class="prevnext"><i class="fa fa-angle-left"></i></a></div>
-                        <div class="pull-left">
-                            <ul class="paginationforum">
-                                <li class="hidden-xs"><a href="#">1</a></li>
-                                <li class="hidden-xs"><a href="#">2</a></li>
-                                <li class="hidden-xs"><a href="#">3</a></li>
-                                <li class="hidden-xs"><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">6</a></li>
-                                <li><a href="#" class="active">7</a></li>
-                                <li><a href="#">8</a></li>
-                                <li class="hidden-xs"><a href="#">9</a></li>
-                                <li class="hidden-xs"><a href="#">10</a></li>
-                                <li class="hidden-xs hidden-md"><a href="#">11</a></li>
-                                <li class="hidden-xs hidden-md"><a href="#">12</a></li>
-                                <li class="hidden-xs hidden-sm hidden-md"><a href="#">13</a></li>
-                                <li><a href="#">20</a></li>
-                            </ul>
-                        </div>
-                        <div class="pull-left"><a href="#" class="prevnext last"><i class="fa fa-angle-right"></i></a></div>
-                        <div class="clearfix"></div>                        
-                    </div>
-                </div>
-            </div>
-
-        </section>
 
 
+            </section>
+
+
+        </div>
     </div>
 </body>
 </html>
