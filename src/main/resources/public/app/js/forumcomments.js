@@ -16,7 +16,7 @@
         });
 
         $http.get('/api/forumComQ').then(function (value) {
-            $scope.CommentQues = value.data;
+            $scope.CommentQues = value.data.replace(/['"]+/g, '');
         });
 
         $scope.Formprocess = function () {
