@@ -1,74 +1,78 @@
-<div style="width:100%;">
-    <div class="row">
-        <div style="float:left; width:49%;">
-            <div class="panel panel-default" >
-                <div class="panel-heading">Course Reviews:</div>
-                <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
-                    <form role="form" class="form-horizontal">
-                    </form> <div ng-repeat="y in reviews" style="float:left">
-                        <div class="col-sm-3" style="float: left; font-weight: 16px;">
-                            <br style="float:left;"> {{y.courseid}}
-                            <br style="float:left;"> Helpfulness: {{y.helpfulness}}
-                            <br style="float:left;"> Easiness: {{y.easiness}}
-                            <br style="float:left;"> Clarity: {{y.clarity}}
-                        </div>
-                        <div class="col-sm-9">
-                            <textarea class="form-control" rows="4" readonly> {{y.comment_text}}</textarea>
-                        </div>
-                        <div class="postinfobot">
-                            <div class="likeblock pull-left">
-                                <a href="#" class="up">
-                                    <i class="fa fa-thumbs-o-up">
-                                        {{y.thumbsup}}
-                                    </i></a>
-                                <a href="#" class="down"><i class="fa fa-thumbs-o-down">
+<!-- PAGE CONTENT -->
+<div class="page-content">
+    <div class="container center-block">
+        <div style="width:100%;">
+            <div class="row">
+                <div style="float:left; width:49%;">
+                    <div class="panel panel-default" >
+                        <div class="panel-heading">Course Reviews:</div>
+                        <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
+                            <form role="form" class="form-horizontal">
+                            </form> <div ng-repeat="y in reviews" style="float:left">
+                                <div class="col-sm-3" style="float: left; font-weight: 16px;">
+                                    <br style="float:left;"> {{y.courseid}}
+                                    <br style="float:left;"> Helpfulness: {{y.helpfulness}}
+                                    <br style="float:left;"> Easiness: {{y.easiness}}
+                                    <br style="float:left;"> Clarity: {{y.clarity}}
+                                </div>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" rows="4" readonly> {{y.comment_text}}</textarea>
+                                </div>
+                                <div class="postinfobot">
+                                    <div class="likeblock pull-left">
+                                        <a href="#" class="up">
+                                            <i class="fa fa-thumbs-o-up">
+                                                {{y.thumbsup}}
+                                            </i></a>
+                                        <a href="#" class="down"><i class="fa fa-thumbs-o-down">
 
-                                    </i>{{y.thumbsdown}}</a>
+                                            </i>{{y.thumbsdown}}</a>
+                                    </div>
+                                    <div class="prev pull-left">
+                                        <button class="fa fa-flag" ng-click="deleteReview(y)"></button>                            </div>
+                                    <div class="posted pull-left">
+                                        <i class="fa fa-clock-o"></i>
+                                        Posted:
+                                        {{y.f_name}} {{y.l_name}}
+                                        {{y.time_stamp}}</div>
+                                </div>
                             </div>
-                            <div class="prev pull-left">
-                                <button class="fa fa-flag" ng-click="deleteReview(y)"></button>                            </div>
-                            <div class="posted pull-left">
-                                <i class="fa fa-clock-o"></i>
-                                Posted:
-                                {{y.f_name}} {{y.l_name}}
-                                {{y.time_stamp}}</div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div style="float:right; width:49%; margin-left:10px;">
-            <div class="panel panel-default" >
-                <div class="panel-heading">Forum Posts:</div>
-                <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
-                    <form role="form" class="form-horizontal"></form>
-                        <div class="post"  ng-repeat="x in posts">
-                            <div class="wrap-ut pull-left">
-                                <div class="userinfo pull-left">
-                                    <div class="avatar">
-                                        <img src="assets/img/logo/avatar.jpg" alt="" />
-                                        <div class="status green">&nbsp;</div>
-                                    </div>
+                <div style="float:right; width:49%; margin-left:10px;">
+                    <div class="panel panel-default" >
+                        <div class="panel-heading">Forum Posts:</div>
+                        <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
+                            <form role="form" class="form-horizontal"></form>
+                            <div class="post"  ng-repeat="x in posts">
+                                <div class="wrap-ut pull-left">
+                                    <div class="userinfo pull-left">
+                                        <div class="avatar">
+                                            <img src="assets/img/logo/avatar.jpg" alt="" />
+                                            <div class="status green">&nbsp;</div>
+                                        </div>
 
-                                </div>
-                                <div class="posttext pull-left">
-                                    <h2><a href="#/comments">{{x.search_keywords}}</a></h2>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="postinfo pull-left">
-                                <div class="comments">
-                                    <div class="commentbg">
-                                        560
-                                        <div class="mark"></div>
                                     </div>
-
+                                    <div class="posttext pull-left">
+                                        <h2><a href="#/comments">{{x.search_keywords}}</a></h2>
+                                    </div>
+                                    <div class="clearfix"></div>
                                 </div>
-                                <div class="time"><i class="fa fa-clock-o"></i>{{x.time_stamp}}</div>
-                                <button class="fa fa-flag" ng-click="deletePost(x)"></button>                            </div>
+                                <div class="postinfo pull-left">
+                                    <div class="comments">
+                                        <div class="commentbg">
+                                            560
+                                            <div class="mark"></div>
+                                        </div>
+
+                                    </div>
+                                    <div class="time"><i class="fa fa-clock-o"></i>{{x.time_stamp}}</div>
+                                    <button class="fa fa-flag" ng-click="deletePost(x)"></button>                            </div>
                             </div>
                             <div class="clearfix"></div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>

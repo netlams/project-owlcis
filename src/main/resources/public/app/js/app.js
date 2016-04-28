@@ -2,7 +2,7 @@
  * Created by dhruvin sheth
  */
 
-var authApp = angular.module('authApp', ['ngAnimate', 'ngResource', 'ngSanitize', 'ui.router', 'ui.router', 'angular.filter', 'datatables', 'datatables.buttons', 'datatables.bootstrap']);
+var authApp = angular.module('authApp', ['ngAnimate', 'ngResource', 'ngSanitize', 'ui.router', 'ui.router', 'angular.filter', 'datatables', 'datatables.buttons', 'datatables.bootstrap', 'duScroll']);
 
 authApp.config(function ($stateProvider, $urlRouterProvider, $compileProvider) {
 

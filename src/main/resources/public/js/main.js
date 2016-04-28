@@ -19,6 +19,7 @@ var initClient = function () {
 
 $(function () {
   $('#google-signin-btn').tooltip()
+  $('#app').css( "visibility", "visible");
 })
 
 /* Start Google Auth */

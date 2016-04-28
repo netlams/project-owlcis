@@ -446,7 +446,7 @@
                         console.log("from gF() " + $scope.flowchartData.year + " " + $scope.flowchartData.degree);
                         setCookie('FC_YEAR', $scope.flowchartData.year, 1);
                         setCookie('FC_DEGREE', $scope.flowchartData.degree, 1);
-                        $window.open("./dummy_flowchart.html", "_blank");
+                        $window.open("./flowchart_diagram.html", "_blank");
                     };
                     
                     function setCookie(cname, cvalue, exdays) {

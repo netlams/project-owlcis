@@ -1,138 +1,177 @@
-<div class="row" ng-controller="PromiseCtrl">
-    <div class="col-md-4">
-        <h3 class="widget-title">Looking for reviews?</h3>
-        <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
-            <div class="form-group">
-                <label for="course-list">Courses:</label>
-                <select ng-change="selectClicked()"  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
-                    <option value="">Select Course</option>
-                    <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary" >Search</button>
-        </form>
-
-    </div>
-    <div class="col-md-7">
-        <div class="col-md-8">
-            <p class="widget-title">Address</p>
-            <section style="margin-bottom: 0px;">
-                <p style="font-weight: bolder">Temple University Computer & Information Sciences</br>
-                    1925 N. 12th Street </br>
-                    Philadelphia, PA 19122</br>
-                    Phone: 215- 204-8450 | Fax: 215- 204-5082 </br>
-                    Email: cis@temple.edu</p>
-            </section>
+<div data-ng-controler="homeController">
+    <div id="home-branding" class="jumbotron">
+        <div class="container text-center">
+            <h1>TEMPLE OWLCIS</h1>
+            <a href="#what-is-owlcis" target="_self"  du-smooth-scroll><button class="btn btn-default">What is OWLCIS?</button></a>
+            <a href="#recent-reviews" target="_self"  du-smooth-scroll><button class="btn btn-default">Course Reviews</button></a>
         </div>
-        <div class="col-md-2">
-            <div class="images">
-                <img src="assets/img/logo/serc.jpg" alt="image" width="205px" height="175px">
-            </div>
-        </div>
-
     </div>
+    <div class="container">
 
-    <div class="col-md-4">
 
-        <div class="panel panel-default">
-            <div class="panel-heading" style="overflow-y: scroll; color: black; font-size: 16px;">
-                <h6>Courses With Highest feedback:</h6>
+        <div class="row" ng-controller="PromiseCtrl">
+
+
+            <div class="col-md-4 hidden-xs">
+                <h3 class="widget-title">Looking for reviews?</h3>
+                <form name="courseForm" class="form-inline" data-ng-submit="Formprocess()" >
+                    <div class="form-group">
+                        <label for="course-list">Courses:</label>
+                        <select ng-change="selectClicked()"  name="selectedID" id="selectedID"  data-ng-model ="Dataform.selectedID" class="form-control"  data-ng-required="true">
+                            <option value="">Select Course</option>
+                            <option data-ng-repeat="y in Dataform.course_ID">{{y.course_id}}</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" >Search</button>
+                </form>
 
             </div>
-            <div class="panel-body">
-                <br>{{countt[0].course_id}}
-                <br>{{countt[1].course_id}}
-                <br>{{countt[2].course_id}}
-                <br>{{countt[3].course_id}}
-                <br>{{countt[4].course_id}}
+            <div class="col-md-7 hidden-xs">
+                <div class="col-md-8">
+                    <p class="widget-title">Address</p>
+                    <section style="margin-bottom: 0px;">
+                        <p style="font-weight: bolder">Temple University Computer & Information Sciences</br>
+                            1925 N. 12th Street </br>
+                            Philadelphia, PA 19122</br>
+                            Phone: 215- 204-8450 | Fax: 215- 204-5082 </br>
+                            Email: cis@temple.edu</p>
+                    </section>
+                </div>
+                <div class="col-md-2">
+                    <div class="images">
+                        <img src="assets/img/logo/serc.jpg" alt="image" width="205px" height="175px">
+                    </div>
+                </div>
+
             </div>
-        </div>
 
-    </div>
+            <div class="col-md-4 hidden-xs">
 
-
-    <div class="col-md-8">
-        <div class="panel panel-default" >
-            <div class="panel-heading">Most Recent Feedback:</div>
-            <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
-                <form role="form" class="form-horizontal">
-
-
-
-                    <div class="list-group-item" >
-                        <div class="row" ng-hide="initialData();" ng-repeat="x in initialdataset">
-                            <!--that display all the data-->
-                            <div class="col-md-2" style="float: left; font-weight: 16px;">
-                                <br style="float:left;"> {{x.courseid}}
-                                <!--<br style="float:left;"> {{x.reviewid}}-->
-                                <br style="float:left;"> Helpfulness:{{x.helpfulness}}
-                                <br style="float:left;"> Easiness:{{x.easiness}}
-                                <br style="float:left;"> Clarity:{{x.clarity}}
-                            </div>
-                            <div class="col-md-10">
-                                <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
-                            </div>
-                            <div class="postinfobot">
-                                <div class="likeblock pull-left">
-                                    <a href="#" class="up">
-                                        <i class="fa fa-thumbs-o-up">
-                                            {{x.thumbsup}}
-                                        </i></a>
-                                    <a href="#" class="down"><i class="fa fa-thumbs-o-down">
-
-                                        </i>{{x.thumbsdown}}</a>
-                                </div>
-                                <div class="prev pull-left">
-                                    <a href="#"><i class="fa fa-reply"></i></a>
-                                </div>
-                                <div class="posted pull-left">
-                                    <i class="fa fa-clock-o"></i>
-                                    Posted:
-                                    {{x.f_name}} {{x.l_name}}
-                                    {{x.time_stamp}}</div>
-                            </div>
-                        </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="overflow-y: scroll; color: black; font-size: 16px;">
+                        <h6>Courses With Highest feedback:</h6>
 
                     </div>
-                    <div class="row" ng-repeat="x in example2">
-                        <div class="col-md-2" style="float: left; font-weight: 16px;">
-                            <br style="float:left;"> {{x.courseid}}
-                            <br style="float:left;"> Helpfulness: {{x.helpfulness}}
-                            <br style="float:left;"> Easiness: {{x.easiness}}
-                            <br style="float:left;"> Clarity: {{x.clarity}}
-                        </div>
-                        <div class="col-md-10">
-                            <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
-                        </div>
-                        <div class="postinfobot">
-                            <div class="likeblock pull-left">
-                                <a href="#" class="up">
-                                    <i class="fa fa-thumbs-o-up">
-                                        {{x.thumbsup}}
-                                    </i></a>
-                                <a href="#" class="down"><i class="fa fa-thumbs-o-down">
-
-                                    </i>{{x.thumbsdown}}</a>
-                            </div>
-                            <div class="prev pull-left">
-                                <a href="#"><i class="fa fa-reply"></i></a>
-                            </div>
-                            <div class="posted pull-left">
-                                <i class="fa fa-clock-o"></i>
-                                Posted:
-                                {{x.f_name}} {{x.l_name}}
-                                {{x.time_stamp}}</div>
-                        </div>
+                    <div class="panel-body">
+                        <br>{{countt[0].course_id}}
+                        <br>{{countt[1].course_id}}
+                        <br>{{countt[2].course_id}}
+                        <br>{{countt[3].course_id}}
+                        <br>{{countt[4].course_id}}
                     </div>
+                </div>
+
             </div>
 
+
+            <div class="col-md-8" id="recent-reviews">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">Most Recent Feedback:</div>
+                    <div class="panel-body" style="height: 540px; overflow-y: scroll; color: black;">
+                        <form role="form" class="form-horizontal">
+
+
+
+                            <div class="list-group-item" >
+                                <div class="row" ng-hide="initialData();" ng-repeat="x in initialdataset">
+                                    <!--that display all the data-->
+                                    <div class="col-md-2" style="float: left; font-weight: 16px;">
+                                        <br style="float:left;"> {{x.courseid}}
+                                        <!--<br style="float:left;"> {{x.reviewid}}-->
+                                        <br style="float:left;"> Helpfulness:{{x.helpfulness}}
+                                        <br style="float:left;"> Easiness:{{x.easiness}}
+                                        <br style="float:left;"> Clarity:{{x.clarity}}
+                                    </div>
+                                    <div class="col-md-10">
+                                        <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
+                                    </div>
+                                    <div class="postinfobot">
+                                        <div class="likeblock pull-left">
+                                            <a href="#" class="up">
+                                                <i class="fa fa-thumbs-o-up">
+                                                    {{x.thumbsup}}
+                                                </i></a>
+                                            <a href="#" class="down"><i class="fa fa-thumbs-o-down">
+
+                                                </i>{{x.thumbsdown}}</a>
+                                        </div>
+                                        <div class="prev pull-left">
+                                            <a href="#"><i class="fa fa-reply"></i></a>
+                                        </div>
+                                        <div class="posted pull-left">
+                                            <i class="fa fa-clock-o"></i>
+                                            Posted:
+                                            {{x.f_name}} {{x.l_name}}
+                                            {{x.time_stamp}}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row" ng-repeat="x in example2">
+                                <div class="col-md-2" style="float: left; font-weight: 16px;">
+                                    <br style="float:left;"> {{x.courseid}}
+                                    <br style="float:left;"> Helpfulness: {{x.helpfulness}}
+                                    <br style="float:left;"> Easiness: {{x.easiness}}
+                                    <br style="float:left;"> Clarity: {{x.clarity}}
+                                </div>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" rows="4" readonly> {{x.comment_text}}</textarea>
+                                </div>
+                                <div class="postinfobot">
+                                    <div class="likeblock pull-left">
+                                        <a href="#" class="up">
+                                            <i class="fa fa-thumbs-o-up">
+                                                {{x.thumbsup}}
+                                            </i></a>
+                                        <a href="#" class="down"><i class="fa fa-thumbs-o-down">
+
+                                            </i>{{x.thumbsdown}}</a>
+                                    </div>
+                                    <div class="prev pull-left">
+                                        <a href="#"><i class="fa fa-reply"></i></a>
+                                    </div>
+                                    <div class="posted pull-left">
+                                        <i class="fa fa-clock-o"></i>
+                                        Posted:
+                                        {{x.f_name}} {{x.l_name}}
+                                        {{x.time_stamp}}</div>
+                                </div>
+                            </div>
+                    </div>
+
+                </div>
+                <div class="btn-group" role="group" style="float: right; font-weight: bolder; color: white; ">
+                    <a class="btn btn-primary" href="#reviews">More Reviews</a>
+                </div>
+            </div>
         </div>
 
+    </div>
+
+    <div class="jumbotron" id="what-is-owlcis">
+        <div class="container text-center">
+            <div class="col-sm-12">
+                <h2>What is OWLCIS</h2>
+                <p>OWLCIS is a website created by Temple University CIS students, specifically for CIS students and alumni. Its main functionality is to serve as a place for students to post reviews about courses in the department. However, it has other features that are accessible to both current students and alumni.</p>
+            </div>
+            <p class="col-sm-12 col-md-4">POST QUESTIONS AND ANSWERS ON THE FORUM</p>
+            <p class="col-sm-12 col-md-4">CREATE A COURSE SCHEDULE AND DEGREE FLOWCHART</p>
+            <p class="col-sm-12 col-sm-4">VIEW AND POST FEEDBACK ABOUT COURSES</p>
+        </div>
     </div>
 </div>
 
-<div class="btn-group" role="group" style="float: right; font-weight: bolder; color: white; ">
-    <button class="btn btn-primary" onclick="http://www.owlcis.me/schedule" >More Reviews</button>
-</div>
+<script>
+    var app = angular.module('authApp');
 
+    /* Display JSON list */
+    app.controller('homeController', function ($scope, $document) {
+        var top = 400;
+        var duration = 2500; //milliseconds
 
+        //Scroll to the exact position
+        $document.scrollTop(top, duration).then(function () {
+            console && console.log('You just scrolled to the top!');
+        });
+    });
+</script>

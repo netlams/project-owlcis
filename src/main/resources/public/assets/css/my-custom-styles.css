@@ -1,10 +1,102 @@
 /* Temple Cherry Red #9E1B34 */
 /* btn color (green)): #1abc9c */
 @import url(//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
+/*@import url(https://fonts.googleapis.com/css?family=Bitter:400,700);*/
 /* Google Sign in button */
 #google-signin-btn, #appLoginMsg button {
     margin-top: 9px;
     margin-bottom: 9px;
+}
+
+#app {
+    visibility: hidden; // wait until load
+}
+
+/* home page */
+@-webkit-keyframes typing {
+    from { width: 0 }
+    to { width:8.0em }
+}
+
+@-moz-keyframes typing {
+    from { width: 0 }
+    to { width:8.0em }
+}
+
+@-webkit-keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: white }
+}
+
+@-moz-keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: white }
+}
+
+#what-is-owlcis.jumbotron {
+    margin-top: 2em;
+    margin-bottom: 0;
+}
+
+#home-branding.jumbotron {
+    height: 90vh;
+    background: url(../img/templemade.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-bottom:1px solid white
+}
+
+#home-branding.jumbotron .container {
+    position: relative;
+    top: 70%;
+}
+
+#home-branding.jumbotron .container h1 { 
+    color: white;
+    font-family: Consolas, monospace; 
+    font-weight: 900;
+    font-size:350%;
+    width:8.0em;
+    white-space:nowrap;
+    overflow:hidden;
+    border-right: .1em solid white;
+    margin: 0 auto;
+    -webkit-animation: typing 12s steps(15, end), /* # of steps = # of characters */
+        blink-caret 1s step-end infinite;
+    -moz-animation: typing 12s steps(15, end), /* # of steps = # of characters */
+        blink-caret 1s step-end infinite;
+}
+
+#home-branding.jumbotron .container .btn {
+    font-family: Consolas, monospace; 
+    font-size: 16px;
+    margin: 0.5em 1em;
+    height: 3em;
+    color: #9E1B34;
+    background-color: white;
+    text-transform: uppercase;
+    font-weight: 800;
+    border-radius: 5px;
+    opacity: 0.9;
+}
+
+#home-branding.jumbotron .container .btn:hover {
+    opacity: 1.0;
+}
+
+/* Responsive Rule: between large and medium screen */
+@media screen and (max-width: 480px) {
+	#home-branding.jumbotron {
+             height: 55vh;
+        }
+        #home-branding.jumbotron .container h1 { 
+            font-size: 200%;
+        }
+        #home-branding.jumbotron .container .btn {
+            font-size: 1em;
+            margin: 0.1em 0.1em;
+        }
 }
 
 /* Angular animation */

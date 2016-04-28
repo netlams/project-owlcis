@@ -645,7 +645,7 @@ public class Main implements SparkApplication {
         /**
          * for flowchart
          */
-        get(API_LOC + "/testflow", (request, response) -> {
+        get(API_LOC + "/flowchart", (request, response) -> {
             // get session
             User user = request.session().attribute("USER");
             // check if there's a logged-in session
