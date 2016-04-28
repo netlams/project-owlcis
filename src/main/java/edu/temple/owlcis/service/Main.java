@@ -36,6 +36,7 @@ public class Main implements SparkApplication {
      */
     public static final String API_LOC = "api";
     public String postid;
+    public String question;
 
     /**
      * Executes the backend logic of the app
@@ -73,7 +74,9 @@ public class Main implements SparkApplication {
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
 
-        /** Increment Thumbs-up Count */
+        /**
+         * Increment Thumbs-up Count
+         */
         post(API_LOC + "/incthumbsup", (request, response) -> {
             Pattern p = Pattern.compile("\\d+");
             //Matcher m = p.matcher(request.body());
@@ -652,12 +655,14 @@ public class Main implements SparkApplication {
                     response.status(200);
                     response.type("application/json");
                     int year = 2012;
-                    if (request.cookie("FC_YEAR") != null) 
+                    if (request.cookie("FC_YEAR") != null) {
                         year = Integer.parseInt(request.cookie("FC_YEAR"));
+                    }
                     String degree = "CS_BS";
-                    if (request.cookie("FC_DEGREE") != null) 
-                        degree = request.cookie("FC_DEGREE");        
-                    
+                    if (request.cookie("FC_DEGREE") != null) {
+                        degree = request.cookie("FC_DEGREE");
+                    }
+
                     return new Gson().toJson(sb.generateFlowchart(degree, year, false));
                 } catch (NullPointerException ex) {
                     // not valid member
@@ -764,7 +769,7 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
+
         /**
          * Reset user schedule list Route
          */
@@ -775,20 +780,20 @@ public class Main implements SparkApplication {
             sch.removeAllSchedule(dbc.getConn());
             return "HTTP 200 - OK";
         });
-        
+
         /**
          * Load sample schedule list Route
          */
         post(API_LOC + "/schedule/load", (request, response) -> {
             User user = request.session().attribute("USER");
             JsonElement jelement = new JsonParser().parse(request.body());
-            JsonObject  jobj = jelement.getAsJsonObject();
+            JsonObject jobj = jelement.getAsJsonObject();
             ScheduleBuilder sch = new ScheduleBuilder(user);
             Database dbc = new Database();
             if (sch.loadDegreeIntoSchedule(jobj.get("degree").getAsString(), jobj.get("year").getAsInt(), dbc.getConn())) {
                 response.status(200);
                 return "HTTP 200 - OK";
-            } else { 
+            } else {
                 response.status(500);
                 return "OWLCIS failed: HTTP 500 SERVER ERROR";
             }
@@ -888,7 +893,7 @@ public class Main implements SparkApplication {
             System.out.println(gson.toJson(list));
             return gson.toJson(list);
         });
-        
+
         /**
          * get EVERY review route
          */
@@ -922,7 +927,7 @@ public class Main implements SparkApplication {
             if (dbc.getError().length() == 0) {
                 try {
                     if (c.insertAllForum_comment(dbc.getConn())) {
-                    //response.status(200);
+                        //response.status(200);
                         response.status(201);
                         return "HTTP 201 - CREATED";
                     }
@@ -932,11 +937,9 @@ public class Main implements SparkApplication {
             }
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
-        });    
-                    
-        
+        });
 
-         /**
+        /**
          * Delete Review Route
          */
         post(API_LOC + "/review/delete", (request, response) -> {
@@ -961,15 +964,26 @@ public class Main implements SparkApplication {
             response.status(500);
             return "OWLCIS failed: HTTP 500 SERVER ERROR";
         });
-        
+
         //forum home to post text, and post it
         post(API_LOC + "/forumcom", (request, response) -> {
             String ret = "";
             Gson gson = new Gson();
             System.out.println("Starting . " + request.body());
-            postid = request.body();
+
+            String postId = request.body().substring(11, request.body().indexOf(','));
+            System.out.print("post id in main:" + postId);
+            //String Question = request.body().substring(request.body().indexOf(',') + 1, request.body().length() - 1);
+            //String Question = request.body().substring(request.body().indexOf(',') + 9, request.body().length() - 2);
+            String Question = request.body().substring(request.body().indexOf(',') + 9, request.body().length() - 2);
+            // String Question = request.body();
+            System.out.println("question in Main:" + Question);
+            question = Question;
+            // postid = request.body();
+            postid = postId;
             Forum_ques s = new Forum_ques();
-            s.setPost_id(request.body());
+            // s.setPost_id(request.body());
+            s.setPost_id(postId);
             List list = s.getQuestion();
             response.status(200);
             System.out.println(gson.toJson(list));
@@ -985,13 +999,28 @@ public class Main implements SparkApplication {
             s.setPost_id(postid);
             List list = s.getQuestion();
             response.status(200);
-
+            //System.out.println(gson.toJson(question));
             System.out.println(gson.toJson(list));
-            return gson.toJson(list);
+            return (gson.toJson(list));
             //return ret;
         });
 
-         /**
+        //forum home to post text, and post it
+        get(API_LOC + "/forumComQ", (request, response) -> {
+            String ret = "";
+            Gson gson = new Gson();
+            //Forum_ques s = new Forum_ques();
+            //s.setPost_id(postid);
+            //List list = s.getQuestion();
+            response.status(200);
+            System.out.println(gson.toJson(question));
+            //System.out.println(gson.toJson(list));
+            return (gson.toJson(question));
+            //return (question);
+            //return ret;
+        });
+
+        /**
          * Delete Post Route
          */
         post(API_LOC + "/post/delete", (request, response) -> {

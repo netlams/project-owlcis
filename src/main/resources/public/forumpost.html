@@ -1,117 +1,140 @@
 <body ng-controller="Ctrl">
-        <div class="wrapper">
+    <div class="wrapper">
 
-            <!-- Slider -->
-            <div class="tp-banner-container">
+        <!-- Slider -->
+        <div class="tp-banner-container">
             <nav class="navbar navbar-default navbar-dark " role="navigation">
                 <div class="container">
 
 
                 </div>
             </nav>
+        </div>
+
+        <!-- //Slider -->
+
+
+
+        <div class="headernav">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-4 col-xs-12 col-sm-5 col-md-4 avt">
+                        <div class="stnt pull-right">
+
+                            <form action="/#/forum" method="post" class="form">
+                                <input type="submit" class="btn btn-primary" value="Forum Home">
+                            </form>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
             </div>
-
-            <!-- //Slider -->
-            <section class="content">
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 col-md-8">
+        </div>
 
 
 
-                            <!-- POST   name="desc" id="desc" method="post"action="#"-->
-                            <div class="post">
-                                <form  class="form newtopic"  data-ng-submit="Formprocess()">
-                                    <div class="topwrap">
-                                        <div class="userinfo pull-left">
-                                            <div class="avatar">
-                                                <img src="assets/img/logo/avatar.jpg" alt="" />
-                                                <div class="status red">&nbsp;</div>
-                                            </div>
-                                        </div>
-                                        <div class="posttext pull-left">
-                                            <div>
-                                                <textarea  name="f" id="f" placeholder="Enter a question" data-ng-model ="Dataform.f" class="form-control" ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="postinfobot">
-                                        <div class="pull-right postreply">
-                                            <div class="pull-left"><button type="submit" class="btn btn-primary">Post</button></div>
-                                            <div class="clearfix"></div>
-                                        </div>
+        <section class="content">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
 
 
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </form>
-                            </div><!-- POST -->
 
-                            <!-- POST -->
-                            <div class="post" ng-repeat="x in forum | limitTo:5">
-                                <div class="wrap-ut pull-left">
+                        <!-- POST   name="desc" id="desc" method="post"action="#"-->
+                        <div class="post">
+                            <form  class="form newtopic"  data-ng-submit="Formprocess()">
+                                <div class="topwrap">
                                     <div class="userinfo pull-left">
                                         <div class="avatar">
                                             <img src="assets/img/logo/avatar.jpg" alt="" />
                                             <div class="status green">&nbsp;</div>
                                         </div>
-
                                     </div>
                                     <div class="posttext pull-left">
-                                        <h2><a href="/#/comments">{{x.search_keywords}}</a></h2>
+                                        <div>
+                                            <textarea  name="f" id="f" placeholder="Enter a question" data-ng-model ="Dataform.f" class="form-control" ></textarea>
+                                        </div>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="postinfo pull-left">
-                                    <div class="comments">
-                                        <div class="commentbg">
-                                            560
-                                            <div class="mark"></div>
-                                        </div>
-
+                                <div class="postinfobot">
+                                    <div class="pull-right postreply">
+                                        <div class="pull-left"><button type="submit" class="btn btn-primary">Post</button></div>
+                                        <div class="clearfix"></div>
                                     </div>
-                                    <div class="views"><i class="fa fa-eye"></i> 1,568</div>
-                                    <div class="time"><i class="fa fa-clock-o"></i>{{x.time_stamp}}</div>
+
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </form>
+                        </div><!-- POST -->
+
+                        <!-- POST -->
+                        <div class="post" ng-repeat="x in forum|limitTo:5">
+                            <div class="wrap-ut pull-left">
+                                <div class="userinfo pull-left">
+                                    <div class="avatar">
+                                        <img src="assets/img/logo/avatar.jpg" alt="" />
+                                        <div class="status red">&nbsp;</div>
+                                    </div>
+
+                                </div>
+                                <div class="posttext pull-left">
+                                    <!-- <h2><a href="/#/comments">{{x.search_keywords}}</a></h2>-->
+                                    <h2 ng-click="like(x.post_id, x.search_keywords)"><a href="#/comments">{{x.search_keywords}}</a> </h2>
                                 </div>
                                 <div class="clearfix"></div>
-                            </div><!-- POST -->
-                        </div>
-                        <div class="col-lg-4 col-md-4">
-                            <div class="sidebarblock">
-                                <h3>My Questions</h3>
-                                <div class="divline"></div>
-                                <div class="blocktxt" ng-repeat="z in forumQues">
-                                    <a href="#">{{z.search_keywords}}</a>
+                            </div>
+                            <div class="postinfo pull-left">
+                                <div class="comments">
+
+
                                 </div>
-                                </div>
+                                <div class="views">Posted by:{{x.f_name}}{{x.l_name}}</div>
+                                <div class="time"><i class="fa fa-clock-o"></i>{{x.time_stamp}}</div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div><!-- POST -->
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="sidebarblock">
+                            <h3>My Questions</h3>
+                            <div class="divline"></div>
+                            <div class="blocktxt" ng-repeat="z in forumQues">
+                                <!--<a href="#">{{z.search_keywords}}</a>-->
+                                <h4 ng-click="like(z.post_id, z.search_keywords)"><a href="#/comments">{{z.search_keywords}}</a> </h4>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+    </div>
 
 
-            <!-- FOOTER -->
-            <footer style="margin-bottom: 30px; padding-top: 10px;">
-                <!-- COPYRIGHT -->
-                <div class="text-center copyright navbar-fixed-bottom">
-                    &copy;2016 The Develovers. All Rights Reserved.
-                </div>
-                <!-- END COPYRIGHT -->
-            </footer>
+    <!-- FOOTER -->
+    <footer style="margin-bottom: 30px; padding-top: 10px;">
+        <!-- COPYRIGHT -->
+        <div class="text-center copyright navbar-fixed-bottom">
+            &copy;2016 The Develovers. All Rights Reserved.
+        </div>
+        <!-- END COPYRIGHT -->
+    </footer>
 
-        <!-- get jQuery from the google apis -->
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
+    <!-- get jQuery from the google apis -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
 
-        <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
-        <script type="text/javascript" src="rs-plugin/js/jquery.themepunch.plugins.min.js"></script>
-        <script type="text/javascript" src="rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+    <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
+    <script type="text/javascript" src="rs-plugin/js/jquery.themepunch.plugins.min.js"></script>
+    <script type="text/javascript" src="rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
 
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="js/bootstrap.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
 
-        <!-- END REVOLUTION SLIDER -->
-    </body>
+    <!-- END REVOLUTION SLIDER -->
+</body>
 </html>

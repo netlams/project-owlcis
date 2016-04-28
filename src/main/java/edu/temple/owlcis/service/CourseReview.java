@@ -227,7 +227,8 @@ public class CourseReview {
                 System.out.println("insertReview query executed.");
 
                 //If review has a recommended elective, insert into rec_elective
-                if (hasRecElective) {
+                System.out.println("recElectiveID: " + this.recElectiveID);
+                if (hasRecElective && this.recElectiveID.length() > 1) {
                     sql = "INSERT INTO rec_elective (review_id, course_id, semester) "
                             + "VALUES ((SELECT review_id FROM course_review "
                             + "WHERE user_id = ? AND course_id = ?), ?, ?)";
